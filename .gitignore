@@ -33,3 +33,6 @@
 
 # Build folder
 build/
+
+# VSCode JSONs folder
+.vscode/
