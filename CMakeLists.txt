@@ -71,7 +71,7 @@ find_package(plog REQUIRED)
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
-target_include_directories(${target} 
+target_include_directories(${target}
     PUBLIC
         ${directories}
         ${glad_INCLUDES}
