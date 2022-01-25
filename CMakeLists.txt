@@ -1,7 +1,7 @@
 #=== Common ===#
 cmake_minimum_required(VERSION 3.15)
 
-project(meov LANGUAGES CXX VERSION 0.0.2)
+project(meov LANGUAGES CXX VERSION 0.1.3)
 
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})

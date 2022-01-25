@@ -5,7 +5,7 @@
 namespace MEOV::Window {
 
 Git::Git()
-    : Base{ "Git information", ImVec2{ 400, 800 }, true, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize } {}
+    : Base{ "Git information", ImVec2{ 400, 800 }, true } {}
 
 Git::~Git() {}
 
