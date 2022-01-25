@@ -7,9 +7,11 @@
 #define SHADER_VERSION "#version 330 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define GIT_COMMIT_HASH "2b2ae33ce17913b76dd639d8fa3259a15564c748-dirty"
-#define GIT_COMMIT_DATE "Mon Jan 24 15:04:26 2022"
-#define GIT_COMMIT_MESSAGE "Small refactoring in CMakeLists."
+#define LOG_LEVEL "Debug"
+
+#define GIT_COMMIT_HASH "d3d78ae9d84ab506d7a1eed5d7b8cc2cd669a1fa-dirty"
+#define GIT_COMMIT_DATE "Tue Jan 25 11:54:11 2022"
+#define GIT_COMMIT_MESSAGE "Merge pull request #7 from seigtm/Golovinsky_Make_utilites"
 
 namespace MEOV {
 
@@ -61,6 +63,14 @@ const std::string AppInfo::Name() {
 #endif
 }
 
+const std::string AppInfo::LogLevel() {
+#if defined(LOG_LEVEL)
+    return LOG_LEVEL;
+#else
+    return "Debug";
+#endif
+}
+
 const std::string AppInfo::GitCommitHash() {
 #if defined(GIT_COMMIT_HASH)
     return GIT_COMMIT_HASH;
@@ -82,6 +92,14 @@ const std::string AppInfo::GitCommitMessage() {
     return GIT_COMMIT_MESSAGE;
 #else
     return "ERROR_GIT_UNAVAILABLE";
+#endif
+}
+
+bool AppInfo::IsDebugMode() {
+#if defined(DEBUG)
+    return true;
+#else
+    return false;
 #endif
 }
 
