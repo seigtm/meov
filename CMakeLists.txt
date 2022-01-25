@@ -1,6 +1,7 @@
 #=== Common ===#
 cmake_minimum_required(VERSION 3.15)
-project(meov LANGUAGES CXX VERSION 0.0.1)
+
+project(meov LANGUAGES CXX VERSION 0.0.2)
 
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
@@ -14,6 +15,13 @@ set(CMAKE_INSTALL_PREFIX ${root}/bin/${CMAKE_BUILD_TYPE})
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
 include(${root}/cmake/ConanSetup.cmake)
+include(${root}/cmake/GitUtils.cmake)
+include(${root}/cmake/ConfigFileMaker.cmake)
+
+grab_git_info(GIT_COMMIT_HASH GIT_COMMIT_DATE GIT_COMMIT_MESSAGE)
+message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HASH}]")
+
+make_config_file(${root}/src/appinfo/AppInfo.cpp)
 
 #=== Sources ===#
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
