@@ -2,11 +2,15 @@
 
 #include "Common.hpp"
 #include "AppInfo.hpp"
+#include "LogUtils.hpp"
 
 // Main code
 int main(int, char**) {
+    MEOV::Utils::Log::Instance()->Initialize();
+
+    LOGI << "SDL Initialization";
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
-        printf("Error: %s\n", SDL_GetError());
+        LOGF << "Error: " << SDL_GetError();
         return -1;
     }
 
@@ -18,6 +22,8 @@ int main(int, char**) {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+    LOGI << "Window Initialization";
     SDL_Window* window { SDL_CreateWindow(
         MEOV::AppInfo::Name().c_str(),
         SDL_WINDOWPOS_CENTERED,
@@ -30,6 +36,7 @@ int main(int, char**) {
     SDL_GL_SetSwapInterval(1);  // Enable vsync
 
     // Setup Dear ImGui context
+    LOGI << "ImGui Initialization";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -49,6 +56,7 @@ int main(int, char**) {
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    LOGI << "Start main loop";
     // Main loop
     bool done = false;
     while(!done) {
