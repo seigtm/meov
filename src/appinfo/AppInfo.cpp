@@ -1,15 +1,15 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.0.2"
+#define VERSION "v0.1.3"
 #define SHADER_VERSION_MAJOR 3
 #define SHADER_VERSION_MINOR 3
 #define SHADER_VERSION_PATCH 0
 #define SHADER_VERSION "#version 330 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define GIT_COMMIT_HASH "2b2ae33ce17913b76dd639d8fa3259a15564c748-dirty"
-#define GIT_COMMIT_DATE "Mon Jan 24 15:04:26 2022"
-#define GIT_COMMIT_MESSAGE "Small refactoring in CMakeLists."
+#define GIT_COMMIT_HASH "a341ebfaa64a88e829fc287f7c1e9b68cdc17a26-dirty"
+#define GIT_COMMIT_DATE "Tue Jan 25 17:53:30 2022"
+#define GIT_COMMIT_MESSAGE "Used new window classes in main src."
 
 namespace MEOV {
 
