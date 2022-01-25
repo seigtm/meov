@@ -24,19 +24,7 @@ protected:
 };
 
 template<class Base>
-class NonMovable {
-public:
-    NonCopyable(NonCopyable &&) = delete;
-    NonCopyable &operator=(NonCopyable &&) = delete;
-    Base &operator =(Base &&) = delete;
-
-protected:
-    NonCopyable() = default;
-    ~NonCopyable() = default;
-};
-
-template<class Base>
-class Singleton {
+class Singleton : public NonCopyable<Base> {
 public:
     static Base *Instance() {
         static Base inst;
