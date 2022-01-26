@@ -5,9 +5,7 @@
 namespace MEOV::Window {
 
 Git::Git()
-    : Base{ "Git information", ImVec2{ 400, 800 }, true } {}
-
-Git::~Git() {}
+    : Base{ "Git information" } {}
 
 void Git::DrawImpl() {
     ImGui::Text("Git hash:    %s", MEOV::AppInfo::GitCommitHash().c_str());
