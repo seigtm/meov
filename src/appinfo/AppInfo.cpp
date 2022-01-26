@@ -61,6 +61,14 @@ const std::string AppInfo::Name() {
 #endif
 }
 
+const std::string AppInfo::LogLevel() {
+#if defined(LOG_LEVEL)
+    return LOG_LEVEL;
+#else
+    return "Debug";
+#endif
+}
+
 const std::string AppInfo::GitCommitHash() {
 #if defined(GIT_COMMIT_HASH)
     return GIT_COMMIT_HASH;
@@ -82,6 +90,14 @@ const std::string AppInfo::GitCommitMessage() {
     return GIT_COMMIT_MESSAGE;
 #else
     return "ERROR_GIT_UNAVAILABLE";
+#endif
+}
+
+bool AppInfo::IsDebugMode() {
+#if defined(DEBUG)
+    return true;
+#else
+    return false;
 #endif
 }
 

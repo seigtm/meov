@@ -15,9 +15,13 @@ struct AppInfo {
 
     static const std::string Name();
 
+    static const std::string LogLevel();
+
     static const std::string GitCommitHash();
     static const std::string GitCommitDate();
     static const std::string GitCommitMessage();
+
+    static bool IsDebugMode();
 };
 
 

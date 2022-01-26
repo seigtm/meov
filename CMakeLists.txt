@@ -79,6 +79,9 @@ find_package(plog REQUIRED)
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(${target} PRIVATE DEBUG=1)
+endif()
 target_include_directories(${target}
     PUBLIC
         ${directories}
