@@ -1,6 +1,6 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.0.2"
+#define VERSION "v0.1.3"
 #define SHADER_VERSION_MAJOR 3
 #define SHADER_VERSION_MINOR 3
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "d3d78ae9d84ab506d7a1eed5d7b8cc2cd669a1fa-dirty"
-#define GIT_COMMIT_DATE "Tue Jan 25 11:54:11 2022"
-#define GIT_COMMIT_MESSAGE "Merge pull request #7 from seigtm/Golovinsky_Make_utilites"
+#define GIT_COMMIT_HASH "e4b4bfab5a7aa21df0203fad88fb2492d680311d"
+#define GIT_COMMIT_DATE "Wed Jan 26 12:35:33 2022"
+#define GIT_COMMIT_MESSAGE "Fixed conficts && small refactoring."
 
 namespace MEOV {
 
