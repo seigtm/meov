@@ -8,7 +8,7 @@ namespace MEOV::Window {
 class Test : public Base {
 public:
     Test();
-    virtual ~Test();
+    virtual ~Test() = default;
 
 protected:
     void DrawImpl() override;

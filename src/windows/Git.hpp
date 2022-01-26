@@ -7,7 +7,7 @@ namespace MEOV::Window {
 class Git : public Base {
 public:
     Git();
-    virtual ~Git();
+    virtual ~Git() = default;
 
 protected:
     void DrawImpl() override;

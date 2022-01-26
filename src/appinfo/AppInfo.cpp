@@ -7,9 +7,9 @@
 #define SHADER_VERSION "#version 330 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define GIT_COMMIT_HASH "a341ebfaa64a88e829fc287f7c1e9b68cdc17a26-dirty"
-#define GIT_COMMIT_DATE "Tue Jan 25 17:53:30 2022"
-#define GIT_COMMIT_MESSAGE "Used new window classes in main src."
+#define GIT_COMMIT_HASH "37b2f7c5d04649532f1400978fe56bb711c4adae-dirty"
+#define GIT_COMMIT_DATE "Tue Jan 25 18:30:57 2022"
+#define GIT_COMMIT_MESSAGE "Small refactoring and updated version."
 
 namespace MEOV {
 
