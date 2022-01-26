@@ -4,13 +4,13 @@
 
 namespace MEOV::Window {
 
-class Git : public Base {
+class Git final : public Base {
 public:
     Git();
     virtual ~Git() = default;
 
 protected:
-    void DrawImpl() override;
+    void DrawImpl() override final;
 };
 
 }  // namespace MEOV::Window
