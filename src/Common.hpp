@@ -9,10 +9,17 @@
 
 #include <glm/glm.hpp>
 
+#include <plog/Log.h>
+
 #include <algorithm>
 #include <bitset>
+#include <codecvt>
 #include <chrono>
 #include <cstdio>
+#include <filesystem>
 #include <functional>
+#include <locale>
 #include <string>
 #include <string_view>
+
+namespace fs = std::filesystem;

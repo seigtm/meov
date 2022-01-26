@@ -2,14 +2,17 @@
 
 #include "Common.hpp"
 #include "AppInfo.hpp"
+#include "LogUtils.hpp"
 
 #include "windows/Git.hpp"
 #include "windows/Test.hpp"
 
 int main(int, char**) {
-    // Init SDL.
+    MEOV::Utils::Log::Instance()->Initialize();
+
+    LOGI << "SDL Initialization";
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
-        printf("Error: %s\n", SDL_GetError());
+        LOGF << "Error: " << SDL_GetError();
         return -1;
     }
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, MEOV::AppInfo::GLSLVersionMajor());
@@ -20,7 +23,9 @@ int main(int, char**) {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-    SDL_Window* window{ SDL_CreateWindow(
+
+    LOGI << "Window Initialization";
+    SDL_Window* window { SDL_CreateWindow(
         MEOV::AppInfo::Name().c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
@@ -30,7 +35,8 @@ int main(int, char**) {
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1);  // Enable vsync.
 
-    // Setup Dear ImGui context.
+    // Setup Dear ImGui context
+    LOGI << "ImGui Initialization";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -56,6 +62,8 @@ int main(int, char**) {
     testW.ToggleNoMove();
 
     // Main loop.
+    LOGI << "Start main loop";
+    // Main loop
     bool done = false;
     while(!done) {
         // Poll and handle events (inputs, window resize, etc.).
