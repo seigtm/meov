@@ -25,7 +25,7 @@ int main(int, char**) {
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
     LOGI << "Window Initialization";
-    SDL_Window* window { SDL_CreateWindow(
+    SDL_Window* window{ SDL_CreateWindow(
         MEOV::AppInfo::Name().c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
@@ -63,7 +63,6 @@ int main(int, char**) {
 
     // Main loop.
     LOGI << "Start main loop";
-    // Main loop
     bool done = false;
     while(!done) {
         // Poll and handle events (inputs, window resize, etc.).
