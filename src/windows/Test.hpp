@@ -5,13 +5,13 @@
 
 namespace MEOV::Window {
 
-class Test : public Base {
+class Test final : public Base {
 public:
     Test();
     virtual ~Test() = default;
 
 protected:
-    void DrawImpl() override;
+    void DrawImpl() override final;
 };
 
 }  // namespace MEOV::Window
