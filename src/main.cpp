@@ -5,6 +5,7 @@
 #include "LogUtils.hpp"
 
 #include "windows/Git.hpp"
+#include "windows/Log.hpp"
 #include "windows/Test.hpp"
 
 int main(int, char**) {
@@ -59,7 +60,6 @@ int main(int, char**) {
     MEOV::Window::Git gitW;
     MEOV::Window::Test testW;
     testW.ToggleNoResize();
-    testW.ToggleNoMove();
 
     // Main loop.
     LOGI << "Start main loop";
@@ -82,7 +82,8 @@ int main(int, char**) {
 
         // Show the big demo window.
         ImGui::ShowDemoWindow(&show_demo_window);
-
+        // Show singleton log window.
+        MEOV::Window::Log::Instance()->Draw();
         // Show Git info window.
         gitW.Draw();
         // Show another simple test window.

@@ -7,7 +7,9 @@ Test::Test()
 
 void Test::DrawImpl() {
     ImGui::Text("Hello from the test window!");
-    ImGui::Button("Click me, senpai <3!");
+    if(ImGui::Button("Click me, senpai <3!")) {
+        LOGI << "Button was clicked!";
+    }
 }
 
 }  // namespace MEOV::Window

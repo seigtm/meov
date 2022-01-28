@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "e4b4bfab5a7aa21df0203fad88fb2492d680311d"
-#define GIT_COMMIT_DATE "Wed Jan 26 12:35:33 2022"
-#define GIT_COMMIT_MESSAGE "Fixed conficts && small refactoring."
+#define GIT_COMMIT_HASH "ef596d5b8352cd7a85e9af393a0e1cfa91ce81ae-dirty"
+#define GIT_COMMIT_DATE "Wed Jan 26 13:06:23 2022"
+#define GIT_COMMIT_MESSAGE "Merge pull request #10 from seigtm/Baranov_0.1.3_Base_Window"
 
 namespace MEOV {
 
