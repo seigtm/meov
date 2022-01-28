@@ -21,5 +21,6 @@
 #include <locale>
 #include <string>
 #include <string_view>
+#include <queue>
 
 namespace fs = std::filesystem;
