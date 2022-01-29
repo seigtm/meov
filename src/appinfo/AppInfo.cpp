@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "3567438b0571780703f0f4b1e2f61495ae0afa3a-dirty"
-#define GIT_COMMIT_DATE "Sat Jan 29 11:52:25 2022"
-#define GIT_COMMIT_MESSAGE "Pseudo-benchmarking..."
+#define GIT_COMMIT_HASH "0c075683a30695dbe36d0c62587bcd032e6b30d0-dirty"
+#define GIT_COMMIT_DATE "Sat Jan 29 11:57:26 2022"
+#define GIT_COMMIT_MESSAGE "Fixed naming error: 'utilites' -> 'utilities'."
 
 namespace MEOV {
 
