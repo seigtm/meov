@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Utilites.hpp"
+#include "Utilities.hpp"
 #include "windows/Log.hpp"
 
 namespace MEOV::Utils {
