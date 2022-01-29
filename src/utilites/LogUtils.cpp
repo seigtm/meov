@@ -6,6 +6,8 @@
 #include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Record.h>
 
+#include <sstream>
+
 namespace putil = plog::util;
 
 namespace {
@@ -23,7 +25,6 @@ putil::nstring DefaultFormatter::header() {
     const size_t offset{ 1 };
     size_t max_width{ 80 };
     if(static_cast<long>(AppInfo::Name().size()) % 2 != 0) ++max_width;
-    // const putil::nstring stroffset{ offset, PLOG_NSTR(' ') };
     const putil::nchar stroffset{ PLOG_NSTR(' ') };
 
     auto put{ [&](const putil::nstring &left, const putil::nstring &right) {
@@ -36,13 +37,15 @@ putil::nstring DefaultFormatter::header() {
     out << std::setfill(PLOG_NSTR('=')) << std::setw((max_width - (title.size())) / 2) << std::right
         << stroffset << title << stroffset << std::setw((max_width - (title.size())) / 2) << PLOG_NSTR("\n");
 
-    put(PLOG_NSTR("Name:"), str2nstr(AppInfo::Name()));
-    put(PLOG_NSTR("Version:"), str2nstr(AppInfo::Version()));
-    put(PLOG_NSTR("Log level:"), str2nstr(AppInfo::LogLevel()));
+    // clang-format off
+    put(PLOG_NSTR("Name:"),         str2nstr(AppInfo::Name()));
+    put(PLOG_NSTR("Version:"),      str2nstr(AppInfo::Version()));
+    put(PLOG_NSTR("Log level:"),    str2nstr(AppInfo::LogLevel()));
     put(PLOG_NSTR("GLSL Version:"), str2nstr(AppInfo::GLSLVersion()));
-    put(PLOG_NSTR("Git hash:"), str2nstr(AppInfo::GitCommitHash()));
-    put(PLOG_NSTR("Git date:"), str2nstr(AppInfo::GitCommitDate()));
-    put(PLOG_NSTR("Git message:"), str2nstr(AppInfo::GitCommitMessage()));
+    put(PLOG_NSTR("Git hash:"),     str2nstr(AppInfo::GitCommitHash()));
+    put(PLOG_NSTR("Git date:"),     str2nstr(AppInfo::GitCommitDate()));
+    put(PLOG_NSTR("Git message:"),  str2nstr(AppInfo::GitCommitMessage()));
+    // clang-format on
 
     out << putil::nstring(max_width, PLOG_NSTR('=')) << '\n';
 
