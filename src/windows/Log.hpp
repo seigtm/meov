@@ -9,29 +9,11 @@ namespace MEOV::Window {
 
 class Log final : public Base, public MEOV::Utils::Singleton<Log> {
 public:
-    Log()
-        : Base{ "Log" } {}
-
-    void Update(std::vector<plog::util::nstring>* messages) {
-        _messages = messages;
-    }
+    Log();
+    void Update(std::vector<plog::util::nstring>* messages);
 
 protected:
-    void DrawImpl() override final {
-        if(!_messages)
-            return;
-
-        if(ImGui::Button("Clear log buffer"))
-            _messages->clear();
-
-        // Clipper helps us to render only visible log messages.
-        ImGuiListClipper clipper;
-        clipper.Begin(_messages->size());
-        while(clipper.Step())
-            for(int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i)
-                ImGui::TextUnformatted(plog::util::toNarrow(_messages->at(i), plog::codePage::kActive).c_str());
-        clipper.End();
-    }
+    void DrawImpl() override final;
 
 private:
     std::vector<plog::util::nstring>* _messages;
