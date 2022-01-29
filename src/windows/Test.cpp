@@ -14,7 +14,7 @@ void Test::DrawImpl() {
             LOGI << "Button was clicked! [times = " << i << "]";
         auto end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        LOGI << "Duration: " << duration << "\n";
+        LOGI << "Duration: " << duration << "ms.\n";
     }
 }
 
