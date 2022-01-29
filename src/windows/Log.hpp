@@ -24,13 +24,13 @@ protected:
         if(ImGui::Button("Clear log buffer"))
             _messages->clear();
 
-        // Small optimization:
-        // BeginChild() returns `false` if the window is collapsed.
-        // We probably don't want to update it's GUI in this case.
-        if(ImGui::BeginChild("Scrolling"))
-            for(auto&& msg : *_messages)
-                ImGui::Text("%s", plog::util::toNarrow(msg, plog::codePage::kActive).c_str());
-        ImGui::EndChild();
+        // Clipper helps us to render only visible log messages.
+        ImGuiListClipper clipper;
+        clipper.Begin(_messages->size());
+        while(clipper.Step())
+            for(int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i)
+                ImGui::TextUnformatted(plog::util::toNarrow(_messages->at(i), plog::codePage::kActive).c_str());
+        clipper.End();
     }
 
 private:
