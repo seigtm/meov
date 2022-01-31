@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Common.hpp"
 #include "Utilities.hpp"
-#include "windows/Log.hpp"
+#include "LogStorage.hpp"
 
 namespace MEOV::Utils {
 
@@ -12,29 +11,17 @@ public:
     static plog::util::nstring format(const plog::Record& record);
 };
 
-class Log : public Singleton<Log> {
+class LogUtils : public Singleton<LogUtils> {
 public:
     using AppenderPtr = std::unique_ptr<plog::IAppender>;
 
     void Initialize();
     std::string GenerateLogFileName() const;
+    Log::Storage::Ref GetLogStorage() const;
 
 private:
     const std::string sLoggerDirectory{ "logs/" };
+    Log::Storage::Ref mLogStorage;
 };
 
 }  // namespace MEOV::Utils
-
-namespace plog {
-
-template<class Formatter>
-class LogWindowAppender final : public IAppender {
-public:
-    LogWindowAppender();
-    void write(const Record& record) override final;
-
-private:
-    std::vector<util::nstring> mMessages;
-};
-
-}  // namespace plog

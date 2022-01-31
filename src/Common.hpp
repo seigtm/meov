@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <bitset>
+#include <set>
 #include <codecvt>
 #include <chrono>
 #include <cstdio>
