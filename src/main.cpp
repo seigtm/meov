@@ -9,7 +9,7 @@
 #include "windows/Test.hpp"
 
 int main(int, char**) {
-    MEOV::Utils::Log::Instance()->Initialize();
+    MEOV::Utils::LogUtils::Instance()->Initialize();
 
     LOGI << "SDL Initialization";
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
@@ -59,6 +59,12 @@ int main(int, char**) {
     // Dear ImGui windows.
     MEOV::Window::Git gitW;
     MEOV::Window::Test testW;
+    MEOV::Window::Log::Reference logW{ new MEOV::Window::Log };  // FIXME: ambiguous '::Ref' from Subscriber.
+
+    if(auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() }; logStorage != nullptr) {
+        logStorage->Subscribe(logW);
+    }
+
     testW.ToggleNoResize();
 
     // Main loop.
@@ -83,7 +89,7 @@ int main(int, char**) {
         // Show the big demo window.
         ImGui::ShowDemoWindow(&show_demo_window);
         // Show singleton log window.
-        MEOV::Window::Log::Instance()->Draw();
+        logW->Draw();
         // Show Git info window.
         gitW.Draw();
         // Show another simple test window.

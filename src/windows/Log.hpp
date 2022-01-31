@@ -7,16 +7,13 @@
 
 namespace MEOV::Window {
 
-class Log final : public Base, public MEOV::Utils::Singleton<Log> {
+class Log final : public Base, public Utils::Log::Storage::Subscriber {
 public:
+    using Reference = std::shared_ptr<Log>;  // FIXME: ambiguous '::Ref' from Subscriber.
     Log();
-    void Update(std::vector<plog::util::nstring>* messages);
 
 protected:
     void DrawImpl() override final;
-
-private:
-    std::vector<plog::util::nstring>* _messages;
 };
 
 }  // namespace MEOV::Window

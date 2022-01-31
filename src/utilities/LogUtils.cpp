@@ -68,7 +68,7 @@ putil::nstring DefaultFormatter::format(const plog::Record &record) {
     return ss.str();
 }
 
-void Log::Initialize() {
+void LogUtils::Initialize() {
     if(!fs::exists(sLoggerDirectory)) {
         fs::create_directories(sLoggerDirectory);
     }
@@ -77,7 +77,8 @@ void Log::Initialize() {
 
     static plog::ColorConsoleAppender<DefaultFormatter> Console;
     static plog::RollingFileAppender<DefaultFormatter> File{ logfile.c_str() };
-    static plog::LogWindowAppender<DefaultFormatter> ImGuiWindow;
+    // static plog::LogWindowAppender<DefaultFormatter> ImGuiWindow;
+    static MEOV::Utils::Log::Storage Storage;
 
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
 
@@ -85,29 +86,18 @@ void Log::Initialize() {
 #if defined(DEBUG)
         .addAppender(&Console)
 #endif
-        .addAppender(&ImGuiWindow);
+        .addAppender(&Storage);
 }
 
-std::string Log::GenerateLogFileName() const {
+std::string LogUtils::GenerateLogFileName() const {
     time_t now{ time(nullptr) };
     std::stringstream out;
     out << std::put_time(localtime(&now), "%y%m%d%H.log");
     return out.str();
 }
 
-}  // namespace MEOV::Utils
-
-namespace plog {
-
-template<class Formatter>
-LogWindowAppender<Formatter>::LogWindowAppender() {}
-
-template<class Formatter>
-void LogWindowAppender<Formatter>::write(const Record &record) {
-    util::nstring str{ Formatter::format(record) };
-    mMessages.push_back(str);
-    // Notify the log window instance.
-    MEOV::Window::Log::Instance()->Update(&mMessages);
+Log::Storage::Ref LogUtils::GetLogStorage() const {
+    return mLogStorage;
 }
 
-}  // namespace plog
+}  // namespace MEOV::Utils
