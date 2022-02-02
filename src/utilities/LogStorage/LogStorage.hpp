@@ -18,6 +18,9 @@ public:
         std::weak_ptr<Container> mStorage;
     };
 
+    Storage()
+        : mStorage{ new Container } {}
+
     // Overriden write method of IAppender.
     void write(const plog::Record& record) override final;
 
@@ -26,7 +29,7 @@ public:
 
 private:
     ContainerRef mStorage;
-    std::set<Subscriber::WeakRef> mSubscribers;
+    std::list<Subscriber::WeakRef> mSubscribers;
 };
 
 

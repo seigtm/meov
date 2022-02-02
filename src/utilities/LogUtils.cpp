@@ -1,5 +1,5 @@
-#include "AppInfo.hpp"
 #include "Common.hpp"
+#include "AppInfo.hpp"
 #include "LogUtils.hpp"
 
 #include <plog/Init.h>
@@ -77,8 +77,8 @@ void LogUtils::Initialize() {
 
     static plog::ColorConsoleAppender<DefaultFormatter> Console;
     static plog::RollingFileAppender<DefaultFormatter> File{ logfile.c_str() };
-    // static plog::LogWindowAppender<DefaultFormatter> ImGuiWindow;
-    static MEOV::Utils::Log::Storage Storage;
+    static MEOV::Utils::Log::Storage::Ref Storage{ new MEOV::Utils::Log::Storage };
+    mLogStorage = Storage;
 
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
 
@@ -86,7 +86,7 @@ void LogUtils::Initialize() {
 #if defined(DEBUG)
         .addAppender(&Console)
 #endif
-        .addAppender(&Storage);
+        .addAppender(&*mLogStorage);
 }
 
 std::string LogUtils::GenerateLogFileName() const {
