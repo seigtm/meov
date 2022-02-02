@@ -27,12 +27,12 @@ void Storage::Subscribe(const Subscriber::Ref& s) {
     if(s == nullptr) {
         return;
     }
-    mSubscribers.insert(s);
+    mSubscribers.emplace_back(s);
     s->OnSubscribe(mStorage);
 }
 
 void Storage::Unsubscribe(const Subscriber::Ref& s) {
-    mSubscribers.erase(s);
+    // mSubscribers.remove(s);
 }
 
 

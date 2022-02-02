@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "11e132b529e73de56585e74c18d9e9b96dcc6f87-dirty"
-#define GIT_COMMIT_DATE "Sat Jan 29 14:04:03 2022"
-#define GIT_COMMIT_MESSAGE "Created scroll area and changed clear button text."
+#define GIT_COMMIT_HASH "9bde63f3683a9c41cbcd9b0082f6c23ab94515f5-dirty"
+#define GIT_COMMIT_DATE "Mon Jan 31 18:51:43 2022"
+#define GIT_COMMIT_MESSAGE "Temporary version (bugs + unrefactored)."
 
 namespace MEOV {
 
