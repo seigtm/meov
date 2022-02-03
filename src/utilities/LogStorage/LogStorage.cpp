@@ -14,6 +14,9 @@ void Storage::Subscriber::OnStorageUpdate() {}
 
 //========================== Storage =============================//
 
+Storage::Storage()
+    : mStorage{ new Container } {}
+
 void Storage::write(const plog::Record& record) {
     mStorage->emplace_back(DefaultFormatter::format(record));
     for(auto&& weakptr : mSubscribers) {
@@ -32,8 +35,7 @@ void Storage::Subscribe(const Subscriber::Ref& s) {
 }
 
 void Storage::Unsubscribe(const Subscriber::Ref& s) {
-    // mSubscribers.remove(s);
+    // mSubscribers.remove(s); // FIXME:
 }
-
 
 }  // namespace MEOV::Utils::Log
