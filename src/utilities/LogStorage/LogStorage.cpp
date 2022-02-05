@@ -35,7 +35,11 @@ void Storage::Subscribe(const Subscriber::Ref& s) {
 }
 
 void Storage::Unsubscribe(const Subscriber::Ref& s) {
-    // mSubscribers.remove(s); // FIXME:
+    mSubscribers.remove_if(
+        [s](auto&& x) {
+            auto ptr = x.lock();
+            return ptr == s;
+        });
 }
 
 }  // namespace MEOV::Utils::Log
