@@ -61,9 +61,11 @@ int main(int, char**) {
     MEOV::Window::Test testW;
     MEOV::Window::Log::Reference logW{ new MEOV::Window::Log };  // FIXME: ambiguous '::Ref' from Subscriber.
 
-    if(auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() }; logStorage != nullptr) {
+    auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() };
+    if(logStorage != nullptr) {
         logStorage->Subscribe(logW);
     }
+    logStorage->Unsubscribe(logW);  // FIXME: Doesn't become unsubscribed here. Why?
 
     testW.ToggleNoResize();
 
