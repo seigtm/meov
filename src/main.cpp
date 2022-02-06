@@ -59,13 +59,15 @@ int main(int, char**) {
     // Dear ImGui windows.
     MEOV::Window::Git gitW;
     MEOV::Window::Test testW;
-    MEOV::Window::Log::Reference logW{ new MEOV::Window::Log };  // FIXME: ambiguous '::Ref' from Subscriber.
+    MEOV::Window::Log::Reference logW1{ new MEOV::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
+    MEOV::Window::Log::Reference logW2{ new MEOV::Window::Log{ "Second" } };
 
     auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
-        logStorage->Subscribe(logW);
+        logStorage->Subscribe(logW1);
+        logStorage->Subscribe(logW2);
     }
-    logStorage->Unsubscribe(logW);  // FIXME: Doesn't become unsubscribed here. Why?
+    // logStorage->Unsubscribe(logW1);
 
     testW.ToggleNoResize();
 
@@ -91,7 +93,8 @@ int main(int, char**) {
         // Show the big demo window.
         ImGui::ShowDemoWindow(&show_demo_window);
         // Show singleton log window.
-        logW->Draw();
+        logW1->Draw();
+        logW2->Draw();
         // Show Git info window.
         gitW.Draw();
         // Show another simple test window.

@@ -12,7 +12,7 @@ public:
     class Subscriber : public AsReference<Subscriber> {
     public:
         virtual void OnSubscribe(ContainerRef storage);
-        virtual void OnStorageUpdate();
+        virtual void OnUnsubscribe();
 
     protected:
         std::weak_ptr<Container> mStorage;

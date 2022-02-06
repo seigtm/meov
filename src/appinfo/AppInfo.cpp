@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "8047623419d06a64aeeb754e263e1cf81f70a0a3-dirty"
-#define GIT_COMMIT_DATE "Fri Feb 4 00:50:35 2022"
-#define GIT_COMMIT_MESSAGE "Small refactoring."
+#define GIT_COMMIT_HASH "66633a837d2f6e751652d2ba2032fab31c51802a-dirty"
+#define GIT_COMMIT_DATE "Sun Feb 6 01:08:52 2022"
+#define GIT_COMMIT_MESSAGE "Trying to unsubscribe log window, but it's not working for now :(."
 
 namespace MEOV {
 
