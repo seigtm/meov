@@ -10,7 +10,9 @@ void Storage::Subscriber::OnSubscribe(ContainerRef storage) {
     mStorage = storage;
 }
 
-void Storage::Subscriber::OnStorageUpdate() {}
+void Storage::Subscriber::OnUnsubscribe() {
+    mStorage.reset();
+}
 
 //========================== Storage =============================//
 
@@ -19,11 +21,12 @@ Storage::Storage()
 
 void Storage::write(const plog::Record& record) {
     mStorage->emplace_back(DefaultFormatter::format(record));
-    for(auto&& weakptr : mSubscribers) {
-        if(auto sub{ weakptr.lock() }; sub != nullptr) {
-            sub->OnStorageUpdate();
-        }
-    }
+    // FIXME: Why do we even need OnStorageUpdate()?
+    // for(auto&& weakptr : mSubscribers) {
+    //     if(auto sub{ weakptr.lock() }; sub != nullptr) {
+    //         sub->OnStorageUpdate();
+    //     }
+    // }
 }
 
 void Storage::Subscribe(const Subscriber::Ref& s) {
@@ -38,6 +41,7 @@ void Storage::Unsubscribe(const Subscriber::Ref& s) {
     mSubscribers.remove_if(
         [s](auto&& x) {
             auto ptr = x.lock();
+            s->OnUnsubscribe();
             return ptr == s;
         });
 }

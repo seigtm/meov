@@ -2,8 +2,8 @@
 
 namespace MEOV::Window {
 
-Log::Log()
-    : Base{ "Log" } {}
+Log::Log(std::string_view const title)
+    : Base{ title } {}
 
 void Log::DrawImpl() {
     auto storage{ mStorage.lock() };
