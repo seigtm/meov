@@ -5,10 +5,11 @@
 #include "LogUtils.hpp"
 
 #include "windows/Git.hpp"
+#include "windows/Log.hpp"
 #include "windows/Test.hpp"
 
 int main(int, char**) {
-    MEOV::Utils::Log::Instance()->Initialize();
+    MEOV::Utils::LogUtils::Instance()->Initialize();
 
     LOGI << "SDL Initialization";
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
@@ -58,8 +59,17 @@ int main(int, char**) {
     // Dear ImGui windows.
     MEOV::Window::Git gitW;
     MEOV::Window::Test testW;
+    MEOV::Window::Log::Reference logW1{ new MEOV::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
+    MEOV::Window::Log::Reference logW2{ new MEOV::Window::Log{ "Second" } };
+
+    auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() };
+    if(logStorage != nullptr) {
+        logStorage->Subscribe(logW1);
+        logStorage->Subscribe(logW2);
+    }
+    // logStorage->Unsubscribe(logW1);
+
     testW.ToggleNoResize();
-    testW.ToggleNoMove();
 
     // Main loop.
     LOGI << "Start main loop";
@@ -82,7 +92,9 @@ int main(int, char**) {
 
         // Show the big demo window.
         ImGui::ShowDemoWindow(&show_demo_window);
-
+        // Show singleton log window.
+        logW1->Draw();
+        logW2->Draw();
         // Show Git info window.
         gitW.Draw();
         // Show another simple test window.

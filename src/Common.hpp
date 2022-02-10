@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <bitset>
+#include <set>
 #include <codecvt>
 #include <chrono>
 #include <cstdio>
@@ -21,5 +22,6 @@
 #include <locale>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace fs = std::filesystem;
