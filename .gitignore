@@ -36,3 +36,6 @@ build/
 
 # VSCode JSONs folder
 .vscode/
+
+# Ini files
+*.ini

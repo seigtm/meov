@@ -24,8 +24,8 @@ message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HA
 make_config_file(${root}/src/appinfo/AppInfo.cpp)
 
 #=== Sources ===#
-file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
-file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp)
+file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp) # CONFIGURE_DEPENDS)
+file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp) # CONFIGURE_DEPENDS)
 
 set(directories)
 foreach(header ${headers})

@@ -8,6 +8,7 @@ template<class Base>
 class AsReference {
 public:
     using Ref = std::shared_ptr<Base>;
+    using WeakRef = std::weak_ptr<Base>;
     using Ptr = std::unique_ptr<Base>;
 };
 
@@ -16,7 +17,7 @@ class NonCopyable {
 public:
     NonCopyable(const NonCopyable &) = delete;
     NonCopyable &operator=(const NonCopyable &) = delete;
-    Base &operator =(const Base &) = delete;
+    Base &operator=(const Base &) = delete;
 
 protected:
     NonCopyable() = default;
@@ -36,4 +37,4 @@ protected:
     ~Singleton() = default;
 };
 
-} // namespace MEOV::Utils
+}  // namespace MEOV::Utils
