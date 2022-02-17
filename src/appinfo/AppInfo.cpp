@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "a1716ff4856209d1da61c855570c32fabd448435"
-#define GIT_COMMIT_DATE "Thu Feb 10 07:51:14 2022"
-#define GIT_COMMIT_MESSAGE "Merge pull request #11 from seigtm/Baranov_0.1.4_Log_Window"
+#define GIT_COMMIT_HASH "b96fe6ed42925746f7203f892c22168845e44626-dirty"
+#define GIT_COMMIT_DATE "Thu Feb 17 15:33:02 2022"
+#define GIT_COMMIT_MESSAGE "Small refactoring in AppInfo."
 
 namespace MEOV {
 
