@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "66633a837d2f6e751652d2ba2032fab31c51802a-dirty"
-#define GIT_COMMIT_DATE "Sun Feb 6 01:08:52 2022"
-#define GIT_COMMIT_MESSAGE "Trying to unsubscribe log window, but it's not working for now :(."
+#define GIT_COMMIT_HASH "a1716ff4856209d1da61c855570c32fabd448435"
+#define GIT_COMMIT_DATE "Thu Feb 10 07:51:14 2022"
+#define GIT_COMMIT_MESSAGE "Merge pull request #11 from seigtm/Baranov_0.1.4_Log_Window"
 
 namespace MEOV {
 

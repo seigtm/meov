@@ -24,5 +24,4 @@ struct AppInfo {
     static bool IsDebugMode();
 };
 
-
 }  // namespace MEOV
