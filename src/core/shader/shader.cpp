@@ -78,7 +78,6 @@ Shader::Setter &Shader::Setter::set(bool v1, bool v2, bool v3, bool v4) {
 
 Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
     : program{ glCreateProgram() } {
-
     unsigned vertex{ makeShader(GL_VERTEX_SHADER, load(vertexPath)) };
     unsigned fragment{ makeShader(GL_FRAGMENT_SHADER, load(fragmentPath)) };
 
@@ -90,7 +89,8 @@ Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
     if(!success) {
         char error[512];
         glGetProgramInfoLog(program, sizeof(error), nullptr, error);
-        LOGE << "[Shader] Failed while linking program:\n" << error;
+        LOGE << "[Shader] Failed while linking program:\n"
+             << error;
     }
 
     glDeleteShader(vertex);
@@ -115,7 +115,7 @@ Shader::operator unsigned() const {
 
 std::string Shader::load(const std::string &path) const {
     std::ifstream file{ path };
-    return std::string{ std::istreambuf_iterator<char>{ file }, {}};
+    return std::string{ std::istreambuf_iterator<char>{ file }, {} };
 }
 
 unsigned Shader::makeShader(GLenum type, const std::string &source) const {
@@ -139,9 +139,9 @@ unsigned Shader::makeShader(GLenum type, const std::string &source) const {
 
 std::string Shader::getDefaultShaderSource(GLenum type) const {
     switch(type) {
-        case GL_VERTEX_SHADER:
-            return {
-R"glsl(
+    case GL_VERTEX_SHADER:
+        return {
+            R"glsl(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aClr;
@@ -156,11 +156,11 @@ void main() {
     vertexTexCoord = aTex;
 }
 )glsl"
-            };
-            break;
-        case GL_FRAGMENT_SHADER:
-            return {
-R"glsl(
+        };
+        break;
+    case GL_FRAGMENT_SHADER:
+        return {
+            R"glsl(
 #version 330 core
 in vec3 vertexColor;
 in vec2 vertexTexCoord;
@@ -178,11 +178,12 @@ void main() {
     }
 };
 )glsl"
-            };
-            break;
-        default:
-            break;
+        };
+        break;
+    default:
+        break;
     }
+    return {};
 }
 
-} // namespace meov::core
+}  // namespace meov::core

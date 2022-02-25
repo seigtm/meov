@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "7d34fd6b8cb3cd31b518b0845ea99f9a21536a2e-dirty"
-#define GIT_COMMIT_DATE "Thu Feb 17 15:34:28 2022"
-#define GIT_COMMIT_MESSAGE "Fixed line endings in AppInfo ini-file."
+#define GIT_COMMIT_HASH "37eac9e0783c35c49b617f3d366f397f77dc4a9a"
+#define GIT_COMMIT_DATE "Fri Feb 25 18:45:24 2022"
+#define GIT_COMMIT_MESSAGE "Some glass of liquided shit"
 
 namespace meov {
 

@@ -10,7 +10,7 @@ namespace {
 using MeshPtr = std::shared_ptr<Mesh>;
 using ShaderPtr = std::shared_ptr<Shader>;
 using TexturePtr = std::shared_ptr<Texture>;
-}
+}  // namespace
 
 class Model {
 public:
@@ -39,4 +39,4 @@ private:
     TexturePtr mTexture;
 };
 
-} // namespace meov::core
+}  // namespace meov::core

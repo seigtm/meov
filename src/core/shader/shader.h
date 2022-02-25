@@ -3,11 +3,13 @@
 namespace meov::core {
 
 namespace Position {
-    enum Type {
-        Position,
-        Color,
-        TextureCoordinates
-    };
+
+enum Type {
+    Position,
+    Color,
+    TextureCoordinates
+};
+
 };
 
 class Shader {
@@ -36,6 +38,7 @@ class Shader::Setter {
     friend class Shader;
 
     Setter(Shader &parent, const std::string &name);
+
 public:
     Setter &set(float value);
     Setter &set(float v1, float v2);
@@ -57,4 +60,4 @@ private:
     int id;
 };
 
-} // namespace meov::core
+}  // namespace meov::core
