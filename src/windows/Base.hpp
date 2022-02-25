@@ -2,7 +2,7 @@
 
 #include "Common.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 class Base {
 public:
@@ -48,4 +48,4 @@ private:
     void ToggleFlag(ImGuiWindowFlags flag);
 };
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

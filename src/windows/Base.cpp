@@ -1,6 +1,6 @@
 #include "windows/Base.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 Base::Base(std::string_view const title, ImVec2 const& size, bool isClosable, ImGuiWindowFlags flags)
     : _title{ title }
@@ -39,4 +39,4 @@ void Base::ToggleFlag(ImGuiWindowFlags flag) {
     _flags ^= flag;
 }
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace MEOV {
+namespace meov {
 
 struct AppInfo {
     static const std::string Version();
@@ -24,4 +24,4 @@ struct AppInfo {
     static bool IsDebugMode();
 };
 
-}  // namespace MEOV
+}  // namespace meov

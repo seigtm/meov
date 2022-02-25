@@ -9,11 +9,11 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "b96fe6ed42925746f7203f892c22168845e44626-dirty"
-#define GIT_COMMIT_DATE "Thu Feb 17 15:33:02 2022"
-#define GIT_COMMIT_MESSAGE "Small refactoring in AppInfo."
+#define GIT_COMMIT_HASH "7d34fd6b8cb3cd31b518b0845ea99f9a21536a2e-dirty"
+#define GIT_COMMIT_DATE "Thu Feb 17 15:34:28 2022"
+#define GIT_COMMIT_MESSAGE "Fixed line endings in AppInfo ini-file."
 
-namespace MEOV {
+namespace meov {
 
 const std::string AppInfo::Version() {
 #if defined(VERSION)
@@ -59,7 +59,7 @@ const std::string AppInfo::Name() {
 #if defined(PROGRAM_NAME)
     return PROGRAM_NAME;
 #else
-    return "MEOV | Minimalistic Easy Object Viewer";
+    return "meov | Minimalistic Easy Object Viewer";
 #endif
 }
 
@@ -103,4 +103,4 @@ bool AppInfo::IsDebugMode() {
 #endif
 }
 
-}  // namespace MEOV
+}  // namespace meov

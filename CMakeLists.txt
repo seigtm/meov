@@ -45,7 +45,7 @@ conan_setup()
 conan_cmake_configure(
     REQUIRES
         sdl/2.0.18
-        glad/0.1.34
+        glbinding/3.1.0
         imgui/1.86
         glm/0.9.9.8
         glew/2.2.0
@@ -53,8 +53,6 @@ conan_cmake_configure(
     OPTIONS
         sdl:vulkan=False
         sdl:sdl2main=False
-        glad:gl_version=3.3
-        glad:gl_profile=core
     GENERATORS
         cmake_find_package
     IMPORTS
@@ -72,7 +70,7 @@ conan_cmake_install(
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(imgui REQUIRED)
-find_package(glad REQUIRED)
+find_package(glbinding REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
@@ -85,14 +83,13 @@ endif()
 target_include_directories(${target}
     PUBLIC
         ${directories}
-        ${glad_INCLUDES}
 )
 target_link_libraries(${target}
     PUBLIC
         ${OPENGL_opengl_LIBRARY}
         SDL2::SDL2-static
         imgui::imgui
-        glad::glad
+        glbinding::glbinding
         glm::glm
         GLEW::GLEW
         plog::plog
@@ -102,7 +99,10 @@ set_target_properties(${target}
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
+        ARCHIVE_OUTPUT_DIRECTORY ${root}/assets
+        LIBRARY_OUTPUT_DIRECTORY ${root}/assets
+        RUNTIME_OUTPUT_DIRECTORY ${root}/assets
 )
 
 #=== Install ===#
-install(TARGETS ${target} RUNTIME DESTINATION ${root}/bin)
+install(TARGETS ${target} RUNTIME DESTINATION ${root}/assets)
