@@ -17,4 +17,4 @@ private:
     bool mValid;
 };
 
-} // namespace meov::core
+}  // namespace meov::core

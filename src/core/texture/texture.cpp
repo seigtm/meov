@@ -49,4 +49,4 @@ unsigned Texture::getID() const {
     return mId;
 }
 
-} // namespace meov::core
+}  // namespace meov::core

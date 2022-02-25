@@ -60,12 +60,12 @@ size_t Vertices::count() const {
     return mSource.size();
 }
 
-const Vertex& Vertices::operator[](size_t id) const {
+const Vertex &Vertices::operator[](size_t id) const {
     return mSource.at(id);
 }
 
-Vertex& Vertices::operator[](size_t id) {
+Vertex &Vertices::operator[](size_t id) {
     return mSource.at(id);
 }
 
-} // namespace meov::core
+}  // namespace meov::core

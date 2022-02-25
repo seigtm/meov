@@ -29,7 +29,9 @@ private:
     size_t mVertices{};
 
     enum class BufferType {
-        VAO, VBO, EBO
+        VAO,
+        VBO,
+        EBO
     };
 
     std::map<BufferType, GLuint> mBuffers;
@@ -38,4 +40,4 @@ private:
     void loadBuffer(BufferType type, GLenum target, size_t size, const GLubyte *data);
 };
 
-} // namespace meov::core
+}  // namespace meov::core

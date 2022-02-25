@@ -21,17 +21,17 @@ Model::Model(const MeshPtr &mesh, const ShaderPtr &shader, const TexturePtr &tex
     mShader->get("defTexture").set(0);
 }
 
-Model& Model::Mesh(const MeshPtr &Mesh) {
+Model &Model::Mesh(const MeshPtr &Mesh) {
     mMesh = Mesh;
     return *this;
 }
 
-Model& Model::shader(const ShaderPtr &shader) {
+Model &Model::shader(const ShaderPtr &shader) {
     mShader = shader;
     return *this;
 }
 
-Model& Model::texture(const TexturePtr &texture) {
+Model &Model::texture(const TexturePtr &texture) {
     mTexture = texture;
     return *this;
 }
@@ -63,4 +63,4 @@ void Model::bind() const {
     if(mTexture) mTexture->bind();
 }
 
-} // namespace meov::core
+}  // namespace meov::core

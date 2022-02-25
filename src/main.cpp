@@ -13,7 +13,7 @@
 #include "mesh.h"
 #include "model.h"
 
-int main(int, char **) {
+int main(int, char**) {
     meov::Utils::LogUtils::Instance()->Initialize();
 
     LOGI << "Current directory: " << fs::current_path().string();
@@ -43,10 +43,9 @@ int main(int, char **) {
     SDL_GL_SetSwapInterval(1);  // Enable vsync.
 
     glbinding::Binding::initialize(
-        [](const char *name) {
+        [](const char* name) {
             return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
-        }
-    );
+        });
 
     // Setup Dear ImGui context
     LOGI << "ImGui Initialization";
@@ -80,15 +79,16 @@ int main(int, char **) {
 
     meov::core::ShaderPtr shader{ std::make_shared<meov::core::Shader>() };
     meov::core::TexturePtr texture{ std::make_shared<meov::core::Texture>(
-        "../textures/best-of-the-best.png"
-    ) };
+        "../textures/best-of-the-best.png") };
     const glm::vec4 white{ 1.f, 1.f, 1.f, 1.f };
+    // clang-format off
     meov::core::MeshPtr mesh{ std::make_shared<meov::core::Mesh>(meov::core::Vertices{
         meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, .0f }, white, glm::vec2{ 1.0f, 1.0f } },
         meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, .0f }, white, glm::vec2{ 1.0f, 0.0f } },
         meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, .0f }, white, glm::vec2{ 0.0f, 0.0f } },
         meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, .0f }, white, glm::vec2{ 0.0f, 1.0f } },
     } ) };
+    // clang-format on
 
     meov::core::Model triangle{ mesh, shader, texture };
 

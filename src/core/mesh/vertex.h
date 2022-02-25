@@ -34,20 +34,25 @@ private:
 
 namespace VertexInfo {
 
-    constexpr size_t count{ 9 };
-    constexpr size_t stride{ sizeof(float) * count };
+constexpr size_t count{ 9 };
+constexpr size_t stride{ sizeof(float) * count };
 
-    namespace Count {
-        constexpr int pos{ glm::vec3::length() };
-        constexpr int clr{ glm::vec4::length() };
-        constexpr int tex{ glm::vec2::length() };
-    }
+namespace Count {
 
-    namespace Offset {
-        constexpr size_t pos{ 0 };
-        constexpr size_t clr{ sizeof(float) * Count::pos };
-        constexpr size_t tex{ sizeof(float) * Count::pos + Count::clr };
-    }
-}
+constexpr int pos{ glm::vec3::length() };
+constexpr int clr{ glm::vec4::length() };
+constexpr int tex{ glm::vec2::length() };
 
-} // namespace meov::core
+}  // namespace Count
+
+namespace Offset {
+
+constexpr size_t pos{ 0 };
+constexpr size_t clr{ sizeof(float) * Count::pos };
+constexpr size_t tex{ sizeof(float) * Count::pos + Count::clr };
+
+}  // namespace Offset
+
+}  // namespace VertexInfo
+
+}  // namespace meov::core

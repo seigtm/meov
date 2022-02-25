@@ -11,12 +11,12 @@ Mesh::Mesh() {
     glGenVertexArrays(1, &mBuffers[BufferType::VAO]);
 }
 
-Mesh::Mesh(const Vertices &vertices) 
+Mesh::Mesh(const Vertices &vertices)
     : Mesh{} {
     load(vertices);
 }
 
-Mesh::Mesh(const Vertices &vertices, const std::vector<unsigned> &indices) 
+Mesh::Mesh(const Vertices &vertices, const std::vector<unsigned> &indices)
     : Mesh{ vertices } {
     load(indices);
 }
@@ -107,4 +107,4 @@ void Mesh::loadBuffer(BufferType type, GLenum target, size_t size, const GLubyte
     glBufferData(target, size, data, GL_STATIC_DRAW);
 }
 
-} // namespace meov::core
+}  // namespace meov::core
