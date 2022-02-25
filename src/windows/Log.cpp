@@ -1,6 +1,6 @@
 #include "windows/Log.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 Log::Log(std::string_view const title)
     : Base{ title } {}
@@ -26,4 +26,4 @@ void Log::DrawImpl() {
     ImGui::EndChild();
 }
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

@@ -3,7 +3,7 @@
 #include "Utilities.hpp"
 #include "LogStorage.hpp"
 
-namespace MEOV::Utils {
+namespace meov::Utils {
 
 class DefaultFormatter {
 public:
@@ -24,4 +24,4 @@ private:
     Log::Storage::Ref mLogStorage;
 };
 
-}  // namespace MEOV::Utils
+}  // namespace meov::Utils

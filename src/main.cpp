@@ -6,18 +6,24 @@
 
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
-#include "windows/Test.hpp"
 
-int main(int, char**) {
-    MEOV::Utils::LogUtils::Instance()->Initialize();
+#include "vertex.h"
+#include "shader.h"
+#include "texture.h"
+#include "mesh.h"
+#include "model.h"
 
+int main(int, char **) {
+    meov::Utils::LogUtils::Instance()->Initialize();
+
+    LOGI << "Current directory: " << fs::current_path().string();
     LOGI << "SDL Initialization";
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
         LOGF << "Error: " << SDL_GetError();
         return -1;
     }
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, MEOV::AppInfo::GLSLVersionMajor());
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, MEOV::AppInfo::GLSLVersionMinor());
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, meov::AppInfo::GLSLVersionMajor());
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, meov::AppInfo::GLSLVersionMinor());
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     // Create window with graphics context.
@@ -27,7 +33,7 @@ int main(int, char**) {
 
     LOGI << "Window Initialization";
     SDL_Window* window{ SDL_CreateWindow(
-        MEOV::AppInfo::Name().c_str(),
+        meov::AppInfo::Name().c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         1280, 720,
@@ -35,6 +41,12 @@ int main(int, char**) {
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1);  // Enable vsync.
+
+    glbinding::Binding::initialize(
+        [](const char *name) {
+            return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
+        }
+    );
 
     // Setup Dear ImGui context
     LOGI << "ImGui Initialization";
@@ -50,26 +62,35 @@ int main(int, char**) {
 
     // Setup Platform/Renderer backends.
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
-    ImGui_ImplOpenGL3_Init(MEOV::AppInfo::GLSLVersion().c_str());
+    ImGui_ImplOpenGL3_Init(meov::AppInfo::GLSLVersion().c_str());
 
     // Our state.
     bool show_demo_window = true;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Dear ImGui windows.
-    MEOV::Window::Git gitW;
-    MEOV::Window::Test testW;
-    MEOV::Window::Log::Reference logW1{ new MEOV::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
-    MEOV::Window::Log::Reference logW2{ new MEOV::Window::Log{ "Second" } };
+    meov::Window::Git gitW;
+    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
 
-    auto logStorage{ MEOV::Utils::LogUtils::Instance()->GetLogStorage() };
+    auto logStorage{ meov::Utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
         logStorage->Subscribe(logW1);
-        logStorage->Subscribe(logW2);
     }
     // logStorage->Unsubscribe(logW1);
 
-    testW.ToggleNoResize();
+    meov::core::ShaderPtr shader{ std::make_shared<meov::core::Shader>() };
+    meov::core::TexturePtr texture{ std::make_shared<meov::core::Texture>(
+        "../textures/best-of-the-best.png"
+    ) };
+    const glm::vec4 white{ 1.f, 1.f, 1.f, 1.f };
+    meov::core::MeshPtr mesh{ std::make_shared<meov::core::Mesh>(meov::core::Vertices{
+        meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, .0f }, white, glm::vec2{ 1.0f, 1.0f } },
+        meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, .0f }, white, glm::vec2{ 1.0f, 0.0f } },
+        meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, .0f }, white, glm::vec2{ 0.0f, 0.0f } },
+        meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, .0f }, white, glm::vec2{ 0.0f, 1.0f } },
+    } ) };
+
+    meov::core::Model triangle{ mesh, shader, texture };
 
     // Main loop.
     LOGI << "Start main loop";
@@ -90,21 +111,17 @@ int main(int, char**) {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        // Show the big demo window.
-        ImGui::ShowDemoWindow(&show_demo_window);
         // Show singleton log window.
         logW1->Draw();
-        logW2->Draw();
         // Show Git info window.
         gitW.Draw();
-        // Show another simple test window.
-        testW.Draw();
 
         // Rendering.
         ImGui::Render();
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
+        triangle.draw();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
     }

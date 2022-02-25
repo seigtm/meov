@@ -5,7 +5,7 @@
 #include "LogUtils.hpp"
 #include "windows/Base.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 class Log final : public Base, public Utils::Log::Storage::Subscriber {
 public:
@@ -16,4 +16,4 @@ protected:
     void DrawImpl() override final;
 };
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

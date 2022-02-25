@@ -2,7 +2,7 @@
 
 #include "windows/Base.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 class Git final : public Base {
 public:
@@ -12,4 +12,4 @@ protected:
     void DrawImpl() override final;
 };
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

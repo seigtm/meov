@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace MEOV::Utils {
+namespace meov::Utils {
 
 template<class Base>
 class AsReference {
@@ -37,4 +37,4 @@ protected:
     ~Singleton() = default;
 };
 
-}  // namespace MEOV::Utils
+}  // namespace meov::Utils

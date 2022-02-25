@@ -13,7 +13,7 @@
 #define GIT_COMMIT_DATE "@GIT_COMMIT_DATE@"
 #define GIT_COMMIT_MESSAGE "@GIT_COMMIT_MESSAGE@"
 
-namespace MEOV {
+namespace meov {
 
 const std::string AppInfo::Version() {
 #if defined(VERSION)
@@ -59,7 +59,7 @@ const std::string AppInfo::Name() {
 #if defined(PROGRAM_NAME)
     return PROGRAM_NAME;
 #else
-    return "MEOV | Minimalistic Easy Object Viewer";
+    return "meov | Minimalistic Easy Object Viewer";
 #endif
 }
 
@@ -103,4 +103,4 @@ bool AppInfo::IsDebugMode() {
 #endif
 }
 
-}  // namespace MEOV
+}  // namespace meov

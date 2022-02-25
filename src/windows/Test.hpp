@@ -3,7 +3,7 @@
 #include "Common.hpp"
 #include "windows/Base.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 class Test final : public Base {
 public:
@@ -13,4 +13,4 @@ protected:
     void DrawImpl() override final;
 };
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window

@@ -18,7 +18,7 @@ putil::nstring str2nstr(const std::string &str) {
 
 }  // namespace
 
-namespace MEOV::Utils {
+namespace meov::Utils {
 
 putil::nstring DefaultFormatter::header() {
     putil::nostringstream out;
@@ -77,7 +77,7 @@ void LogUtils::Initialize() {
 
     static plog::ColorConsoleAppender<DefaultFormatter> Console;
     static plog::RollingFileAppender<DefaultFormatter> File{ logfile.c_str() };
-    static MEOV::Utils::Log::Storage::Ref Storage{ new MEOV::Utils::Log::Storage };
+    static meov::Utils::Log::Storage::Ref Storage{ new meov::Utils::Log::Storage };
     mLogStorage = Storage;
 
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
@@ -100,4 +100,4 @@ Log::Storage::Ref LogUtils::GetLogStorage() const {
     return mLogStorage;
 }
 
-}  // namespace MEOV::Utils
+}  // namespace meov::Utils

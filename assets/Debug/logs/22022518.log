@@ -1,0 +1,58 @@
+﻿================== MEOV | Minimalistic Easy Object Viewer log ==================
+ Name:                                   MEOV | Minimalistic Easy Object Viewer
+ Version:                                                                v0.1.3
+ Log level:                                                               Debug
+ GLSL Version:                                                #version 330 core
+ Git hash:                       7d34fd6b8cb3cd31b518b0845ea99f9a21536a2e-dirty
+ Git date:                                             Thu Feb 17 15:34:28 2022
+ Git message:                           Fixed line endings in AppInfo ini-file.
+================================================================================
+[2022.02.25][18:23:46.939][INFO ][main@20] Running directory: G:\Projects\meov\assets\Debug\meov.exe
+[2022.02.25][18:23:46.943][INFO ][main@21] SDL Initialization
+[2022.02.25][18:23:47.199][INFO ][main@35] Window Initialization
+[2022.02.25][18:23:47.518][INFO ][main@53] ImGui Initialization
+[2022.02.25][18:23:47.526][ERROR][meov::core::Texture::Texture@18] [Texture] Error while loading texture from 'textures/best-of-the-best.png'
+[2022.02.25][18:23:47.527][ERROR][meov::core::Texture::Texture@19] [Texture]     can't fopen
+[2022.02.25][18:23:47.528][INFO ][main@99] Start main loop
+[2022.02.25][18:28:04.792][INFO ][main@20] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:28:04.793][INFO ][main@21] SDL Initialization
+[2022.02.25][18:28:04.961][INFO ][main@35] Window Initialization
+[2022.02.25][18:28:05.238][INFO ][main@53] ImGui Initialization
+[2022.02.25][18:28:05.240][ERROR][meov::core::Texture::Texture@18] [Texture] Error while loading texture from 'textures/best-of-the-best.png'
+[2022.02.25][18:28:05.241][ERROR][meov::core::Texture::Texture@19] [Texture]     can't fopen
+[2022.02.25][18:28:05.241][INFO ][main@99] Start main loop
+[2022.02.25][18:28:24.503][INFO ][main@20] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:28:24.503][INFO ][main@21] SDL Initialization
+[2022.02.25][18:28:24.662][INFO ][main@35] Window Initialization
+[2022.02.25][18:28:24.889][INFO ][main@53] ImGui Initialization
+[2022.02.25][18:28:24.916][INFO ][main@99] Start main loop
+[2022.02.25][18:29:51.986][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:29:51.987][INFO ][main@20] SDL Initialization
+[2022.02.25][18:29:52.147][INFO ][main@34] Window Initialization
+[2022.02.25][18:29:52.396][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:29:52.416][INFO ][main@95] Start main loop
+[2022.02.25][18:34:02.935][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:34:02.936][INFO ][main@20] SDL Initialization
+[2022.02.25][18:34:03.236][INFO ][main@34] Window Initialization
+[2022.02.25][18:34:03.780][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:34:03.795][INFO ][main@95] Start main loop
+[2022.02.25][18:36:16.997][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:36:16.998][INFO ][main@20] SDL Initialization
+[2022.02.25][18:36:17.164][INFO ][main@34] Window Initialization
+[2022.02.25][18:36:17.430][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:36:17.442][INFO ][main@96] Start main loop
+[2022.02.25][18:40:38.410][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:40:38.410][INFO ][main@20] SDL Initialization
+[2022.02.25][18:40:38.572][INFO ][main@34] Window Initialization
+[2022.02.25][18:40:38.839][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:40:38.849][INFO ][main@96] Start main loop
+[2022.02.25][18:41:44.418][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:41:44.419][INFO ][main@20] SDL Initialization
+[2022.02.25][18:41:44.579][INFO ][main@34] Window Initialization
+[2022.02.25][18:41:44.808][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:41:44.816][INFO ][main@96] Start main loop
+[2022.02.25][18:43:46.401][INFO ][main@19] Current directory: G:\Projects\meov\assets\Debug
+[2022.02.25][18:43:46.402][INFO ][main@20] SDL Initialization
+[2022.02.25][18:43:46.563][INFO ][main@34] Window Initialization
+[2022.02.25][18:43:46.787][INFO ][main@52] ImGui Initialization
+[2022.02.25][18:43:46.796][INFO ][main@96] Start main loop

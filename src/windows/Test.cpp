@@ -1,6 +1,6 @@
 #include "windows/Test.hpp"
 
-namespace MEOV::Window {
+namespace meov::Window {
 
 Test::Test()
     : Base{ "Test window", ImVec2{ 200, 150 } } {}
@@ -18,4 +18,4 @@ void Test::DrawImpl() {
     }
 }
 
-}  // namespace MEOV::Window
+}  // namespace meov::Window
