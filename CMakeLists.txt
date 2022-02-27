@@ -7,11 +7,7 @@ set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
 set(build_dir ${root}/build)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Debug)
-endif()
-
-set(CMAKE_INSTALL_PREFIX ${root}/bin/${CMAKE_BUILD_TYPE})
+set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
 include(${root}/cmake/ConanSetup.cmake)
@@ -24,8 +20,8 @@ message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HA
 make_config_file(${root}/src/appinfo/AppInfo.cpp)
 
 #=== Sources ===#
-file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp) # CONFIGURE_DEPENDS)
-file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp) # CONFIGURE_DEPENDS)
+file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
+file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp)
 
 set(directories)
 foreach(header ${headers})
@@ -54,18 +50,18 @@ conan_cmake_configure(
         sdl:vulkan=False
         sdl:sdl2main=False
     GENERATORS
-        cmake_find_package
+        cmake_find_package_multi
     IMPORTS
         "bin, *.dll -> ./bin"
         "lib, *.dylib* -> ./bin"
 )
-conan_cmake_autodetect(settings)
-conan_cmake_install(
-    PATH_OR_REFERENCE .
-    BUILD missing
-    REMOTE conancenter
-    SETTINGS ${settings}
-)
+foreach(TYPE ${CMAKE_CONFIGURATION_TYPES})
+    conan_cmake_autodetect(settings BUILD_TYPE ${TYPE})
+    conan_cmake_install(PATH_OR_REFERENCE .
+                        BUILD missing
+                        REMOTE conancenter
+                        SETTINGS ${settings})
+endforeach()
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -77,9 +73,6 @@ find_package(plog REQUIRED)
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(${target} PRIVATE DEBUG=1)
-endif()
 target_include_directories(${target}
     PUBLIC
         ${directories}
@@ -99,10 +92,12 @@ set_target_properties(${target}
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
-        ARCHIVE_OUTPUT_DIRECTORY ${root}/assets
-        LIBRARY_OUTPUT_DIRECTORY ${root}/assets
-        RUNTIME_OUTPUT_DIRECTORY ${root}/assets
+        # TODO: Rethink output directories (it's bad to assign it to the assets dir).
+        # ARCHIVE_OUTPUT_DIRECTORY ${root}/assets
+        # LIBRARY_OUTPUT_DIRECTORY ${root}/assets
+        # RUNTIME_OUTPUT_DIRECTORY ${root}/assets
 )
 
 #=== Install ===#
-install(TARGETS ${target} RUNTIME DESTINATION ${root}/assets)
+# TODO: Rethink install destination.
+# install(TARGETS ${target} RUNTIME DESTINATION ${root}/assets)
