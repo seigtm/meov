@@ -6,31 +6,55 @@
 
 ```json
 [
-    {
-        "name": "MainCamera",
-        "type": "camera",
-        "properties": {
-            "transform" {
-                "position" { "x": 0, "y": 0, "z": 0 },
-                "rotation" { "x": 0, "y": 0, "z": 0 },
-                "scale": { "x": 0, "y": 0, "z": 0 }
-            },
+  {
+    "name": "MainCamera",
+    "type": "camera",
+    "properties": {
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0,
+          "y": 0,
+          "z": 0
         }
-    },
-    {
-        "name": "Model",
-        "type": "node",
-        "properties": {
-            "transform": {
-                "position" { "x": 0, "y": 0, "z": -10 },
-                "rotation" { "x": 0, "y": 0, "z": 0 },
-                "scale": { "x": 0, "y": 0, "z": 0 }
-            },
-            "model": {
-                "path": "path/to/object.obj"
-            },
-        }
+      }
     }
+  },
+  {
+    "name": "Model",
+    "type": "node",
+    "properties": {
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -10
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "model": {
+        "path": "path/to/object.obj"
+      }
+    }
+  }
 ]
 ```
 
