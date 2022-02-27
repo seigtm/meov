@@ -2,8 +2,8 @@
 
 namespace meov::Window {
 
-Log::Log(std::string_view const title)
-    : Base{ title } {}
+Log::Log(std::string_view const title, ImVec2 const& size)
+    : Base{ title, size } {}
 
 void Log::DrawImpl() {
     auto storage{ mStorage.lock() };
