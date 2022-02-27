@@ -59,7 +59,7 @@ const std::string AppInfo::Name() {
 #if defined(PROGRAM_NAME)
     return PROGRAM_NAME;
 #else
-    return "meov | Minimalistic Easy Object Viewer";
+    return "MEOV | Minimalistic Easy Object Viewer";
 #endif
 }
 
