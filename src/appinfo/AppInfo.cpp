@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "70a07aeaa4e8ea218c5b9bc883a59479cb53c80a-dirty"
-#define GIT_COMMIT_DATE "Fri Feb 25 19:15:21 2022"
-#define GIT_COMMIT_MESSAGE "Refactoring (fixed formatting)."
+#define GIT_COMMIT_HASH "cf12dc6e4b24113a7d5785dbb5f4e32efc06571e-dirty"
+#define GIT_COMMIT_DATE "Sun Feb 27 14:05:58 2022"
+#define GIT_COMMIT_MESSAGE "Small refactoring."
 
 namespace meov {
 
