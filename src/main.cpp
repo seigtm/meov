@@ -63,10 +63,6 @@ int main(int, char**) {
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init(meov::AppInfo::GLSLVersion().c_str());
 
-    // Our state.
-    bool show_demo_window = true;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
     // Dear ImGui windows.
     meov::Window::Git gitW;
     meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
@@ -75,11 +71,10 @@ int main(int, char**) {
     if(logStorage != nullptr) {
         logStorage->Subscribe(logW1);
     }
-    // logStorage->Unsubscribe(logW1);
 
     meov::core::ShaderPtr shader{ std::make_shared<meov::core::Shader>() };
     meov::core::TexturePtr texture{ std::make_shared<meov::core::Texture>(
-        "../textures/best-of-the-best.png") };
+        "../../assets/textures/best-of-the-best.png") };
     const glm::vec4 white{ 1.f, 1.f, 1.f, 1.f };
     // clang-format off
     meov::core::MeshPtr mesh{ std::make_shared<meov::core::Mesh>(meov::core::Vertices{
@@ -119,6 +114,7 @@ int main(int, char**) {
         // Rendering.
         ImGui::Render();
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        static const ImVec4 clear_color{ .45f, .55f, .6f, 1.f };
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         triangle.draw();
