@@ -38,18 +38,18 @@ void Mesh::Draw(Shader &shader) {
         std::stringstream name;
         name << "texture";
         switch(texture.GetType()) {
-        case Texture::Type::Diffuse: {
-            name << "Diffuse" << diffuseCount++;
-        } break;
-        case Texture::Type::Specular: {
-            name << "Specular" << specularCount++;
-        } break;
-        case Texture::Type::Normal: {
-            name << "Normal" << normalCount++;
-        } break;
-        case Texture::Type::Height: {
-            name << "Height" << heightCount++;
-        } break;
+            case Texture::Type::Diffuse: {
+                name << "Diffuse" << diffuseCount++;
+            } break;
+            case Texture::Type::Specular: {
+                name << "Specular" << specularCount++;
+            } break;
+            case Texture::Type::Normal: {
+                name << "Normal" << normalCount++;
+            } break;
+            case Texture::Type::Height: {
+                name << "Height" << heightCount++;
+            } break;
         }
 
         LOGD << "Setting texture " << name.str() << " as " << i;

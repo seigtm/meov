@@ -126,7 +126,7 @@ int main() {
     auto shader{ std::make_shared<meov::core::Shader>(
         // "shaders/vertex_test.glsl",
         // "shaders/fragment_test.glsl"
-    ) };
+        ) };
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
             meov::core::Vertex{ glm::vec4{ 0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
@@ -150,20 +150,20 @@ int main() {
         while(SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
             switch(event.type) {
-            case SDL_WINDOWEVENT:
-                if(event.window.windowID != SDL_GetWindowID(window)) {
+                case SDL_WINDOWEVENT:
+                    if(event.window.windowID != SDL_GetWindowID(window)) {
+                        break;
+                    }
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                        glViewport(0, 0, event.window.data1, event.window.data2);
+                        break;
+                    } else if(event.window.event != SDL_WINDOWEVENT_CLOSE) {
+                        break;
+                    }
+                case SDL_QUIT:
+                    done = true;
+                default:
                     break;
-                }
-                if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                    glViewport(0, 0, event.window.data1, event.window.data2);
-                    break;
-                } else if(event.window.event != SDL_WINDOWEVENT_CLOSE) {
-                    break;
-                }
-            case SDL_QUIT:
-                done = true;
-            default:
-                break;
             }
         }
 
