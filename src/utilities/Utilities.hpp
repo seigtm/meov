@@ -2,8 +2,9 @@
 
 #include <memory>
 
-namespace meov::Utils {
+namespace meov::utils {
 
+/** @warning Use this class only for final classes! */
 template<class Base>
 class AsReference {
 public:
@@ -37,4 +38,4 @@ protected:
     ~Singleton() = default;
 };
 
-}  // namespace meov::Utils
+}  // namespace meov::utils

@@ -4,7 +4,7 @@
 
 #include "Utilities.hpp"
 
-namespace meov::Utils::Log {
+namespace meov::utils::Log {
 
 class Storage final : public AsReference<Storage>, public plog::IAppender {
 public:
@@ -33,4 +33,4 @@ private:
     std::list<Subscriber::WeakRef> mSubscribers;
 };
 
-}  // namespace meov::Utils::Log
+}  // namespace meov::utils::Log

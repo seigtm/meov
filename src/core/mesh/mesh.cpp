@@ -3,108 +3,122 @@
 #include "mesh.h"
 #include "vertex.h"
 #include "shader.h"
+#include "texture.h"
 
 namespace meov::core {
 
-Mesh::Mesh() {
-    mBuffers[BufferType::VAO] = 0u;
-    glGenVertexArrays(1, &mBuffers[BufferType::VAO]);
+Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, std::vector<Texture> &&textures)
+    : mVertices{ std::move(vertices) }
+    , mIndices{ std::move(indices) }
+    , mTextures{ std::move(textures) } {
+    Load();
 }
 
-Mesh::Mesh(const Vertices &vertices)
-    : Mesh{} {
-    load(vertices);
+Mesh::~Mesh() {
+    ResetBuffer(EBO);
+    ResetBuffer(VBO);
+    glDeleteVertexArrays(1, &VAO);
 }
 
-Mesh::Mesh(const Vertices &vertices, const std::vector<unsigned> &indices)
-    : Mesh{ vertices } {
-    load(indices);
+void Mesh::Draw(const std::shared_ptr<Shader> &shader) {
+    if (shader != nullptr) Draw(*shader);
 }
 
-void Mesh::load(const Vertices &vertices) {
-    if(vertices.empty()) {
-        return;
+void Mesh::Draw(Shader &shader) {
+    unsigned diffuseCount{ 1 };
+    unsigned specularCount{ 1 };
+    unsigned normalCount{ 1 };
+    unsigned heightCount{ 1 };
+    for (size_t i{}; i < mTextures.size(); ++i) {
+        auto &texture{ mTextures[i] };
+        if (!texture.Valid()) {
+            continue;
+        }
+        glActiveTexture(GL_TEXTURE0 + i);
+        std::stringstream name;
+        name << "texture";
+        switch(texture.GetType()) {
+            case Texture::Type::Diffuse: {
+                name << "Diffuse" << diffuseCount++;
+            } break;
+            case Texture::Type::Specular: {
+                name << "Specular" << specularCount++;
+            } break;
+            case Texture::Type::Normal: {
+                name << "Normal" << normalCount++;
+            } break;
+            case Texture::Type::Height: {
+                name << "Height" << heightCount++;
+            } break;
+        }
+
+        LOGD << "Setting texture " << name.str() << " as " << i;
+        shader.Get(name.str()).Set(texture.GetID());
+        texture.Bind();
     }
-    mVertices = vertices.count();
 
-    bind();
-    resetBuffer(BufferType::VBO);
-    loadBuffer(BufferType::VBO, GL_ARRAY_BUFFER, vertices.length(),
-               reinterpret_cast<const GLubyte *>(vertices.raw().data()));
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
-    glVertexAttribPointer(Position::Position, VertexInfo::Count::pos, GL_FLOAT, GL_FALSE,
-                          VertexInfo::stride, (void *)VertexInfo::Offset::pos);
-    glEnableVertexAttribArray(Position::Position);
-
-    glVertexAttribPointer(Position::Color, VertexInfo::Count::clr, GL_FLOAT, GL_FALSE,
-                          VertexInfo::stride, (void *)VertexInfo::Offset::clr);
-    glEnableVertexAttribArray(Position::Color);
-
-    glVertexAttribPointer(Position::TextureCoordinates, VertexInfo::Count::clr, GL_FLOAT, GL_FALSE,
-                          VertexInfo::stride, (void *)VertexInfo::Offset::tex);
-    glEnableVertexAttribArray(Position::TextureCoordinates);
-
-    unbind();
+    glActiveTexture(GL_TEXTURE0);
 }
 
-void Mesh::load(const std::vector<unsigned> &indices) {
-    if(indices.empty()) {
-        return;
+bool Mesh::HasIndices() const {
+    return !mIndices.empty();
+}
+
+size_t Mesh::IndicesCount() const {
+    return mIndices.size();
+}
+
+size_t Mesh::VerticesCount() const {
+    return mVertices.size();
+}
+
+void Mesh::Load() {
+    if(mVertices.empty()) return;
+
+    glGenVertexArrays(1, &VAO);
+    GenerateBuffer(VBO, GL_ARRAY_BUFFER);
+    GenerateBuffer(EBO, GL_ELEMENT_ARRAY_BUFFER);
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * Vertex::Length(), mVertices.data(), GL_STATIC_DRAW);
+    if (HasIndices()) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(unsigned),
+            mIndices.data(), GL_STATIC_DRAW);
     }
-    mIndices = indices.size();
 
-    bind();
-    resetBuffer(BufferType::EBO);
-    loadBuffer(BufferType::EBO, GL_ELEMENT_ARRAY_BUFFER,
-               sizeof(float) * indices.size(),
-               reinterpret_cast<const GLubyte *>(indices.data()));
-    unbind();
-}
+    GLuint attributePos{};
+    const auto InitializeAttribute{
+        [&] (GLint count, GLuint offset) {
+            glVertexAttribPointer(
+                attributePos, count, GL_FLOAT, GL_FALSE, Vertex::Length(), (GLvoid*)offset);
+            glEnableVertexAttribArray(attributePos);
+            ++attributePos;
+        }
+    };
 
-void Mesh::load(const Vertices &vertices, const std::vector<unsigned> &indices) {
-    load(vertices);
-    load(indices);
-}
+    InitializeAttribute(Vertex::PositionCount(), Vertex::PositionOffset());
+    InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset());
+    InitializeAttribute(Vertex::TexturePositionCount(), Vertex::TexturePositionOffset());
+    InitializeAttribute(Vertex::TangentCount(), Vertex::TangentOffset());
+    InitializeAttribute(Vertex::BitAgentCount(), Vertex::BitAgentOffset());
 
-void Mesh::bind() const {
-    glBindVertexArray(mBuffers.at(BufferType::VAO));
-}
-
-void Mesh::unbind() const {
     glBindVertexArray(0);
 }
 
-bool Mesh::hasIndices() const {
-    return mIndices != 0;
+void Mesh::ResetBuffer(GLuint &buffer) {
+    glDeleteBuffers(1, &buffer);
+    buffer = 0;
 }
 
-size_t Mesh::indices() const {
-    return mIndices;
-}
-
-size_t Mesh::vertices() const {
-    return mVertices;
-}
-
-void Mesh::resetBuffer(BufferType type) {
-    if(auto found{ mBuffers.find(type) }; found != mBuffers.end()) {
-        glDeleteBuffers(1, &(found->second));
-        found->second = 0u;
-    } else {
-        mBuffers[type] = 0u;
-    }
-}
-
-void Mesh::loadBuffer(BufferType type, GLenum target, size_t size, const GLubyte *data) {
-    if(nullptr == data) {
-        return;
-    }
-
-    auto &buffer{ mBuffers[type] };
-
+void Mesh::GenerateBuffer(GLuint &buffer, GLenum type) {
+    ResetBuffer(buffer);
     glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, size, data, GL_STATIC_DRAW);
 }
 
 }  // namespace meov::core

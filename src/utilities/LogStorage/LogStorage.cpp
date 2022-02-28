@@ -2,7 +2,7 @@
 #include "LogStorage.hpp"
 #include "LogUtils.hpp"
 
-namespace meov::Utils::Log {
+namespace meov::utils::Log {
 
 //====================== Storage::Subscriber =====================//
 
@@ -46,4 +46,4 @@ void Storage::Unsubscribe(const Subscriber::Ref& s) {
         });
 }
 
-}  // namespace meov::Utils::Log
+}  // namespace meov::utils::Log

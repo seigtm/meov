@@ -7,18 +7,17 @@
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
 
+#include "mesh.h"
 #include "vertex.h"
 #include "shader.h"
 #include "texture.h"
-#include "mesh.h"
-#include "model.h"
 
-int main(int, char**) {
-    meov::Utils::LogUtils::Instance()->Initialize();
+int main() {
+    meov::utils::LogUtils::Instance()->Initialize();
 
     LOGI << "Current directory: " << fs::current_path().string();
     LOGI << "SDL Initialization";
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
         LOGF << "Error: " << SDL_GetError();
         return -1;
     }
@@ -36,23 +35,38 @@ int main(int, char**) {
         meov::AppInfo::Name().c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        1280, 720,
+        1680, 960,
         SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI) };
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-    SDL_GL_MakeCurrent(window, gl_context);
-    SDL_GL_SetSwapInterval(1);  // Enable vsync.
+    SDL_GLContext context{ SDL_GL_CreateContext(window) };
+    SDL_GL_MakeCurrent(window, context);
 
+    if(SDL_GL_SetSwapInterval(true) < 0) {
+        LOGW << "Cannot enable VSync!";
+    }
+
+    LOGI << "OpenGL Initialization";
     glbinding::Binding::initialize(
         [](const char* name) {
             return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
         });
+    LOGI << "OpenGL was initialized: " << glGetString(GL_VERSION);
+    // if (GL_ARB_direct_state_access)
+
+
+#if defined(_DEBUG)
+    LOGD << "Debug callbacks initialization";
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
+
+    SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
+#endif
 
     // Setup Dear ImGui context
     LOGI << "ImGui Initialization";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    (void)io;
+    auto& io{ ImGui::GetIO() };
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
@@ -60,51 +74,108 @@ int main(int, char**) {
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer backends.
-    ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
+    ImGui_ImplSDL2_InitForOpenGL(window, context);
     ImGui_ImplOpenGL3_Init(meov::AppInfo::GLSLVersion().c_str());
+
+    // Our state.
+    const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };
 
     // Dear ImGui windows.
     meov::Window::Git gitW;
     meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
 
-    auto logStorage{ meov::Utils::LogUtils::Instance()->GetLogStorage() };
+    auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
         logStorage->Subscribe(logW1);
     }
 
-    meov::core::ShaderPtr shader{ std::make_shared<meov::core::Shader>() };
-    meov::core::TexturePtr texture{ std::make_shared<meov::core::Texture>(
-        "textures/best-of-the-best.png") };
-    const glm::vec4 white{ 1.f, 1.f, 1.f, 1.f };
-    // clang-format off
-    meov::core::MeshPtr mesh{ std::make_shared<meov::core::Mesh>(meov::core::Vertices{
-        meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, .0f }, white, glm::vec2{ 1.0f, 1.0f } },
-        meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, .0f }, white, glm::vec2{ 1.0f, 0.0f } },
-        meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, .0f }, white, glm::vec2{ 0.0f, 0.0f } },
-        meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, .0f }, white, glm::vec2{ 0.0f, 1.0f } },
-    } ) };
-    // clang-format on
+    // float vertices[] = {
+    //     // positions          // colors           // texture coords
+    //      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+    //      0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+    //     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+    //     -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
+    // };
+    // unsigned int indices[] = {
+    //     0, 1, 3, // first triangle
+    //     1, 2, 3  // second triangle
+    // };
+    // unsigned int VBO, VAO, EBO;
+    // glGenVertexArrays(1, &VAO);
+    // glGenBuffers(1, &VBO);
+    // glGenBuffers(1, &EBO);
 
-    meov::core::Model triangle{ mesh, shader, texture };
+    // glBindVertexArray(VAO);
+
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // // position attribute
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    // glEnableVertexAttribArray(0);
+    // // color attribute
+    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    // glEnableVertexAttribArray(1);
+    // // texture coord attribute
+    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    // glEnableVertexAttribArray(2);
+
+    // FIXME: Fix shader::Load() in Shader ctr.
+    // auto shader{ std::make_shared<meov::core::Shader>(
+    //     "shaders/vertex_test.glsl",
+    //     "shaders/fragment_test.glsl"
+    //     ) };
+    auto mesh{ std::make_shared<meov::core::Mesh>(
+        std::vector{
+            meov::core::Vertex{ glm::vec4{ 0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
+            meov::core::Vertex{ glm::vec4{ 0.5f, -0.5f, .0f, 1.f }, glm::vec4{ 0.f, 1.f, 0.f, 1.f }, glm::vec2{ 1.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec4{ -0.5f, -0.5f, .0f, 1.f }, glm::vec4{ 0.f, 0.f, 1.f, 1.f }, glm::vec2{ 0.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec4{ -0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 1.f, 0.f, 1.f }, glm::vec2{ 0.0f, 1.0f } } },
+        std::vector{
+            0u, 1u, 3u,  // first triangle
+            1u, 2u, 3u   // second triangle
+        },
+        std::vector{
+            meov::core::Texture{ "textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse } }) };
 
     // Main loop.
     LOGI << "Start main loop";
     bool done = false;
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     while(!done) {
         // Poll and handle events (inputs, window resize, etc.).
         SDL_Event event;
         while(SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
-            if(event.type == SDL_QUIT)
+            switch(event.type) {
+            case SDL_WINDOWEVENT:
+                if(event.window.windowID != SDL_GetWindowID(window)) {
+                    break;
+                }
+                if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                    glViewport(0, 0, event.window.data1, event.window.data2);
+                    break;
+                } else if(event.window.event != SDL_WINDOWEVENT_CLOSE) {
+                    break;
+                }
+            case SDL_QUIT:
                 done = true;
-            if(event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-                done = true;
+            default:
+                break;
+            }
         }
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window);
         ImGui::NewFrame();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // mesh->Draw(shader); // FIXME: Uncomment this when shader::Load() will be resolved.
 
         // Show singleton log window.
         logW1->Draw();
@@ -113,12 +184,12 @@ int main(int, char**) {
 
         // Rendering.
         ImGui::Render();
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        static const ImVec4 clear_color{ .45f, .55f, .6f, 1.f };
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        triangle.draw();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // trans = glm::rotate(trans, 0.1f, glm::vec3(0.0f, 0.0f, 1.0f));
+        // triangle.shader()->Use();
+        // triangle.shader()->Get("localTransform").Set(trans);
+        // triangle.draw();
         SDL_GL_SwapWindow(window);
     }
 
@@ -127,7 +198,7 @@ int main(int, char**) {
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    SDL_GL_DeleteContext(gl_context);
+    SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
