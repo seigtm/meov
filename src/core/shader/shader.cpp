@@ -135,6 +135,8 @@ unsigned Shader::GetID() const {
 }
 
 std::string Shader::Load(const std::string_view &path) {
+    if (path.empty())
+        return "";
     std::ifstream ifs{ path.data() };
     return std::string{ { std::istreambuf_iterator<char>{ ifs } }, std::istreambuf_iterator<char>{} };
 }

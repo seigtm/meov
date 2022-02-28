@@ -123,11 +123,10 @@ int main() {
     // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     // glEnableVertexAttribArray(2);
 
-    // FIXME: Fix shader::Load() in Shader ctr.
-    // auto shader{ std::make_shared<meov::core::Shader>(
-    //     "shaders/vertex_test.glsl",
-    //     "shaders/fragment_test.glsl"
-    //     ) };
+    auto shader{ std::make_shared<meov::core::Shader>(
+        // "shaders/vertex_test.glsl",
+        // "shaders/fragment_test.glsl"
+    ) };
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
             meov::core::Vertex{ glm::vec4{ 0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
@@ -175,7 +174,7 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // mesh->Draw(shader); // FIXME: Uncomment this when shader::Load() will be resolved.
+        mesh->Draw(shader);
 
         // Show singleton log window.
         logW1->Draw();
