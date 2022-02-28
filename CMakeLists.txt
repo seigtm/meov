@@ -37,31 +37,8 @@ list(REMOVE_DUPLICATES directories)
 list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
-conan_setup()
-conan_cmake_configure(
-    REQUIRES
-        sdl/2.0.18
-        glbinding/3.1.0
-        imgui/1.86
-        glm/0.9.9.8
-        glew/2.2.0
-        plog/1.1.5
-    OPTIONS
-        sdl:vulkan=False
-        sdl:sdl2main=False
-    GENERATORS
-        cmake_find_package_multi
-    IMPORTS
-        "bin, *.dll -> ./bin"
-        "lib, *.dylib* -> ./bin"
-)
-foreach(TYPE ${CMAKE_CONFIGURATION_TYPES})
-    conan_cmake_autodetect(settings BUILD_TYPE ${TYPE})
-    conan_cmake_install(PATH_OR_REFERENCE .
-                        BUILD missing
-                        REMOTE conancenter
-                        SETTINGS ${settings})
-endforeach()
+include(${root}/cmake/ManageDependencies.cmake)
+conan_install()
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -97,6 +74,13 @@ set_target_properties(${target}
         # LIBRARY_OUTPUT_DIRECTORY ${root}/assets
         # RUNTIME_OUTPUT_DIRECTORY ${root}/assets
 )
+
+#=== Sanitizer options ===#
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
+
+#=== Clone assets to the build ===#
+add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
 
 #=== Install ===#
 # TODO: Rethink install destination.

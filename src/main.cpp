@@ -74,7 +74,7 @@ int main(int, char**) {
 
     meov::core::ShaderPtr shader{ std::make_shared<meov::core::Shader>() };
     meov::core::TexturePtr texture{ std::make_shared<meov::core::Texture>(
-        "../../assets/textures/best-of-the-best.png") };
+        "textures/best-of-the-best.png") };
     const glm::vec4 white{ 1.f, 1.f, 1.f, 1.f };
     // clang-format off
     meov::core::MeshPtr mesh{ std::make_shared<meov::core::Mesh>(meov::core::Vertices{
