@@ -5,7 +5,8 @@
 
 namespace meov::core {
 
-Shader::Setter::Setter(Shader &parent, const std::string_view &name) : mParent{ parent } {
+Shader::Setter::Setter(Shader &parent, const std::string_view &name)
+    : mParent{ parent } {
     Get(name);
 }
 
@@ -14,20 +15,62 @@ Shader::Setter &Shader::Setter::Get(const std::string_view &name) {
     return *this;
 }
 
-Shader::Setter &Shader::Setter::Set(float value) { glUniform1f(mId, value); return *this; }
-Shader::Setter &Shader::Setter::Set(float v1, float v2) { glUniform2f(mId, v1, v2); return *this; }
-Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3) { glUniform3f(mId, v1, v2, v3); return *this; }
-Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3, float v4) { glUniform4f(mId, v1, v2, v3, v4); return *this; }
-Shader::Setter &Shader::Setter::Set(int value) { glUniform1i(mId, value); return *this; }
-Shader::Setter &Shader::Setter::Set(int v1, int v2) { glUniform2i(mId, v1, v2); return *this; }
-Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3) { glUniform3i(mId, v1, v2, v3); return *this; }
-Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3, int v4) { glUniform4i(mId, v1, v2, v3, v4); return *this; }
-Shader::Setter &Shader::Setter::Set(unsigned value) { glUniform1ui(mId, value); return *this; }
-Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2) { glUniform2ui(mId, v1, v2); return *this; }
-Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3) { glUniform3ui(mId, v1, v2, v3); return *this; }
-Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3, unsigned v4) { glUniform4ui(mId, v1, v2, v3, v4); return *this; }
-Shader::Setter &Shader::Setter::Set(bool value) { Set(static_cast<int>(value)); return *this; }
-Shader::Setter &Shader::Setter::Set(bool v1, bool v2) { Set(static_cast<int>(v1), static_cast<int>(v2)); return *this; }
+Shader::Setter &Shader::Setter::Set(float value) {
+    glUniform1f(mId, value);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(float v1, float v2) {
+    glUniform2f(mId, v1, v2);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3) {
+    glUniform3f(mId, v1, v2, v3);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3, float v4) {
+    glUniform4f(mId, v1, v2, v3, v4);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(int value) {
+    glUniform1i(mId, value);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(int v1, int v2) {
+    glUniform2i(mId, v1, v2);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3) {
+    glUniform3i(mId, v1, v2, v3);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3, int v4) {
+    glUniform4i(mId, v1, v2, v3, v4);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(unsigned value) {
+    glUniform1ui(mId, value);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2) {
+    glUniform2ui(mId, v1, v2);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3) {
+    glUniform3ui(mId, v1, v2, v3);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3, unsigned v4) {
+    glUniform4ui(mId, v1, v2, v3, v4);
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(bool value) {
+    Set(static_cast<int>(value));
+    return *this;
+}
+Shader::Setter &Shader::Setter::Set(bool v1, bool v2) {
+    Set(static_cast<int>(v1), static_cast<int>(v2));
+    return *this;
+}
 Shader::Setter &Shader::Setter::Set(bool v1, bool v2, bool v3) {
     Set(static_cast<int>(v1),
         static_cast<int>(v2),
@@ -52,9 +95,9 @@ Shader::Setter &Shader::Setter::Set(const glm::mat4 &matrix) {
 Shader::Shader(const std::string_view &vertexPath, const std::string_view &fragmentPath)
     : mProgram{ glCreateProgram() } {
     const unsigned vertex{ MakeShader(GL_VERTEX_SHADER, Load(vertexPath)) };
-    if (vertex == std::numeric_limits<unsigned>::max()) return;
+    if(vertex == std::numeric_limits<unsigned>::max()) return;
     const unsigned fragment{ MakeShader(GL_FRAGMENT_SHADER, Load(fragmentPath)) };
-    if (fragment == std::numeric_limits<unsigned>::max()) {
+    if(fragment == std::numeric_limits<unsigned>::max()) {
         glDeleteShader(vertex);
         return;
     }
@@ -67,7 +110,8 @@ Shader::Shader(const std::string_view &vertexPath, const std::string_view &fragm
     if(!success) {
         char error[512];
         glGetProgramInfoLog(mProgram, sizeof(error), nullptr, error);
-        LOGE << "Failed while linking mProgram:\n" << error;
+        LOGE << "Failed while linking mProgram:\n"
+             << error;
     }
 
     glDeleteShader(vertex);
@@ -99,7 +143,8 @@ unsigned Shader::MakeShader(GLenum type, const std::string &source) {
     const std::string defaultSrc{ GetDefaultShaderSource(type) };
     unsigned shader{ glCreateShader(type) };
     const char *src{ source.empty() ? defaultSrc.c_str() : source.c_str() };
-    LOGD << GetShaderName(type) << " shader source: \n" << src;
+    LOGD << GetShaderName(type) << " shader source: \n"
+         << src;
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
 
@@ -108,7 +153,8 @@ unsigned Shader::MakeShader(GLenum type, const std::string &source) {
     if(!status) {
         char error[512];
         glGetShaderInfoLog(shader, sizeof(error), nullptr, error);
-        LOGE << "Error while compiling " << GetShaderName(type) << " shader:\n" << error << "\n";
+        LOGE << "Error while compiling " << GetShaderName(type) << " shader:\n"
+             << error << "\n";
         return std::numeric_limits<unsigned>::max();
     }
     return shader;
@@ -118,7 +164,7 @@ std::string Shader::GetDefaultShaderSource(GLenum type) {
     switch(type) {
     case GL_VERTEX_SHADER:
         return {
-AppInfo::GLSLVersion() + R"glsl(
+            AppInfo::GLSLVersion() + R"glsl(
 layout (location = 0) in vec4 aPos;
 layout (location = 1) in vec4 aClr;
 layout (location = 2) in vec2 aTex;
@@ -141,7 +187,7 @@ void main() {
         break;
     case GL_FRAGMENT_SHADER:
         return {
-AppInfo::GLSLVersion() + R"glsl(
+            AppInfo::GLSLVersion() + R"glsl(
 in vec4 vertexColor;
 in vec2 vertexTexCoord;
 
@@ -163,11 +209,14 @@ void main() {
 
 std::string Shader::GetShaderName(GLenum type) {
     switch(type) {
-        case GL_VERTEX_SHADER: return "Vertex";
-        case GL_FRAGMENT_SHADER: return "Fragment";
-        case GL_GEOMETRY_SHADER: return "Geometry";
-        default:
-            break;
+    case GL_VERTEX_SHADER:
+        return "Vertex";
+    case GL_FRAGMENT_SHADER:
+        return "Fragment";
+    case GL_GEOMETRY_SHADER:
+        return "Geometry";
+    default:
+        break;
     }
     return "Unknown";
 }

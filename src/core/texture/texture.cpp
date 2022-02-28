@@ -7,7 +7,6 @@ namespace meov::core {
 Texture::Texture(const std::string_view &path, const Type type)
     : mPath{ path }
     , mType{ type } {
-
     if(path.empty()) {
         LOGW << "Creating texute with empty path parameter!";
         // stbi_load_from_memory()

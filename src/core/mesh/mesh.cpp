@@ -21,7 +21,7 @@ Mesh::~Mesh() {
 }
 
 void Mesh::Draw(const std::shared_ptr<Shader> &shader) {
-    if (shader != nullptr) Draw(*shader);
+    if(shader != nullptr) Draw(*shader);
 }
 
 void Mesh::Draw(Shader &shader) {
@@ -29,27 +29,27 @@ void Mesh::Draw(Shader &shader) {
     unsigned specularCount{ 1 };
     unsigned normalCount{ 1 };
     unsigned heightCount{ 1 };
-    for (size_t i{}; i < mTextures.size(); ++i) {
+    for(size_t i{}; i < mTextures.size(); ++i) {
         auto &texture{ mTextures[i] };
-        if (!texture.Valid()) {
+        if(!texture.Valid()) {
             continue;
         }
         glActiveTexture(GL_TEXTURE0 + i);
         std::stringstream name;
         name << "texture";
         switch(texture.GetType()) {
-            case Texture::Type::Diffuse: {
-                name << "Diffuse" << diffuseCount++;
-            } break;
-            case Texture::Type::Specular: {
-                name << "Specular" << specularCount++;
-            } break;
-            case Texture::Type::Normal: {
-                name << "Normal" << normalCount++;
-            } break;
-            case Texture::Type::Height: {
-                name << "Height" << heightCount++;
-            } break;
+        case Texture::Type::Diffuse: {
+            name << "Diffuse" << diffuseCount++;
+        } break;
+        case Texture::Type::Specular: {
+            name << "Specular" << specularCount++;
+        } break;
+        case Texture::Type::Normal: {
+            name << "Normal" << normalCount++;
+        } break;
+        case Texture::Type::Height: {
+            name << "Height" << heightCount++;
+        } break;
         }
 
         LOGD << "Setting texture " << name.str() << " as " << i;
@@ -86,17 +86,17 @@ void Mesh::Load() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, mVertices.size() * Vertex::Length(), mVertices.data(), GL_STATIC_DRAW);
-    if (HasIndices()) {
+    if(HasIndices()) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(unsigned),
-            mIndices.data(), GL_STATIC_DRAW);
+                     mIndices.data(), GL_STATIC_DRAW);
     }
 
     GLuint attributePos{};
     const auto InitializeAttribute{
-        [&] (GLint count, GLuint offset) {
+        [&](GLint count, GLuint offset) {
             glVertexAttribPointer(
-                attributePos, count, GL_FLOAT, GL_FALSE, Vertex::Length(), (GLvoid*)offset);
+                attributePos, count, GL_FLOAT, GL_FALSE, Vertex::Length(), (GLvoid *)offset);
             glEnableVertexAttribArray(attributePos);
             ++attributePos;
         }
