@@ -12,7 +12,7 @@ class Mesh {
 public:
     Mesh() = default;
     Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices,
-        std::vector<Texture> &&textures);
+         std::vector<Texture> &&textures);
     ~Mesh();
 
     void Draw(const std::shared_ptr<Shader> &shader);

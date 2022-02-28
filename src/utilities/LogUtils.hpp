@@ -8,7 +8,7 @@ namespace meov::utils {
 class DefaultFormatter {
 public:
     static plog::util::nstring header();
-    static plog::util::nstring format(const plog::Record& record);
+    static plog::util::nstring format(const plog::Record &record);
 };
 
 class LogUtils : public Singleton<LogUtils> {
