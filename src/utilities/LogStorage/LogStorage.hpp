@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.hpp"
+
 #include "Utilities.hpp"
 
 namespace meov::Utils::Log {
