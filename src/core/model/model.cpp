@@ -4,8 +4,6 @@
 #include "shader.h"
 #include "texture.h"
 #include "mesh.h"
-// #include "renderer.h"
-// #include "render_context.h"
 
 namespace meov::core {
 
@@ -14,14 +12,14 @@ Model::Model(const MeshPtr &mesh, const ShaderPtr &shader, const TexturePtr &tex
     if(nullptr == mShader) {
         return;
     }
-    if(nullptr == mTexture || !mTexture->valid()) {
+    if(nullptr == mTexture || !mTexture->Valid()) {
         return;
     }
-    mShader->get("useTexture").set(true);
-    mShader->get("defTexture").set(0);
+    mShader->Get("useTexture").Set(true);
+    mShader->Get("defTexture").Set(mTexture->GetID());
 }
 
-Model &Model::Mesh(const MeshPtr &Mesh) {
+Model &Model::mesh(const MeshPtr &Mesh) {
     mMesh = Mesh;
     return *this;
 }
@@ -36,7 +34,7 @@ Model &Model::texture(const TexturePtr &texture) {
     return *this;
 }
 
-const MeshPtr Model::Mesh() const {
+const MeshPtr Model::mesh() const {
     return mMesh;
 }
 
@@ -49,18 +47,18 @@ const TexturePtr Model::texture() const {
 }
 
 void Model::draw() {
-    bind();
-    if(!mMesh->hasIndices()) {
-        glDrawArrays(GL_TRIANGLES, 0, mMesh->vertices());
+    Bind();
+    if(mMesh->HasIndices()) {
+        glDrawElements(GL_TRIANGLES, mMesh->IndicesCount(), GL_UNSIGNED_INT, nullptr);
     } else {
-        glDrawElements(GL_TRIANGLES, mMesh->indices(), GL_UNSIGNED_INT, nullptr);
+        glDrawArrays(GL_TRIANGLES, 0, mMesh->VerticesCount());
     }
 }
 
-void Model::bind() const {
-    if(mShader) mShader->use();
-    if(mMesh) mMesh->bind();
-    if(mTexture) mTexture->bind();
+void Model::Bind() const {
+    if(mShader) mShader->Use();
+    if(mTexture) mTexture->Bind();
+    mMesh->Draw(mShader);
 }
 
 }  // namespace meov::core

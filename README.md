@@ -4,60 +4,6 @@
 
 ## **Scheme:**
 
-```json
-[
-  {
-    "name": "MainCamera",
-    "type": "camera",
-    "properties": {
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "scale": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
-      }
-    }
-  },
-  {
-    "name": "Model",
-    "type": "node",
-    "properties": {
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": -10
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "scale": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
-      },
-      "model": {
-        "path": "path/to/object.obj"
-      }
-    }
-  }
-]
-```
-
 ```mermaid
 classDiagram
     direction LR
@@ -101,8 +47,15 @@ classDiagram
         +draw(const Texture &model) void
     }
 
-    class Vertex
-    class Shader
+    class Vertex {
+        +position vec4
+        +color vec4
+        +texturePosition vec2
+        +tangent vec3
+        +bitAgent vec3
+    }
+    class Shader {
+    }
     class Texture
     class Mesh
     class Model
@@ -156,4 +109,58 @@ int meov::Core::run() {
     return 0;
 }
 
+```
+
+```json
+[
+  {
+    "name": "MainCamera",
+    "type": "camera",
+    "properties": {
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "Model",
+    "type": "node",
+    "properties": {
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -10
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "model": {
+        "path": "path/to/object.obj"
+      }
+    }
+  }
+]
 ```

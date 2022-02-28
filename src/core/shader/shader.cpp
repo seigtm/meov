@@ -1,96 +1,73 @@
 #include "Common.hpp"
+#include "AppInfo.hpp"
 
 #include "shader.h"
 
 namespace meov::core {
 
-Shader::Setter::Setter(Shader &parent, const std::string &name)
-    : parent{ parent }, id{ glGetUniformLocation(parent, name.c_str()) } {
+Shader::Setter::Setter(Shader &parent, const std::string_view &name) : mParent{ parent } {
+    Get(name);
 }
 
-Shader::Setter &Shader::Setter::set(float value) {
-    glUniform1f(id, value);
+Shader::Setter &Shader::Setter::Get(const std::string_view &name) {
+    mId = glGetUniformLocation(mParent.GetID(), name.data());
     return *this;
 }
 
-Shader::Setter &Shader::Setter::set(float v1, float v2) {
-    glUniform2f(id, v1, v2);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(float v1, float v2, float v3) {
-    glUniform3f(id, v1, v2, v3);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(float v1, float v2, float v3, float v4) {
-    glUniform4f(id, v1, v2, v3, v4);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(int value) {
-    glUniform1i(id, value);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(int v1, int v2) {
-    glUniform2i(id, v1, v2);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(int v1, int v2, int v3) {
-    glUniform3i(id, v1, v2, v3);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(int v1, int v2, int v3, int v4) {
-    glUniform4i(id, v1, v2, v3, v4);
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(bool value) {
-    set(static_cast<int>(value));
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(bool v1, bool v2) {
-    set(static_cast<int>(v1),
-        static_cast<int>(v2));
-    return *this;
-}
-
-Shader::Setter &Shader::Setter::set(bool v1, bool v2, bool v3) {
-    set(static_cast<int>(v1),
+Shader::Setter &Shader::Setter::Set(float value) { glUniform1f(mId, value); return *this; }
+Shader::Setter &Shader::Setter::Set(float v1, float v2) { glUniform2f(mId, v1, v2); return *this; }
+Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3) { glUniform3f(mId, v1, v2, v3); return *this; }
+Shader::Setter &Shader::Setter::Set(float v1, float v2, float v3, float v4) { glUniform4f(mId, v1, v2, v3, v4); return *this; }
+Shader::Setter &Shader::Setter::Set(int value) { glUniform1i(mId, value); return *this; }
+Shader::Setter &Shader::Setter::Set(int v1, int v2) { glUniform2i(mId, v1, v2); return *this; }
+Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3) { glUniform3i(mId, v1, v2, v3); return *this; }
+Shader::Setter &Shader::Setter::Set(int v1, int v2, int v3, int v4) { glUniform4i(mId, v1, v2, v3, v4); return *this; }
+Shader::Setter &Shader::Setter::Set(unsigned value) { glUniform1ui(mId, value); return *this; }
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2) { glUniform2ui(mId, v1, v2); return *this; }
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3) { glUniform3ui(mId, v1, v2, v3); return *this; }
+Shader::Setter &Shader::Setter::Set(unsigned v1, unsigned v2, unsigned v3, unsigned v4) { glUniform4ui(mId, v1, v2, v3, v4); return *this; }
+Shader::Setter &Shader::Setter::Set(bool value) { Set(static_cast<int>(value)); return *this; }
+Shader::Setter &Shader::Setter::Set(bool v1, bool v2) { Set(static_cast<int>(v1), static_cast<int>(v2)); return *this; }
+Shader::Setter &Shader::Setter::Set(bool v1, bool v2, bool v3) {
+    Set(static_cast<int>(v1),
         static_cast<int>(v2),
         static_cast<int>(v3));
     return *this;
 }
-
-Shader::Setter &Shader::Setter::set(bool v1, bool v2, bool v3, bool v4) {
-    set(static_cast<int>(v1),
+Shader::Setter &Shader::Setter::Set(bool v1, bool v2, bool v3, bool v4) {
+    Set(static_cast<int>(v1),
         static_cast<int>(v2),
         static_cast<int>(v3),
         static_cast<int>(v4));
     return *this;
 }
 
+Shader::Setter &Shader::Setter::Set(const glm::mat4 &matrix) {
+    glUniformMatrix4fv(mId, 1, GL_FALSE, glm::value_ptr(matrix));
+    return *this;
+}
+
 //====================== Shader ======================//
 
-Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
-    : program{ glCreateProgram() } {
-    unsigned vertex{ makeShader(GL_VERTEX_SHADER, load(vertexPath)) };
-    unsigned fragment{ makeShader(GL_FRAGMENT_SHADER, load(fragmentPath)) };
+Shader::Shader(const std::string_view &vertexPath, const std::string_view &fragmentPath)
+    : mProgram{ glCreateProgram() } {
+    const unsigned vertex{ MakeShader(GL_VERTEX_SHADER, Load(vertexPath)) };
+    if (vertex == std::numeric_limits<unsigned>::max()) return;
+    const unsigned fragment{ MakeShader(GL_FRAGMENT_SHADER, Load(fragmentPath)) };
+    if (fragment == std::numeric_limits<unsigned>::max()) {
+        glDeleteShader(vertex);
+        return;
+    }
 
-    glAttachShader(program, vertex);
-    glAttachShader(program, fragment);
-    glLinkProgram(program);
-    int success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    glAttachShader(mProgram, vertex);
+    glAttachShader(mProgram, fragment);
+    glLinkProgram(mProgram);
+    int success{};
+    glGetProgramiv(mProgram, GL_LINK_STATUS, &success);
     if(!success) {
         char error[512];
-        glGetProgramInfoLog(program, sizeof(error), nullptr, error);
-        LOGE << "[Shader] Failed while linking program:\n"
-             << error;
+        glGetProgramInfoLog(mProgram, sizeof(error), nullptr, error);
+        LOGE << "Failed while linking mProgram:\n" << error;
     }
 
     glDeleteShader(vertex);
@@ -98,30 +75,30 @@ Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
 }
 
 Shader::~Shader() {
-    glDeleteProgram(program);
+    glDeleteProgram(mProgram);
 }
 
-void Shader::use() const {
-    glUseProgram(program);
+void Shader::Use() const {
+    glUseProgram(mProgram);
 }
 
-Shader::Setter Shader::get(const std::string &name) {
+Shader::Setter Shader::Get(const std::string_view &name) {
     return Setter{ *this, name };
 }
 
-Shader::operator unsigned() const {
-    return program;
+unsigned Shader::GetID() const {
+    return mProgram;
 }
 
-std::string Shader::load(const std::string &path) const {
-    std::ifstream file{ path };
-    return std::string{ std::istreambuf_iterator<char>{ file }, {} };
+std::string Shader::Load(const std::string_view &path) {
+    return std::string{ std::istreambuf_iterator<char>{ std::ifstream{ path } }, {} };
 }
 
-unsigned Shader::makeShader(GLenum type, const std::string &source) const {
-    const std::string defaultSrc{ getDefaultShaderSource(type) };
+unsigned Shader::MakeShader(GLenum type, const std::string &source) {
+    const std::string defaultSrc{ GetDefaultShaderSource(type) };
     unsigned shader{ glCreateShader(type) };
     const char *src{ source.empty() ? defaultSrc.c_str() : source.c_str() };
+    LOGD << GetShaderName(type) << " shader source: \n" << src;
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
 
@@ -130,28 +107,31 @@ unsigned Shader::makeShader(GLenum type, const std::string &source) const {
     if(!status) {
         char error[512];
         glGetShaderInfoLog(shader, sizeof(error), nullptr, error);
-        LOGE << "[Shader] Error while compiling shader "
-             << static_cast<long>(type) << ":\n"
-             << error << "\n";
+        LOGE << "Error while compiling " << GetShaderName(type) << " shader:\n" << error << "\n";
+        return std::numeric_limits<unsigned>::max();
     }
     return shader;
 }
 
-std::string Shader::getDefaultShaderSource(GLenum type) const {
+std::string Shader::GetDefaultShaderSource(GLenum type) {
     switch(type) {
     case GL_VERTEX_SHADER:
         return {
-            R"glsl(
-#version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aClr;
+AppInfo::GLSLVersion() + R"glsl(
+layout (location = 0) in vec4 aPos;
+layout (location = 1) in vec4 aClr;
 layout (location = 2) in vec2 aTex;
+layout (location = 3) in vec3 aTangent;
+layout (location = 4) in vec4 aBitAgent;
 
-out vec3 vertexColor;
+out vec4 vertexColor;
 out vec2 vertexTexCoord;
 
+uniform mat4 localTransform;
+uniform mat4 globalTransform;
+
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = localTransform * globalTransform * aPos;
     vertexColor = aClr;
     vertexTexCoord = aTex;
 }
@@ -160,22 +140,16 @@ void main() {
         break;
     case GL_FRAGMENT_SHADER:
         return {
-            R"glsl(
-#version 330 core
-in vec3 vertexColor;
+AppInfo::GLSLVersion() + R"glsl(
+in vec4 vertexColor;
 in vec2 vertexTexCoord;
 
 out vec4 FragColor;
 
-uniform bool useTexture = false;
-uniform sampler2D defTexture;
+uniform sampler2D textureDiffuse1;
 
 void main() {
-    if(useTexture) {
-        FragColor = texture(defTexture, vertexTexCoord) * vec4(vertexColor, 1.0);
-    } else {
-        FragColor = vec4(vertexColor, 1.0);
-    }
+    FragColor = texture(textureDiffuse1, vertexTexCoord) * vertexColor;
 };
 )glsl"
         };
@@ -184,6 +158,17 @@ void main() {
         break;
     }
     return {};
+}
+
+std::string Shader::GetShaderName(GLenum type) {
+    switch(type) {
+        case GL_VERTEX_SHADER: return "Vertex";
+        case GL_FRAGMENT_SHADER: return "Fragment";
+        case GL_GEOMETRY_SHADER: return "Geometry";
+        default:
+            break;
+    }
+    return "Unknown";
 }
 
 }  // namespace meov::core
