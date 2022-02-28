@@ -135,7 +135,7 @@ unsigned Shader::GetID() const {
 }
 
 std::string Shader::Load(const std::string_view &path) {
-    if (path.empty())
+    if(path.empty())
         return "";
     std::ifstream ifs{ path.data() };
     return std::string{ { std::istreambuf_iterator<char>{ ifs } }, std::istreambuf_iterator<char>{} };
@@ -164,9 +164,9 @@ unsigned Shader::MakeShader(GLenum type, const std::string &source) {
 
 std::string Shader::GetDefaultShaderSource(GLenum type) {
     switch(type) {
-    case GL_VERTEX_SHADER:
-        return {
-            AppInfo::GLSLVersion() + R"glsl(
+        case GL_VERTEX_SHADER:
+            return {
+                AppInfo::GLSLVersion() + R"glsl(
 layout (location = 0) in vec4 aPos;
 layout (location = 1) in vec4 aClr;
 layout (location = 2) in vec2 aTex;
@@ -185,11 +185,11 @@ void main() {
     vertexTexCoord = aTex;
 }
 )glsl"
-        };
-        break;
-    case GL_FRAGMENT_SHADER:
-        return {
-            AppInfo::GLSLVersion() + R"glsl(
+            };
+            break;
+        case GL_FRAGMENT_SHADER:
+            return {
+                AppInfo::GLSLVersion() + R"glsl(
 in vec4 vertexColor;
 in vec2 vertexTexCoord;
 
@@ -201,24 +201,20 @@ void main() {
     FragColor = texture(textureDiffuse1, vertexTexCoord) * vertexColor;
 };
 )glsl"
-        };
-        break;
-    default:
-        break;
+            };
+            break;
+        default:
+            break;
     }
     return {};
 }
 
 std::string Shader::GetShaderName(GLenum type) {
     switch(type) {
-    case GL_VERTEX_SHADER:
-        return "Vertex";
-    case GL_FRAGMENT_SHADER:
-        return "Fragment";
-    case GL_GEOMETRY_SHADER:
-        return "Geometry";
-    default:
-        break;
+        case GL_VERTEX_SHADER: return "Vertex";
+        case GL_FRAGMENT_SHADER: return "Fragment";
+        case GL_GEOMETRY_SHADER: return "Geometry";
+        default: break;
     }
     return "Unknown";
 }
