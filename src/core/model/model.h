@@ -19,11 +19,11 @@ public:
           const ShaderPtr &shader,
           const TexturePtr &texture);
 
-    Model &Mesh(const MeshPtr &Mesh);
+    Model &mesh(const MeshPtr &Mesh);
     Model &shader(const ShaderPtr &shader);
     Model &texture(const TexturePtr &texture);
 
-    const MeshPtr Mesh() const;
+    const MeshPtr mesh() const;
     const ShaderPtr shader() const;
     const TexturePtr texture() const;
 
@@ -31,7 +31,7 @@ public:
     // void draw(Renderer &renderer, const RenderContext &rContext) const;
 
 protected:
-    void bind() const;
+    void Bind() const;
 
 private:
     MeshPtr mMesh;

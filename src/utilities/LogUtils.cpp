@@ -18,7 +18,7 @@ putil::nstring str2nstr(const std::string &str) {
 
 }  // namespace
 
-namespace meov::Utils {
+namespace meov::utils {
 
 putil::nstring DefaultFormatter::header() {
     putil::nostringstream out;
@@ -77,7 +77,7 @@ void LogUtils::Initialize() {
 
     static plog::ColorConsoleAppender<DefaultFormatter> Console;
     static plog::RollingFileAppender<DefaultFormatter> File{ logfile.c_str() };
-    static meov::Utils::Log::Storage::Ref Storage{ new meov::Utils::Log::Storage };
+    static meov::utils::Log::Storage::Ref Storage{ new meov::utils::Log::Storage };
     mLogStorage = Storage;
 
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
@@ -100,4 +100,72 @@ Log::Storage::Ref LogUtils::GetLogStorage() const {
     return mLogStorage;
 }
 
-}  // namespace meov::Utils
+void OpenGLLogCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
+    GLsizei, const GLchar *msg, const void *) {
+
+    static const auto toStr{ [] (const GLenum e) {
+        switch(e) {
+            case GL_DEBUG_SOURCE_API:             return "[API] ";
+            case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   return "[Window system] ";
+            case GL_DEBUG_SOURCE_SHADER_COMPILER: return "[Shader compiler] ";
+            case GL_DEBUG_SOURCE_THIRD_PARTY:     return "[Third party] ";
+            case GL_DEBUG_SOURCE_APPLICATION:     return "[Application] ";
+            case GL_DEBUG_SOURCE_OTHER:           return "[Other source] ";
+
+            case GL_DEBUG_TYPE_ERROR:               return "[Error] ";
+            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "[Deprecated behavior] ";
+            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  return "[Undefined behavior] ";
+            case GL_DEBUG_TYPE_PORTABILITY:         return "[Portability] ";
+            case GL_DEBUG_TYPE_PERFORMANCE:         return "[Performance] ";
+            case GL_DEBUG_TYPE_MARKER:              return "[Marker] ";
+            case GL_DEBUG_TYPE_OTHER:               return "[Other type] ";
+
+            default: return "[Unknown] ";
+        }
+    } };
+    static const auto level{ [severity] {
+        switch(severity) {
+            case GL_DEBUG_SEVERITY_NOTIFICATION: return plog::debug;
+            case GL_DEBUG_SEVERITY_LOW: return plog::info;
+            case GL_DEBUG_SEVERITY_MEDIUM: return plog::warning;
+            case GL_DEBUG_SEVERITY_HIGH: return plog::error;
+            default: return plog::none;
+        }
+    } };
+
+    LOG(level()) << toStr(source) << toStr(type) << " " << id << ": " << msg;
+}
+
+void SDLLogCallback(void *, int category, SDL_LogPriority priority, const char *message) {
+    static const auto toStr{ [] (const int category) {
+        switch(category) {
+            case SDL_LOG_CATEGORY_APPLICATION: return "[Application] ";
+            case SDL_LOG_CATEGORY_ERROR: return "[Error] ";
+            case SDL_LOG_CATEGORY_ASSERT: return "[Assert] ";
+            case SDL_LOG_CATEGORY_SYSTEM: return "[System] ";
+            case SDL_LOG_CATEGORY_AUDIO: return "[Audio] ";
+            case SDL_LOG_CATEGORY_VIDEO: return "[Video] ";
+            case SDL_LOG_CATEGORY_RENDER: return "[Render] ";
+            case SDL_LOG_CATEGORY_INPUT: return "[Input] ";
+            case SDL_LOG_CATEGORY_TEST: return "[Test] ";
+
+            default: return "Unknown";
+        }
+    } };
+
+    static const auto level{ [priority] {
+        switch(priority) {
+            case SDL_LOG_PRIORITY_VERBOSE: return plog::verbose;
+            case SDL_LOG_PRIORITY_DEBUG: return plog::debug;
+            case SDL_LOG_PRIORITY_INFO: return plog::info;
+            case SDL_LOG_PRIORITY_WARN: return plog::warning;
+            case SDL_LOG_PRIORITY_ERROR: return plog::error;
+            case SDL_LOG_PRIORITY_CRITICAL: return plog::fatal;
+            default: return plog::none;
+        }
+    } };
+
+    LOG(level()) << toStr(category) << message;
+}
+
+}  // namespace meov::utils

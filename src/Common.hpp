@@ -2,7 +2,11 @@
 
 #include <glbinding/gl/gl.h>
 #include <glbinding/Binding.h>
+
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <plog/Log.h>
 #include <stb_image.h>
 

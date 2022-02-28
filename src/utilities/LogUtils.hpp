@@ -3,7 +3,7 @@
 #include "Utilities.hpp"
 #include "LogStorage.hpp"
 
-namespace meov::Utils {
+namespace meov::utils {
 
 class DefaultFormatter {
 public:
@@ -24,4 +24,10 @@ private:
     Log::Storage::Ref mLogStorage;
 };
 
-}  // namespace meov::Utils
+void OpenGLLogCallback(
+    GLenum source, GLenum type, GLuint id, GLenum severity,
+    GLsizei len, const GLchar *msg, const void *);
+
+void SDLLogCallback(void *userdata, int category, SDL_LogPriority priority, const char *message);
+
+}  // namespace meov::utils

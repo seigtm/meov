@@ -4,17 +4,28 @@ namespace meov::core {
 
 class Texture {
 public:
-    explicit Texture(const std::string &path);
+    enum class Type {
+        Diffuse,
+        Specular,
+        Normal,
+        Height,
+    };
+
+    explicit Texture(const std::string_view &path, const Type type);
     ~Texture();
 
-    void bind();
-    bool valid() const;
+    void Bind();
 
-    unsigned getID() const;
+    bool Valid() const;
+    unsigned GetID() const;
+    Type GetType() const;
+
 
 private:
-    unsigned mId;
-    bool mValid;
+    unsigned mId{};
+    std::string mPath;
+    Type mType;
+    bool mValid{ false };
 };
 
 }  // namespace meov::core

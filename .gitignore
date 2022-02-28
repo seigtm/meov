@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.pdb
 
 # Precompiled Headers
 *.gch
@@ -39,3 +40,6 @@ build/
 
 # Ini files
 *.ini
+
+# other
+**/*.log
