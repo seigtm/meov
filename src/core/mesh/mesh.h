@@ -5,39 +5,33 @@
 namespace meov::core {
 
 class Vertex;
-class Vertices;
+class Shader;
+class Texture;
 
 class Mesh {
 public:
-    Mesh();
-    explicit Mesh(const Vertices &vertices);
-    Mesh(const Vertices &vertices, const std::vector<unsigned> &indices);
+    Mesh() = default;
+    Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices,
+        std::vector<Texture> &&textures);
+    ~Mesh();
 
-    void load(const Vertices &vertices);
-    void load(const std::vector<unsigned> &indices);
-    void load(const Vertices &vertices, const std::vector<unsigned> &indices);
+    void Draw(const std::shared_ptr<Shader> &shader);
+    void Draw(Shader &shader);
 
-    void bind() const;
-    void unbind() const;
-
-    bool hasIndices() const;
-    size_t indices() const;
-    size_t vertices() const;
+    bool HasIndices() const;
+    size_t IndicesCount() const;
+    size_t VerticesCount() const;
 
 private:
-    size_t mIndices{};
-    size_t mVertices{};
+    GLuint VAO{}, VBO{}, EBO{};
+    std::vector<Vertex> mVertices;
+    std::vector<unsigned> mIndices;
+    std::vector<Texture> mTextures;
 
-    enum class BufferType {
-        VAO,
-        VBO,
-        EBO
-    };
+    void Load();
 
-    std::map<BufferType, GLuint> mBuffers;
-
-    void resetBuffer(BufferType type);
-    void loadBuffer(BufferType type, GLenum target, size_t size, const GLubyte *data);
+    void ResetBuffer(GLuint &buffer);
+    void GenerateBuffer(GLuint &buffer, GLenum type);
 };
 
 }  // namespace meov::core
