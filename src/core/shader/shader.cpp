@@ -126,6 +126,10 @@ void Shader::Use() const {
     glUseProgram(mProgram);
 }
 
+void Shader::UnUse() const {
+    glUseProgram(0);
+}
+
 Shader::Setter Shader::Get(const std::string_view &name) {
     return Setter{ *this, name };
 }

@@ -20,6 +20,7 @@ public:
     ~Shader();
 
     void Use() const;
+    void UnUse() const;
 
     Setter Get(const std::string_view &name);
 
