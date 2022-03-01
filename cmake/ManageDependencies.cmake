@@ -1,5 +1,4 @@
 macro(conan_install)
-    conan_setup()
     # If not multi-config generator (like VS generator).
     if("${CMAKE_CONFIGURATION_TYPES}" STREQUAL "")
         conan_cmake_configure(
@@ -10,6 +9,7 @@ macro(conan_install)
                 glm/0.9.9.8
                 glew/2.2.0
                 plog/1.1.5
+                assimp/5.1.0
             OPTIONS
                 sdl:vulkan=False
                 sdl:sdl2main=False
@@ -34,6 +34,7 @@ macro(conan_install)
                 glm/0.9.9.8
                 glew/2.2.0
                 plog/1.1.5
+                assimp/5.1.0
             OPTIONS
                 sdl:vulkan=False
                 sdl:sdl2main=False

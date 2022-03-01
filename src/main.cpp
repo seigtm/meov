@@ -82,7 +82,7 @@ int main() {
 
     // Dear ImGui windows.
     meov::Window::Git gitW;
-    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First" } };  // FIXME: ambiguous '::Ref' from Subscriber.
+    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1250, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
 
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
