@@ -10,13 +10,11 @@ set(build_dir ${root}/build)
 set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
-include(${root}/cmake/ConanSetup.cmake)
 include(${root}/cmake/GitUtils.cmake)
-include(${root}/cmake/ConfigFileMaker.cmake)
-
 grab_git_info(GIT_COMMIT_HASH GIT_COMMIT_DATE GIT_COMMIT_MESSAGE)
 message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HASH}]")
 
+include(${root}/cmake/ConfigFileMaker.cmake)
 make_config_file(${root}/src/appinfo/AppInfo.cpp)
 
 #=== Sources ===#
@@ -37,6 +35,8 @@ list(REMOVE_DUPLICATES directories)
 list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
+include(${root}/cmake/ConanSetup.cmake)
+conan_setup()
 include(${root}/cmake/ManageDependencies.cmake)
 conan_install()
 
@@ -47,6 +47,7 @@ find_package(glbinding REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
+find_package(assimp REQUIRED)
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
@@ -63,6 +64,7 @@ target_link_libraries(${target}
         glm::glm
         GLEW::GLEW
         plog::plog
+        assimp::assimp
 )
 set_target_properties(${target}
     PROPERTIES
