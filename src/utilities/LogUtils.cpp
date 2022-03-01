@@ -83,9 +83,9 @@ void LogUtils::Initialize() {
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
 
     plog::init(plog::debug, &File)
-#if defined(DEBUG)
+// #if defined(DEBUG)
         .addAppender(&Console)
-#endif
+// #endif
         .addAppender(&*mLogStorage);
 }
 

@@ -29,6 +29,9 @@ void Mesh::Draw(Shader &shader) {
     unsigned specularCount{ 1 };
     unsigned normalCount{ 1 };
     unsigned heightCount{ 1 };
+
+    shader.Use();
+
     for(size_t i{}; i < mTextures.size(); ++i) {
         auto &texture{ mTextures[i] };
         if(!texture.Valid()) {
@@ -52,13 +55,14 @@ void Mesh::Draw(Shader &shader) {
             } break;
         }
 
-        LOGD << "Setting texture " << name.str() << " as " << i;
-        shader.Get(name.str()).Set(texture.GetID());
+        // LOGD << "Setting texture " << name.str() << " as " << i;
+        shader.Get(name.str()).Set(static_cast<int>(texture.GetID()));
         texture.Bind();
     }
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+    shader.UnUse();
     glBindVertexArray(0);
 
     glActiveTexture(GL_TEXTURE0);
