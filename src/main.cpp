@@ -124,8 +124,8 @@ int main() {
     // glEnableVertexAttribArray(2);
 
     auto shader{ std::make_shared<meov::core::Shader>(
-        // "shaders/vertex_test.glsl",
-        // "shaders/fragment_test.glsl"
+        "shaders/vertex_test.glsl",
+        "shaders/fragment_test.glsl"
         ) };
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
