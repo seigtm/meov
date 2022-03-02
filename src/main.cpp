@@ -68,7 +68,8 @@ int main() {
     ImGui::CreateContext();
     auto& io{ ImGui::GetIO() };
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable docking
+    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable viewports to drag windows outside of the main window.
 
     // Setup Dear ImGui style.
     ImGui::StyleColorsDark();
@@ -125,8 +126,7 @@ int main() {
 
     auto shader{ std::make_shared<meov::core::Shader>(
         "shaders/vertex_test.glsl",
-        "shaders/fragment_test.glsl"
-        ) };
+        "shaders/fragment_test.glsl") };
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
             meov::core::Vertex{ glm::vec4{ 0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
@@ -171,6 +171,8 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(window);
         ImGui::NewFrame();
+
+        ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -21,6 +21,11 @@ make_config_file(${root}/src/appinfo/AppInfo.cpp)
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
 file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp)
 
+# Appending sources and headers of dependencies.
+add_subdirectory(dependencies)
+list(APPEND headers ${deps_headers})
+list(APPEND sources ${deps_sources})
+
 set(directories)
 foreach(header ${headers})
     get_filename_component(directory ${header} PATH)
@@ -42,7 +47,6 @@ conan_install()
 
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(imgui REQUIRED)
 find_package(glbinding REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
@@ -59,7 +63,6 @@ target_link_libraries(${target}
     PUBLIC
         ${OPENGL_opengl_LIBRARY}
         SDL2::SDL2-static
-        imgui::imgui
         glbinding::glbinding
         glm::glm
         GLEW::GLEW

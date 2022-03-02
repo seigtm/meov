@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "a8205aab0db3361b8685bdcaa512767fff8e8737-dirty"
-#define GIT_COMMIT_DATE "Mon Feb 28 18:15:52 2022"
-#define GIT_COMMIT_MESSAGE "Updated clang-format rules and used it on all sources."
+#define GIT_COMMIT_HASH "8874816323d857ede6f173bbde97d6c95c3c1c3e-dirty"
+#define GIT_COMMIT_DATE "Tue Mar 1 16:25:35 2022"
+#define GIT_COMMIT_MESSAGE "Uncommented shader initialization."
 
 namespace meov {
 
