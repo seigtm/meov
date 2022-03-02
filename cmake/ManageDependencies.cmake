@@ -5,7 +5,6 @@ macro(conan_install)
             REQUIRES
                 sdl/2.0.18
                 glbinding/3.1.0
-                imgui/1.86
                 glm/0.9.9.8
                 glew/2.2.0
                 plog/1.1.5
@@ -30,7 +29,6 @@ macro(conan_install)
             REQUIRES
                 sdl/2.0.18
                 glbinding/3.1.0
-                imgui/1.86
                 glm/0.9.9.8
                 glew/2.2.0
                 plog/1.1.5
