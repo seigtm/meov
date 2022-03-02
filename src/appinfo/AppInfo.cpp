@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "e006bc284029a89d1b124da914a03b9edf0e287c"
-#define GIT_COMMIT_DATE "Wed Mar 2 17:12:30 2022"
-#define GIT_COMMIT_MESSAGE "ImGui as submodule instead of conan package for docking purposes."
+#define GIT_COMMIT_HASH "cd94a6a2084fb6eebf6d4b9125e0c37a3aded113"
+#define GIT_COMMIT_DATE "Wed Mar 2 17:34:24 2022"
+#define GIT_COMMIT_MESSAGE "Second attempt to fix freacking git submodules..."
 
 namespace meov {
 
