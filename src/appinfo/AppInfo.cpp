@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "8874816323d857ede6f173bbde97d6c95c3c1c3e-dirty"
-#define GIT_COMMIT_DATE "Tue Mar 1 16:25:35 2022"
-#define GIT_COMMIT_MESSAGE "Uncommented shader initialization."
+#define GIT_COMMIT_HASH "e006bc284029a89d1b124da914a03b9edf0e287c"
+#define GIT_COMMIT_DATE "Wed Mar 2 17:12:30 2022"
+#define GIT_COMMIT_MESSAGE "ImGui as submodule instead of conan package for docking purposes."
 
 namespace meov {
 
