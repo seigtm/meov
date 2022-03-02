@@ -35,17 +35,17 @@ protected:
     //! Override this with your interface widgets' calls.
     virtual void DrawImpl() = 0;
 
-    std::string _title;
-    ImVec2 _size;
-    bool _isClosable;
-    ImGuiWindowFlags _flags;
-
 private:
     /*!
      * \brief Toggles passed Dear ImGui's window flag.
      * \param flag ImGuiWindowsFlag to toggle.
      */
     void ToggleFlag(ImGuiWindowFlags flag);
+
+    std::string _title;
+    ImVec2 _size;
+    bool _isClosable;
+    ImGuiWindowFlags _flags;
 };
 
 }  // namespace meov::Window
