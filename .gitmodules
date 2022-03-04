@@ -5,4 +5,4 @@
 [submodule "dependencies/imgui_filedialog"]
     path = dependencies/imgui_filedialog
     url = https://github.com/aiekick/ImGuiFileDialog.git
-    branch = "Lib_only"
+    branch = "Lib_Only"
