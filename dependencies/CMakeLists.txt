@@ -12,6 +12,8 @@ set(deps_sources
     # Dear ImGui's backends (submodule with docking branch).
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_sdl.cpp
+    # Dear ImGui File Dialog (submodule with Lib_Only branch).
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui_filedialog/ImGuiFileDialog.cpp
     # To make sources visible in the root project's folder.
     PARENT_SCOPE)
 
@@ -29,5 +31,7 @@ set(deps_headers
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3.h
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3_loader.h
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_sdl.h
+    # Dear ImGui File Dialog (submodule with Lib_Only branch).
+    ${CMAKE_CURRENT_SOURCE_DIR}/imgui_filedialog/ImGuiFileDialog.h
     # To make headers visible in the root project's folder.
     PARENT_SCOPE)

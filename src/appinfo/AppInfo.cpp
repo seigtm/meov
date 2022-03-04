@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "c9e3a77df848ee61a60614457a2d789330460ba8-dirty"
-#define GIT_COMMIT_DATE "Wed Mar 2 17:41:22 2022"
-#define GIT_COMMIT_MESSAGE "Third attempt to fix freacking git submodules..."
+#define GIT_COMMIT_HASH "48da890ccb27f5f3e99f995de2eb2be1c283b010-dirty"
+#define GIT_COMMIT_DATE "Fri Mar 4 21:51:38 2022"
+#define GIT_COMMIT_MESSAGE "Switched ImGuiFileDialog submodule's to the 'Lib_Only' branch."
 
 namespace meov {
 
