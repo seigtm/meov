@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "cd94a6a2084fb6eebf6d4b9125e0c37a3aded113"
-#define GIT_COMMIT_DATE "Wed Mar 2 17:34:24 2022"
-#define GIT_COMMIT_MESSAGE "Second attempt to fix freacking git submodules..."
+#define GIT_COMMIT_HASH "c9e3a77df848ee61a60614457a2d789330460ba8-dirty"
+#define GIT_COMMIT_DATE "Wed Mar 2 17:41:22 2022"
+#define GIT_COMMIT_MESSAGE "Third attempt to fix freacking git submodules..."
 
 namespace meov {
 
