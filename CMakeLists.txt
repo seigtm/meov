@@ -5,7 +5,7 @@ project(meov LANGUAGES CXX VERSION 0.1.4)
 
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
-set(build_dir ${root}/build)
+set(build_dir ${CMAKE_CURRENT_BINARY_DIR})
 
 set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
@@ -36,8 +36,8 @@ list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
 include(${root}/cmake/ConanSetup.cmake)
-include(${root}/cmake/ConanDependencies.cmake)
 conan_setup()
+include(${root}/cmake/ConanDependencies.cmake)
 conan_install()
 
 find_package(OpenGL REQUIRED)
@@ -89,7 +89,7 @@ add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
 #=== Clone assets to the build ===#
-add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
+# add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
 
 #=== Install ===#
 # TODO: Rethink install destination.
