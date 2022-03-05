@@ -21,11 +21,6 @@ make_config_file(${root}/src/appinfo/AppInfo.cpp)
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
 file(GLOB_RECURSE headers ${root}/src/*.h ${root}/src/*.hpp)
 
-# Appending sources and headers of dependencies.
-add_subdirectory(dependencies)
-list(APPEND headers ${deps_headers})
-list(APPEND sources ${deps_sources})
-
 set(directories)
 foreach(header ${headers})
     get_filename_component(directory ${header} PATH)
@@ -41,8 +36,8 @@ list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
 include(${root}/cmake/ConanSetup.cmake)
+include(${root}/cmake/ConanDependencies.cmake)
 conan_setup()
-include(${root}/cmake/ManageDependencies.cmake)
 conan_install()
 
 find_package(OpenGL REQUIRED)
@@ -52,6 +47,11 @@ find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
 find_package(assimp REQUIRED)
+
+# Appending sources and headers of dependencies.
+add_subdirectory(dependencies)
+# list(APPEND headers ${deps_headers})
+# list(APPEND sources ${deps_sources})
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
@@ -68,6 +68,10 @@ target_link_libraries(${target}
         GLEW::GLEW
         plog::plog
         assimp::assimp
+
+    PRIVATE
+        deps_imgui
+        deps_stb_image
 )
 set_target_properties(${target}
     PROPERTIES

@@ -1,37 +1,58 @@
 # === Collecting all sources and headers of external dependencies here. ===#
 
-set(deps_sources
-    # STB image.
-    ${CMAKE_CURRENT_SOURCE_DIR}/stb_image.cpp
-    # Dear ImGui's common (submodule with docking branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_tables.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_widgets.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.cpp
-    # Dear ImGui's backends (submodule with docking branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_sdl.cpp
-    # Dear ImGui File Dialog (submodule with Lib_Only branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui_filedialog/ImGuiFileDialog.cpp
-    # To make sources visible in the root project's folder.
-    PARENT_SCOPE)
+set(current_dir ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(deps_headers
-    # STB image.
-    ${CMAKE_CURRENT_SOURCE_DIR}/stb_image.h
+#============= ImGui =============#
+
+set(_sources
     # Dear ImGui's common (submodule with docking branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imconfig.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_internal.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imstb_rectpack.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imstb_textedit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imstb_truetype.h
+        ${current_dir}/imgui/imgui_demo.cpp
+        ${current_dir}/imgui/imgui_draw.cpp
+        ${current_dir}/imgui/imgui_tables.cpp
+        ${current_dir}/imgui/imgui_widgets.cpp
+        ${current_dir}/imgui/imgui.cpp
+
+        ${current_dir}/imgui/imconfig.h
+        ${current_dir}/imgui/imgui_internal.h
+        ${current_dir}/imgui/imgui.h
+        ${current_dir}/imgui/imstb_rectpack.h
+        ${current_dir}/imgui/imstb_textedit.h
+        ${current_dir}/imgui/imstb_truetype.h
+
     # Dear ImGui's backends (submodule with docking branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_opengl3_loader.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/imgui_impl_sdl.h
+        ${current_dir}/imgui/backends/imgui_impl_opengl3.cpp
+        ${current_dir}/imgui/backends/imgui_impl_sdl.cpp
+
+        ${current_dir}/imgui/backends/imgui_impl_opengl3.h
+        ${current_dir}/imgui/backends/imgui_impl_opengl3_loader.h
+        ${current_dir}/imgui/backends/imgui_impl_sdl.h
+
     # Dear ImGui File Dialog (submodule with Lib_Only branch).
-    ${CMAKE_CURRENT_SOURCE_DIR}/imgui_filedialog/ImGuiFileDialog.h
-    # To make headers visible in the root project's folder.
-    PARENT_SCOPE)
+        ${current_dir}/imgui_filedialog/ImGuiFileDialog.cpp
+        ${current_dir}/imgui_filedialog/ImGuiFileDialog.h
+)
+add_library(deps_imgui OBJECT ${_sources})
+target_include_directories(deps_imgui
+    PUBLIC
+        ${current_dir}/imgui
+        ${current_dir}/imgui_filedialog
+)
+target_link_libraries(deps_imgui
+    PRIVATE
+        ${OPENGL_opengl_LIBRARY}
+        SDL2::SDL2-static
+)
+unset(_sources)
+
+#============= STB =============#
+
+set(_sources
+        ${current_dir}/stb_image/stb_image.cpp
+        ${current_dir}/stb_image/stb_image.h
+)
+add_library(deps_stb_image OBJECT ${_sources})
+target_include_directories(deps_stb_image
+    PUBLIC
+        ${current_dir}/stb_image
+)
+unset(_sources)
