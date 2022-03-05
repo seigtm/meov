@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL ""
+#define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "a10456854bb64150de4c5e6eea194e69a76be41f-dirty"
-#define GIT_COMMIT_DATE "Fri Mar 4 21:57:45 2022"
-#define GIT_COMMIT_MESSAGE "Collecting ImGuiFileDialog sources with cmake."
+#define GIT_COMMIT_HASH "7db3407972814dc49aa680755b5fd67d05d9fe76-dirty"
+#define GIT_COMMIT_DATE "Sat Mar 5 08:04:38 2022"
+#define GIT_COMMIT_MESSAGE "Fix build system"
 
 namespace meov {
 
