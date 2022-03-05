@@ -37,7 +37,7 @@ void Mesh::Draw(Shader &shader) {
         if(!texture.Valid()) {
             continue;
         }
-        glActiveTexture(GL_TEXTURE0 + i);
+        texture.Activate(i);
         std::stringstream name;
         name << "texture";
         switch(texture.GetType()) {
@@ -55,7 +55,6 @@ void Mesh::Draw(Shader &shader) {
             } break;
         }
 
-        // LOGD << "Setting texture " << name.str() << " as " << i;
         shader.Get(name.str()).Set(static_cast<int>(texture.GetID()));
         texture.Bind();
     }
@@ -64,7 +63,6 @@ void Mesh::Draw(Shader &shader) {
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
     shader.UnUse();
     glBindVertexArray(0);
-
     glActiveTexture(GL_TEXTURE0);
 }
 
@@ -109,8 +107,8 @@ void Mesh::Load() {
     InitializeAttribute(Vertex::PositionCount(), Vertex::PositionOffset());
     InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset());
     InitializeAttribute(Vertex::TexturePositionCount(), Vertex::TexturePositionOffset());
-    InitializeAttribute(Vertex::TangentCount(), Vertex::TangentOffset());
-    InitializeAttribute(Vertex::BitAgentCount(), Vertex::BitAgentOffset());
+    // InitializeAttribute(Vertex::TangentCount(), Vertex::TangentOffset());
+    // InitializeAttribute(Vertex::BitAgentCount(), Vertex::BitAgentOffset());
 
     glBindVertexArray(0);
 }

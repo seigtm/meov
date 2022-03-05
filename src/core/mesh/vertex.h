@@ -5,11 +5,11 @@ namespace meov::core {
 //=================================== Vertex ===================================//
 
 struct Vertex {
-    glm::vec4 mPos;
+    glm::vec3 mPos;
     glm::vec4 mClr;
     glm::vec2 mTexCoords;
-    glm::vec3 mTangent;
-    glm::vec3 mBitAgent;
+    // glm::vec3 mTangent;
+    // glm::vec3 mBitAgent;
 
     /// @brief Length in bytes
     static GLsizei Length();
@@ -20,14 +20,14 @@ struct Vertex {
     static GLint PositionCount();
     static GLint ColorCount();
     static GLint TexturePositionCount();
-    static GLint TangentCount();
-    static GLint BitAgentCount();
+    // static GLint TangentCount();
+    // static GLint BitAgentCount();
 
     static GLint PositionOffset();
     static GLint ColorOffset();
     static GLint TexturePositionOffset();
-    static GLint TangentOffset();
-    static GLint BitAgentOffset();
+    // static GLint TangentOffset();
+    // static GLint BitAgentOffset();
 };
 
 }  // namespace meov::core

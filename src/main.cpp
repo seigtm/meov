@@ -129,10 +129,10 @@ int main() {
         "shaders/fragment_test.glsl") };
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
-            meov::core::Vertex{ glm::vec4{ 0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
-            meov::core::Vertex{ glm::vec4{ 0.5f, -0.5f, .0f, 1.f }, glm::vec4{ 0.f, 1.f, 0.f, 1.f }, glm::vec2{ 1.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec4{ -0.5f, -0.5f, .0f, 1.f }, glm::vec4{ 0.f, 0.f, 1.f, 1.f }, glm::vec2{ 0.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec4{ -0.5f, 0.5f, .0f, 1.f }, glm::vec4{ 1.f, 1.f, 0.f, 1.f }, glm::vec2{ 0.0f, 1.0f } } },
+            meov::core::Vertex{ glm::vec3{ 0.5f, 0.5f, .0f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
+            meov::core::Vertex{ glm::vec3{ 0.5f, -0.5f, .0f }, glm::vec4{ 0.f, 1.f, 0.f, 1.f }, glm::vec2{ 1.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, .0f }, glm::vec4{ 0.f, 0.f, 1.f, 1.f }, glm::vec2{ 0.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec3{ -0.5f, 0.5f, .0f }, glm::vec4{ 1.f, 1.f, 0.f, 1.f }, glm::vec2{ 0.0f, 1.0f } } },
         std::vector{
             0u, 1u, 3u,  // first triangle
             1u, 2u, 3u   // second triangle

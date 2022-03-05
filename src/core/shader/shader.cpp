@@ -175,7 +175,7 @@ layout (location = 0) in vec4 aPos;
 layout (location = 1) in vec4 aClr;
 layout (location = 2) in vec2 aTex;
 layout (location = 3) in vec3 aTangent;
-layout (location = 4) in vec4 aBitAgent;
+layout (location = 4) in vec3 aBitAgent;
 
 out vec4 vertexColor;
 out vec2 vertexTexCoord;
