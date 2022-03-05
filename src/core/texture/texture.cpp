@@ -44,6 +44,10 @@ void Texture::Bind() {
     glBindTexture(GL_TEXTURE_2D, mId);
 }
 
+void Texture::Activate(const int id) {
+    glActiveTexture(GL_TEXTURE0 + id);
+}
+
 bool Texture::Valid() const {
     return mValid;
 }

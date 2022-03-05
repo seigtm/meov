@@ -15,6 +15,7 @@ public:
     ~Texture();
 
     void Bind();
+    void Activate(const int id);
 
     bool Valid() const;
     unsigned GetID() const;
