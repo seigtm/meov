@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL ""
 
-#define GIT_COMMIT_HASH "48da890ccb27f5f3e99f995de2eb2be1c283b010-dirty"
-#define GIT_COMMIT_DATE "Fri Mar 4 21:51:38 2022"
-#define GIT_COMMIT_MESSAGE "Switched ImGuiFileDialog submodule's to the 'Lib_Only' branch."
+#define GIT_COMMIT_HASH "a10456854bb64150de4c5e6eea194e69a76be41f-dirty"
+#define GIT_COMMIT_DATE "Fri Mar 4 21:57:45 2022"
+#define GIT_COMMIT_MESSAGE "Collecting ImGuiFileDialog sources with cmake."
 
 namespace meov {
 
