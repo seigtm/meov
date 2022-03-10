@@ -7,6 +7,7 @@
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
 
+#include "FrameBuffer.hpp"
 #include "mesh.h"
 #include "vertex.h"
 #include "shader.h"
@@ -139,6 +140,8 @@ int main() {
         },
         std::vector{
             meov::core::Texture{ "textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse } }) };
+    meov::core::OpenGL_FrameBuffer buffer{};
+    buffer.create_buffers(400, 400);
 
     // Main loop.
     LOGI << "Start main loop";
@@ -176,7 +179,17 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        buffer.bind();
         mesh->Draw(shader);
+        buffer.unbind();
+
+        ImGui::Begin("Scene");
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+        ImVec2 mSize = { viewportPanelSize.x, viewportPanelSize.y };
+        // Add rendered texture to ImGUI scene window.
+        uint32_t textureID = buffer.get_texture();
+        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ mSize.x, mSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::End();
 
         // Show singleton log window.
         logW1->Draw();
@@ -198,6 +211,8 @@ int main() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
+
+    buffer.delete_buffers();
 
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
