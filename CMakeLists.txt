@@ -89,7 +89,7 @@ add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
 #=== Clone assets to the build ===#
-# add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
+add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
 
 #=== Install ===#
 # TODO: Rethink install destination.
