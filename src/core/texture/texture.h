@@ -11,8 +11,13 @@ public:
         Height,
     };
 
-    explicit Texture(const std::string_view &path, const Type type);
+    static std::shared_ptr<Texture> Make(const std::string_view &path, const Type type);
+
+    Texture(const std::string_view &path, const Type type);
     ~Texture();
+
+    Texture(const Texture &other) = delete;
+    Texture &operator=(const Texture &other) = delete;
 
     void Bind();
     void Activate(const int id);
@@ -21,8 +26,8 @@ public:
     unsigned GetID() const;
     Type GetType() const;
 
-
 private:
+
     unsigned mId{};
     std::string mPath;
     Type mType;

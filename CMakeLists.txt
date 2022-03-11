@@ -78,10 +78,7 @@ set_target_properties(${target}
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
-        # TODO: Rethink output directories (it's bad to assign it to the assets dir).
-        # ARCHIVE_OUTPUT_DIRECTORY ${root}/assets
-        # LIBRARY_OUTPUT_DIRECTORY ${root}/assets
-        # RUNTIME_OUTPUT_DIRECTORY ${root}/assets
+        RUNTIME_OUTPUT_DIRECTORY ${root}/assets
 )
 
 #=== Sanitizer options ===#

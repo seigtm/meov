@@ -10,7 +10,7 @@ GLsizei Vertex::Length() { return sizeof(Vertex); }
 GLsizei Vertex::Count() { return sizeof(Vertex) / sizeof(float); }
 
 GLint Vertex::PositionCount() { return glm::vec3::length(); }
-GLint Vertex::ColorCount() { return glm::vec4::length(); }
+GLint Vertex::ColorCount() { return glm::u8vec4::length(); }
 GLint Vertex::TexturePositionCount() { return glm::vec2::length(); }
 // GLint Vertex::TangentCount() { return glm::vec3::length(); }
 // GLint Vertex::BitAgentCount() { return glm::vec3::length(); }

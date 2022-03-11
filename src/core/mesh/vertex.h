@@ -6,7 +6,7 @@ namespace meov::core {
 
 struct Vertex {
     glm::vec3 mPos;
-    glm::vec4 mClr;
+    glm::u8vec4 mClr;
     glm::vec2 mTexCoords;
     // glm::vec3 mTangent;
     // glm::vec3 mBitAgent;

@@ -83,6 +83,8 @@
 		"map": "cpp",
 		"ratio": "cpp",
 		"typeinfo": "cpp",
-		"xstddef": "cpp"
+		"xstddef": "cpp",
+		"deque": "cpp",
+		"queue": "cpp"
 	}
 }

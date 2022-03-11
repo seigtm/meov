@@ -7,7 +7,7 @@
 
 namespace meov::core {
 
-Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, std::vector<Texture> &&textures)
+Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, std::vector<std::shared_ptr<Texture>> &&textures)
     : mVertices{ std::move(vertices) }
     , mIndices{ std::move(indices) }
     , mTextures{ std::move(textures) } {
@@ -34,13 +34,13 @@ void Mesh::Draw(Shader &shader) {
 
     for(size_t i{}; i < mTextures.size(); ++i) {
         auto &texture{ mTextures[i] };
-        if(!texture.Valid()) {
+        if(!texture->Valid()) {
             continue;
         }
-        texture.Activate(i);
+        texture->Activate(i);
         std::stringstream name;
         name << "texture";
-        switch(texture.GetType()) {
+        switch(texture->GetType()) {
             case Texture::Type::Diffuse: {
                 name << "Diffuse" << diffuseCount++;
             } break;
@@ -55,15 +55,15 @@ void Mesh::Draw(Shader &shader) {
             } break;
         }
 
-        shader.Get(name.str()).Set(static_cast<int>(texture.GetID()));
-        texture.Bind();
+        texture->Bind();
+        shader.Get(name.str()).Set(static_cast<int>(i));
     }
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
-    shader.UnUse();
-    glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);
+    // shader.UnUse();
+    // glBindVertexArray(0);
+    // glActiveTexture(GL_TEXTURE0);
 }
 
 bool Mesh::HasIndices() const {
@@ -96,16 +96,16 @@ void Mesh::Load() {
 
     GLuint attributePos{};
     const auto InitializeAttribute{
-        [&](GLint count, GLuint offset) {
-            glVertexAttribPointer(
-                attributePos, count, GL_FLOAT, GL_FALSE, Vertex::Length(), (GLvoid *)offset);
+        [&](GLint count, GLuint offset, GLenum type = GL_FLOAT, GLboolean normalized = GL_FALSE) {
             glEnableVertexAttribArray(attributePos);
+            glVertexAttribPointer(
+                attributePos, count, type, normalized, Vertex::Length(), (GLvoid *)offset);
             ++attributePos;
         }
     };
 
     InitializeAttribute(Vertex::PositionCount(), Vertex::PositionOffset());
-    InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset());
+    InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset(), GL_UNSIGNED_BYTE, GL_TRUE);
     InitializeAttribute(Vertex::TexturePositionCount(), Vertex::TexturePositionOffset());
     // InitializeAttribute(Vertex::TangentCount(), Vertex::TangentOffset());
     // InitializeAttribute(Vertex::BitAgentCount(), Vertex::BitAgentOffset());

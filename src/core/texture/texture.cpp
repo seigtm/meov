@@ -4,6 +4,10 @@
 
 namespace meov::core {
 
+std::shared_ptr<Texture> Texture::Make(const std::string_view &path, const Type type) {
+    return std::make_shared<Texture>(path, type);
+}
+
 Texture::Texture(const std::string_view &path, const Type type)
     : mPath{ path }
     , mType{ type } {
@@ -14,7 +18,6 @@ Texture::Texture(const std::string_view &path, const Type type)
     }
 
     int width, height, channels;
-    stbi_set_flip_vertically_on_load(true);
     auto bytes{ stbi_load(path.data(), &width, &height, &channels, 0) };
     if(nullptr == bytes) {
         LOGE << "Error while loading texture from '" << path << "'";
@@ -29,7 +32,9 @@ Texture::Texture(const std::string_view &path, const Type type)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+    const GLenum format{ channels == 4 ? GL_RGBA : GL_RGB };
+
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, bytes);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(bytes);
     LOGD << "Texture " << path << " was loaded";
