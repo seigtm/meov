@@ -17,7 +17,7 @@ void Log::DrawImpl() {
     if(ImGui::BeginChild("Scrolling", {}, true, ImGuiWindowFlags_HorizontalScrollbar)) {
         // Clipper helps us to render only visible log messages.
         ImGuiListClipper clipper;
-        clipper.Begin(storage->size());
+        clipper.Begin(storage->size(), ImGui::GetTextLineHeight());
         while(clipper.Step()) {
             for(int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
                 const auto &line{ plog::util::toNarrow(storage->at(i), plog::codePage::kActive) };

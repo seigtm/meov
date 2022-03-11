@@ -12,7 +12,7 @@ class Mesh {
 public:
     Mesh() = default;
     Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices,
-         std::vector<Texture> &&textures);
+         std::vector<std::shared_ptr<Texture>> &&textures);
     ~Mesh();
 
     void Draw(const std::shared_ptr<Shader> &shader);
@@ -26,7 +26,7 @@ private:
     GLuint VAO{}, VBO{}, EBO{};
     std::vector<Vertex> mVertices;
     std::vector<unsigned> mIndices;
-    std::vector<Texture> mTextures;
+    std::vector<std::shared_ptr<Texture>> mTextures;
 
     void Load();
 

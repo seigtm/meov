@@ -1,9 +1,7 @@
 #version 440 core
 
-in vsOut{
-   vec4 color;
-   vec2 texPos;
-} vs_in;
+in vec4 color;
+in vec2 texPos;
 
 out vec4 FragColor;
 
@@ -11,5 +9,6 @@ uniform sampler2D textureDiffuse1;
 // uniform sampler2D textureNormal1;
 
 void main() {
-    FragColor = texture(textureDiffuse1, vs_in.texPos) * vs_in.color;
+    // FragColor = mix(texture(textureDiffuse1, texPos), color, 0.5);
+    FragColor = texture(textureDiffuse1, texPos);
 }

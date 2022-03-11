@@ -3,6 +3,7 @@
 #include "Common.hpp"
 #include "AppInfo.hpp"
 #include "LogUtils.hpp"
+#include "TimeUtils.hpp"
 
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
@@ -14,6 +15,7 @@
 #include "texture.h"
 
 int main() {
+    stbi_set_flip_vertically_on_load(true);
     meov::utils::LogUtils::Instance()->Initialize();
 
     LOGI << "Current directory: " << fs::current_path().string();
@@ -49,10 +51,10 @@ int main() {
     glbinding::Binding::initialize(
         [](const char* name) {
             return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
-        });
+        }
+    );
+    glEnable(GL_DEPTH_TEST);
     LOGI << "OpenGL was initialized: " << glGetString(GL_VERSION);
-    // if (GL_ARB_direct_state_access)
-
 
 #if defined(_DEBUG)
     LOGD << "Debug callbacks initialization";
@@ -91,68 +93,162 @@ int main() {
         logStorage->Subscribe(logW1);
     }
 
-    // float vertices[] = {
-    //     // positions          // colors           // texture coords
-    //      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-    //      0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-    //     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-    //     -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
-    // };
-    // unsigned int indices[] = {
-    //     0, 1, 3, // first triangle
-    //     1, 2, 3  // second triangle
-    // };
-    // unsigned int VBO, VAO, EBO;
-    // glGenVertexArrays(1, &VAO);
-    // glGenBuffers(1, &VBO);
-    // glGenBuffers(1, &EBO);
-
-    // glBindVertexArray(VAO);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // // position attribute
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    // glEnableVertexAttribArray(0);
-    // // color attribute
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    // glEnableVertexAttribArray(1);
-    // // texture coord attribute
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    // glEnableVertexAttribArray(2);
-
+    // clang-format off
     auto shader{ std::make_shared<meov::core::Shader>(
         "shaders/vertex_test.glsl",
-        "shaders/fragment_test.glsl") };
+        "shaders/fragment_test.glsl"
+    ) };
+
+    const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
+    const glm::u8vec4 black{ 0x00, 0x00, 0x00, 0xFF };
+    const glm::u8vec4 red{ 0xFF, 0x00, 0x00, 0xFF };
+    const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
+    const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
+
     auto mesh{ std::make_shared<meov::core::Mesh>(
         std::vector{
-            meov::core::Vertex{ glm::vec3{ 0.5f, 0.5f, .0f }, glm::vec4{ 1.f, 0.f, 0.f, 1.f }, glm::vec2{ 1.0f, 1.0f } },
-            meov::core::Vertex{ glm::vec3{ 0.5f, -0.5f, .0f }, glm::vec4{ 0.f, 1.f, 0.f, 1.f }, glm::vec2{ 1.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, .0f }, glm::vec4{ 0.f, 0.f, 1.f, 1.f }, glm::vec2{ 0.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec3{ -0.5f, 0.5f, .0f }, glm::vec4{ 1.f, 1.f, 0.f, 1.f }, glm::vec2{ 0.0f, 1.0f } } },
-        std::vector{
-            0u, 1u, 3u,  // first triangle
-            1u, 2u, 3u   // second triangle
+            // front
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, white, glm::vec2{ 1.0f, 1.0f } }, // 0
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, white, glm::vec2{ 1.0f, 0.0f } }, // 1
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, white, glm::vec2{ 0.0f, 0.0f } }, // 2
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, white, glm::vec2{ 0.0f, 1.0f } }, // 3
+
+            // left
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, red, glm::vec2{ 1.0f, 1.0f } }, // 4
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, red, glm::vec2{ 1.0f, 0.0f } }, // 5
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, red, glm::vec2{ 0.0f, 0.0f } }, // 6
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, red, glm::vec2{ 0.0f, 1.0f } }, // 7
+
+            // right
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, green, glm::vec2{ 1.0f, 1.0f } }, // 8
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, green, glm::vec2{ 1.0f, 0.0f } }, // 9
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, green, glm::vec2{ 0.0f, 0.0f } }, // 10
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, green, glm::vec2{ 0.0f, 1.0f } }, // 11
+
+            // up
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, blue, glm::vec2{ 1.0f, 1.0f } }, // 12
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, blue, glm::vec2{ 1.0f, 0.0f } }, // 13
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, blue, glm::vec2{ 0.0f, 0.0f } }, // 14
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, blue, glm::vec2{ 0.0f, 1.0f } }, // 15
+
+            // down
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, red, glm::vec2{ 1.0f, 1.0f } }, // 16
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, green, glm::vec2{ 1.0f, 0.0f } }, // 17
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, blue, glm::vec2{ 0.0f, 0.0f } }, // 18
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, black, glm::vec2{ 0.0f, 1.0f } }, // 19
+
+            // back
+            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, black, glm::vec2{ 1.0f, 1.0f } },
+            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, black, glm::vec2{ 1.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, black, glm::vec2{ 0.0f, 0.0f } },
+            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, black, glm::vec2{ 0.0f, 1.0f } },
         },
         std::vector{
-            meov::core::Texture{ "textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse } }) };
+            // front
+            0u, 1u, 3u,
+            1u, 2u, 3u,
+
+            // left
+            4u, 5u, 7u,
+            5u, 6u, 7u,
+
+            // right
+            8u, 9u, 11u,
+            9u, 10u, 11u,
+
+            // up
+            12u, 13u, 15u,
+            13u, 14u, 15u,
+
+            // down
+            16u, 17u, 19u,
+            17u, 18u, 19u,
+
+            // back
+            20u, 21u, 23u,
+            21u, 22u, 23u,
+        },
+        std::vector{
+            meov::core::Texture::Make("textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse)
+        }
+    ) };
+
+    // clang-format on
     meov::core::OpenGL_FrameBuffer buffer{};
     buffer.create_buffers(400, 400);
+    glm::mat4 projection{ 1 };
+    glm::mat4 view{ 1.f };
+    glm::mat4 model{ 1.f };
+
+    constexpr float step{ 0.05f };
+    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -2.0f });
 
     // Main loop.
     LOGI << "Start main loop";
     bool done = false;
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+
+    meov::utilities::time::Clock clock;
     while(!done) {
+        clock.Update();
+        model = glm::rotate<float>(model, clock.Delta(), glm::vec3{ 1.0f, 1.0f, 0.0f });
+        shader->Use();
+        shader->Get("projection").Set(projection);
+        shader->Get("view").Set(view);
+        shader->Get("model").Set(model);
+        shader->UnUse();
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window);
+        ImGui::NewFrame();
+
+        ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        buffer.bind();
+        mesh->Draw(shader);
+        buffer.unbind();
+
+        ImGui::Begin("Scene");
+        const auto [width, height]{ ImGui::GetContentRegionAvail() };
+        projection = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
+        // Add rendered texture to ImGUI scene window.
+        uint32_t textureID = buffer.get_texture();
+        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ width, height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::End();
+
+        // Show singleton log window.
+        logW1->Draw();
+        // Show Git info window.
+        gitW.Draw();
+
+        // Rendering.
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        SDL_GL_SwapWindow(window);
+
         // Poll and handle events (inputs, window resize, etc.).
         SDL_Event event;
         while(SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
             switch(event.type) {
+                case SDL_KEYDOWN: {
+                    auto& keysym = event.key.keysym;
+                    LOGD << "Key pressed: " << SDL_GetKeyName(keysym.sym);
+                    glm::vec3 velocity{};
+                    switch(keysym.sym) {
+                        case SDLK_s: velocity.z -= step; break;
+                        case SDLK_w: velocity.z += step; break;
+                        case SDLK_a: velocity.x += step; break;
+                        case SDLK_d: velocity.x -= step; break;
+                    }
+                    if(velocity != glm::vec3{}) {
+                        view = glm::translate(view, velocity);
+                    }
+                } break;
                 case SDL_WINDOWEVENT:
                     if(event.window.windowID != SDL_GetWindowID(window)) {
                         break;
@@ -170,41 +266,6 @@ int main() {
             }
         }
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        ImGui::NewFrame();
-
-        ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        buffer.bind();
-        mesh->Draw(shader);
-        buffer.unbind();
-
-        ImGui::Begin("Scene");
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        ImVec2 mSize = { viewportPanelSize.x, viewportPanelSize.y };
-        // Add rendered texture to ImGUI scene window.
-        uint32_t textureID = buffer.get_texture();
-        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ mSize.x, mSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-        ImGui::End();
-
-        // Show singleton log window.
-        logW1->Draw();
-        // Show Git info window.
-        gitW.Draw();
-
-        // Rendering.
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        // trans = glm::rotate(trans, 0.1f, glm::vec3(0.0f, 0.0f, 1.0f));
-        // triangle.shader()->Use();
-        // triangle.shader()->Get("localTransform").Set(trans);
-        // triangle.draw();
-        SDL_GL_SwapWindow(window);
     }
 
     // Cleanup.
