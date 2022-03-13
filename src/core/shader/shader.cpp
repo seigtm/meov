@@ -149,8 +149,6 @@ unsigned Shader::MakeShader(GLenum type, const std::string &source) {
     const std::string defaultSrc{ GetDefaultShaderSource(type) };
     unsigned shader{ glCreateShader(type) };
     const char *src{ source.empty() ? defaultSrc.c_str() : source.c_str() };
-    LOGD << GetShaderName(type) << " shader source: \n"
-         << src;
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
 
