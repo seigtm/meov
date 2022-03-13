@@ -8,7 +8,7 @@
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
 
-#include "FrameBuffer.hpp"
+#include "OGLFrameBuffer.hpp"
 #include "mesh.h"
 #include "vertex.h"
 #include "shader.h"
@@ -28,7 +28,7 @@ int main() {
 
     // Dear ImGui windows.
     meov::Window::Git gitW;
-    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1250, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
+    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1280, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
 
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
@@ -116,8 +116,8 @@ int main() {
     ) };
 
     // clang-format on
-    meov::core::OpenGL_FrameBuffer buffer{};
-    buffer.create_buffers(400, 400);
+    meov::core::gl::OpenGLFrameBuffer buffer;
+    buffer.Initialize(-1, -1);
     glm::mat4 projection{ 1 };
     glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
@@ -131,6 +131,7 @@ int main() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
     meov::utilities::time::Clock clock;
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while(!done) {
         clock.Update();
         model = glm::rotate<float>(model, clock.Delta(), glm::vec3{ 1.0f, 1.0f, 0.0f });
@@ -149,15 +150,15 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        buffer.bind();
+        buffer.Bind();
         mesh->Draw(shader);
-        buffer.unbind();
+        buffer.UnBind();
 
         ImGui::Begin("Scene");
         const auto [width, height]{ ImGui::GetContentRegionAvail() };
         projection = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
         // Add rendered texture to ImGUI scene window.
-        uint32_t textureID = buffer.get_texture();
+        uint32_t textureID = buffer.GetFrameTexture();
         ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ width, height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();
 
@@ -210,7 +211,7 @@ int main() {
 
     }
 
-    buffer.delete_buffers();
+    buffer.Destroy();
 
     return 0;
 }

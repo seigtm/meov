@@ -23,6 +23,7 @@
 #include <codecvt>
 #include <chrono>
 #include <cstdio>
+#include <cstdint>
 #include <filesystem>
 #include <functional>
 #include <locale>
