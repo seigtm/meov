@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "e0311c35166b3d715dca9c3fea1a2e82905c0b59-dirty"
-#define GIT_COMMIT_DATE "Sun Mar 13 10:33:44 2022"
-#define GIT_COMMIT_MESSAGE "Add Initializer class"
+#define GIT_COMMIT_HASH "5821f0140306c80e7b67cd1efcdd5f5c1461df49-dirty"
+#define GIT_COMMIT_DATE "Sun Mar 13 10:34:13 2022"
+#define GIT_COMMIT_MESSAGE "Fix log"
 
 namespace meov {
 
