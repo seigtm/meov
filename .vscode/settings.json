@@ -4,6 +4,7 @@
 	"cmake.parallelJobs": 16,
 	"cmake.preferredGenerators": [ "Ninja" ],
 	"cmake.buildArgs": [ "-v" ],
+	"cmake.configureOnEdit": true,
 
 	"files.associations": {
 		"*.txt": "cmake",

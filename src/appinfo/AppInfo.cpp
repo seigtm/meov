@@ -1,6 +1,6 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.1.6"
+#define VERSION "v0.1.7"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "5821f0140306c80e7b67cd1efcdd5f5c1461df49-dirty"
-#define GIT_COMMIT_DATE "Sun Mar 13 10:34:13 2022"
-#define GIT_COMMIT_MESSAGE "Fix log"
+#define GIT_COMMIT_HASH "e48763b7e092af55b0372b1164969f67cc9a3f82-dirty"
+#define GIT_COMMIT_DATE "Sun Mar 13 10:34:49 2022"
+#define GIT_COMMIT_MESSAGE "Add Core class"
 
 namespace meov {
 
