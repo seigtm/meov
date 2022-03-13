@@ -1,6 +1,6 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.1.4"
+#define VERSION "v0.1.5"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "3f72821f1de6cbcdf2189ac325af233fabd27c02-dirty"
-#define GIT_COMMIT_DATE "Thu Mar 10 18:04:59 2022"
-#define GIT_COMMIT_MESSAGE "Frame buffer tests."
+#define GIT_COMMIT_HASH "3671636aaaff6858f2bff9dcb98862fa07fcb3c9-dirty"
+#define GIT_COMMIT_DATE "Fri Mar 11 12:28:49 2022"
+#define GIT_COMMIT_MESSAGE "AHAHAHHAHAHAHH TEXTURES WERE ABADONED!!!!"
 
 namespace meov {
 
