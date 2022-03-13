@@ -1,6 +1,6 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.1.5"
+#define VERSION "v0.1.6"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "3671636aaaff6858f2bff9dcb98862fa07fcb3c9-dirty"
-#define GIT_COMMIT_DATE "Fri Mar 11 12:28:49 2022"
-#define GIT_COMMIT_MESSAGE "AHAHAHHAHAHAHH TEXTURES WERE ABADONED!!!!"
+#define GIT_COMMIT_HASH "e0311c35166b3d715dca9c3fea1a2e82905c0b59-dirty"
+#define GIT_COMMIT_DATE "Sun Mar 13 10:33:44 2022"
+#define GIT_COMMIT_MESSAGE "Add Initializer class"
 
 namespace meov {
 

@@ -62,8 +62,9 @@ putil::nstring DefaultFormatter::format(const plog::Record &record) {
     ss << beg << t.tm_year + 1900 << "." << std::setfill(PLOG_NSTR('0')) << std::setw(2) << t.tm_mon + 1 << "." << std::setfill(PLOG_NSTR('0')) << std::setw(2) << t.tm_mday << end;
     ss << beg << std::setfill(PLOG_NSTR('0')) << std::setw(2) << t.tm_hour << PLOG_NSTR(":") << std::setfill(PLOG_NSTR('0')) << std::setw(2) << t.tm_min << PLOG_NSTR(":") << std::setfill(PLOG_NSTR('0')) << std::setw(2) << t.tm_sec << PLOG_NSTR(".") << std::setfill(PLOG_NSTR('0')) << std::setw(3) << record.getTime().millitm << end;
     ss << beg << std::setfill(PLOG_NSTR(' ')) << std::setw(5) << std::left << severityToString(record.getSeverity()) << end;
-    ss << beg << record.getFunc() << PLOG_NSTR("@") << record.getLine() << end << PLOG_NSTR(' ');
-    ss << record.getMessage() << PLOG_NSTR("\n");
+    ss << PLOG_NSTR(' ') << record.getMessage();
+    ss << PLOG_NSTR("\t\t") << beg << "file: " <<  record.getFunc() << PLOG_NSTR(" at ") << record.getLine() << end;
+    ss << PLOG_NSTR("\n");
 
     return ss.str();
 }
