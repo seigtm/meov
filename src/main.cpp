@@ -14,72 +14,14 @@
 #include "shader.h"
 #include "texture.h"
 
+#include "Core.hpp"
+
 int main() {
     stbi_set_flip_vertically_on_load(true);
     meov::utils::LogUtils::Instance()->Initialize();
 
     LOGI << "Current directory: " << fs::current_path().string();
-    LOGI << "SDL Initialization";
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
-        LOGF << "Error: " << SDL_GetError();
-        return -1;
-    }
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, meov::AppInfo::GLSLVersionMajor());
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, meov::AppInfo::GLSLVersionMinor());
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-    // Create window with graphics context.
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-    LOGI << "Window Initialization";
-    SDL_Window* window{ SDL_CreateWindow(
-        meov::AppInfo::Name().c_str(),
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        1680, 960,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI) };
-    SDL_GLContext context{ SDL_GL_CreateContext(window) };
-    SDL_GL_MakeCurrent(window, context);
-
-    if(SDL_GL_SetSwapInterval(true) < 0) {
-        LOGW << "Cannot enable VSync!";
-    }
-
-    LOGI << "OpenGL Initialization";
-    glbinding::Binding::initialize(
-        [](const char* name) {
-            return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
-        }
-    );
-    glEnable(GL_DEPTH_TEST);
-    LOGI << "OpenGL was initialized: " << glGetString(GL_VERSION);
-
-#if defined(_DEBUG)
-    LOGD << "Debug callbacks initialization";
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
-
-    SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
-#endif
-
-    // Setup Dear ImGui context
-    LOGI << "ImGui Initialization";
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    auto& io{ ImGui::GetIO() };
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable docking
-    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable viewports to drag windows outside of the main window.
-
-    // Setup Dear ImGui style.
-    ImGui::StyleColorsDark();
-
-    // Setup Platform/Renderer backends.
-    ImGui_ImplSDL2_InitForOpenGL(window, context);
-    ImGui_ImplOpenGL3_Init(meov::AppInfo::GLSLVersion().c_str());
+    meov::core::Core core{ std::vector<std::string>{} };
 
     // Our state.
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };
@@ -200,7 +142,7 @@ int main() {
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
+        ImGui_ImplSDL2_NewFrame(core.mWindow);
         ImGui::NewFrame();
 
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
@@ -228,7 +170,7 @@ int main() {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        SDL_GL_SwapWindow(window);
+        SDL_GL_SwapWindow(core.mWindow);
 
         // Poll and handle events (inputs, window resize, etc.).
         SDL_Event event;
@@ -250,7 +192,7 @@ int main() {
                     }
                 } break;
                 case SDL_WINDOWEVENT:
-                    if(event.window.windowID != SDL_GetWindowID(window)) {
+                    if(event.window.windowID != SDL_GetWindowID(core.mWindow)) {
                         break;
                     }
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
@@ -268,16 +210,7 @@ int main() {
 
     }
 
-    // Cleanup.
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-
     buffer.delete_buffers();
-
-    SDL_GL_DeleteContext(context);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 
     return 0;
 }
