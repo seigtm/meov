@@ -2,7 +2,7 @@
 
 #include "mesh.h"
 #include "vertex.h"
-#include "shader.h"
+#include "Shader.hpp"
 #include "texture.h"
 
 namespace meov::core {
@@ -20,17 +20,15 @@ Mesh::~Mesh() {
     glDeleteVertexArrays(1, &VAO);
 }
 
-void Mesh::Draw(const std::shared_ptr<Shader> &shader) {
-    if(shader != nullptr) Draw(*shader);
-}
+void Mesh::Draw(shaders::Program &program) {
+    if (!program.IsValid()) return;
 
-void Mesh::Draw(Shader &shader) {
     unsigned diffuseCount{ 1 };
     unsigned specularCount{ 1 };
     unsigned normalCount{ 1 };
     unsigned heightCount{ 1 };
 
-    shader.Use();
+    program.Use();
 
     for(size_t i{}; i < mTextures.size(); ++i) {
         auto &texture{ mTextures[i] };
@@ -56,14 +54,15 @@ void Mesh::Draw(Shader &shader) {
         }
 
         texture->Bind();
-        shader.Get(name.str()).Set(static_cast<int>(i));
+        if (auto &var{ program.Get(name.str()) }; var != nullptr)
+            var->Set(static_cast<int>(i));
     }
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
-    // shader.UnUse();
-    // glBindVertexArray(0);
-    // glActiveTexture(GL_TEXTURE0);
+    program.UnUse();
+    glBindVertexArray(0);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 bool Mesh::HasIndices() const {

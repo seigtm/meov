@@ -1,26 +1,43 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 
 namespace meov::core {
 
-class FrameBuffer {
+constexpr int32_t DefaultFrameBufferWidth{ 1280 };
+constexpr int32_t DefaultFrameBufferHeight{ 760 };
+
+template<class Implementation>
+class FrameBuffer final {
 public:
-    virtual ~FrameBuffer() = default;
-    virtual void Initialize(int32_t width, int32_t height) = 0;
-    virtual void Destroy() = 0;
+    void Initialize(
+        int32_t width = DefaultFrameBufferWidth,
+        int32_t height = DefaultFrameBufferHeight) {
+        mImpl.reset(new Implementation{ width, height });
+    }
+    void Destroy() {
+        mImpl.reset();
+    }
 
-    virtual void Bind() = 0;
-    virtual void UnBind() = 0;
+    void Bind() {
+        if (IsInitialized()) mImpl->Bind();
+    }
+    void UnBind() {
+        if (IsInitialized()) mImpl->UnBind();
+    }
 
-    virtual uint32_t GetFrameTexture() = 0;
+    uint32_t GetFrameTexture() const {
+        if (IsInitialized()) {
+            return mImpl->GetFrameTexture();
+        }
+        return 0;
+    };
 
-    bool IsInitialized() const { return mInitialized; }
+    bool IsInitialized() const { return mImpl != nullptr; }
 
 protected:
-    int32_t mWidth{ -1 };
-    int32_t mHeight{ -1 };
-    bool mInitialized{ false };
+    std::unique_ptr<Implementation> mImpl;
 };
 
 };  // namespace meov::core
