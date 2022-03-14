@@ -6,5 +6,8 @@ function(make_config_file filename)
     set(PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer")
     set(LOG_LEVEL ${CMAKE_BUILD_TYPE})
 
+    set(USING_OPENGL true)
+    set(USING_VULCAN false)
+
     configure_file("${filename}.in" ${filename} @ONLY)
 endfunction()
