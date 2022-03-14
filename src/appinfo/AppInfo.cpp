@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "e48763b7e092af55b0372b1164969f67cc9a3f82-dirty"
-#define GIT_COMMIT_DATE "Sun Mar 13 10:34:49 2022"
-#define GIT_COMMIT_MESSAGE "Add Core class"
+#define GIT_COMMIT_HASH "a69df98e10608cdba5e0c1e450aaee87264d733d-dirty"
+#define GIT_COMMIT_DATE "Sun Mar 13 11:35:07 2022"
+#define GIT_COMMIT_MESSAGE "Refactor FrameBuffer"
 
 namespace meov {
 
