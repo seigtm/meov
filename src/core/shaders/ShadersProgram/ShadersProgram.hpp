@@ -26,7 +26,7 @@ public:
         virtual void UnUse() = 0;
 
         virtual bool IsValid() const = 0;
-        virtual std::shared_ptr<Setter> Get(const std::string_view &name) = 0;
+        virtual std::shared_ptr<Setter> Get(Program &parent, const std::string_view &name) = 0;
 
     protected:
         std::string mName;
@@ -45,6 +45,7 @@ public:
 
     bool IsValid() const;
     uint32_t GetID() const;
+    std::string GetName() const;
     std::shared_ptr<Setter> Get(const std::string_view &name);
 
 private:

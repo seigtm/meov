@@ -52,9 +52,14 @@ uint32_t Program::GetID() const {
     return mImpl->GetID();
 }
 
+std::string Program::GetName() const {
+    if (!mImpl) return "NO_NAME";
+    return mImpl->GetName();
+}
+
 std::shared_ptr<Setter> Program::Get(const std::string_view &name) {
     if (!mImpl) return nullptr;
-    return mImpl->Get(name);
+    return mImpl->Get(*this, name);
 }
 
 
