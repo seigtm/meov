@@ -7,7 +7,7 @@ namespace meov::core::shaders::gl {
 
 // ============================= OGLProgramImpl ==============================//
 
-OGLProgramImpl::OGLProgramImpl(const std::string &name)
+OGLProgramImpl::OGLProgramImpl(const std::string &name) noexcept
     : Program::Impl{ name, glCreateProgram() }
 { }
 
@@ -32,8 +32,8 @@ bool OGLProgramImpl::Detach(const std::shared_ptr<Shader> &shader) {
 
     size_t count{ mShaders.erase(shader->GetType()) };
     if (count == 0) {
-        LOGW << "The " << shader->GetTypeName() << " shader with ID #" << shader->GetID()
-            << " is not in " << mName << " shaders program.";
+        LOGW << "[" << mName << "] The " << shader->GetTypeName() << " shader with ID #"
+            << shader->GetID() << " is not in " << mName << " shaders program.";
         return false;
     }
 
@@ -56,12 +56,9 @@ void OGLProgramImpl::UnUse() {
 bool OGLProgramImpl::IsValid() const {
     return mValid;
 }
-uint32_t OGLProgramImpl::GetID() const {
-    return mId;
-}
 
-std::shared_ptr<Setter> OGLProgramImpl::Get(const std::string_view &name) {
-    return std::make_shared<OGLSetter>(*dynamic_cast<Program *>(this), name);
+std::shared_ptr<Setter> OGLProgramImpl::Get(Program &parent, const std::string_view &name) {
+    return std::make_shared<OGLSetter>(parent, name);
 }
 
 bool OGLProgramImpl::Link() {

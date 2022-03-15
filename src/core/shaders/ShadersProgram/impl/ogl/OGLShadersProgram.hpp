@@ -10,22 +10,20 @@ namespace meov::core::shaders::gl {
 
 // ============================= OGLProgramImpl ==============================//
 
-class OGLProgramImpl : public Program::Impl {
+class OGLProgramImpl final : public Program::Impl {
 public:
-    explicit OGLProgramImpl(const std::string &name);
+    explicit OGLProgramImpl(const std::string &name) noexcept;
     ~OGLProgramImpl();
 
-    bool Attach(const std::shared_ptr<Shader> &shader);
-    bool Detach(const std::shared_ptr<Shader> &shader);
-    void Clear();
+    bool Attach(const std::shared_ptr<Shader> &shader) override;
+    bool Detach(const std::shared_ptr<Shader> &shader) override;
 
-    void Use();
-    void UnUse();
+    void Use() override;
+    void UnUse() override;
 
-    bool IsValid() const;
-    uint32_t GetID() const;
+    bool IsValid() const override;
 
-    std::shared_ptr<Setter> Get(const std::string_view &name);
+    std::shared_ptr<Setter> Get(Program &parent, const std::string_view &name) override;
 
 private:
     bool mValid{ true };
