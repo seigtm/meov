@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "a69df98e10608cdba5e0c1e450aaee87264d733d-dirty"
-#define GIT_COMMIT_DATE "Sun Mar 13 11:35:07 2022"
-#define GIT_COMMIT_MESSAGE "Refactor FrameBuffer"
+#define GIT_COMMIT_HASH "4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4"
+#define GIT_COMMIT_DATE "Mon Mar 14 14:25:04 2022"
+#define GIT_COMMIT_MESSAGE "Lil core shaders refactoring"
 
 namespace meov {
 

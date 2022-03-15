@@ -16,6 +16,7 @@ message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HA
 
 include(${root}/cmake/ConfigFileMaker.cmake)
 make_config_file(${root}/src/appinfo/AppInfo.cpp)
+make_config_file(${root}/src/appinfo/Definitions.hpp)
 
 #=== Sources ===#
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
@@ -50,8 +51,6 @@ find_package(assimp REQUIRED)
 
 # Appending sources and headers of dependencies.
 add_subdirectory(dependencies)
-# list(APPEND headers ${deps_headers})
-# list(APPEND sources ${deps_sources})
 
 #=== Executable ===#
 add_executable(${target} ${sources} ${headers})
