@@ -10,20 +10,20 @@ Initializer::Initializer(Listener *parent, std::string &&name, Task &&onInit, Ta
 	, mDestroyTask{ std::move(onDestroy) }
 {
 	LOGI << "Initialize " << mName;
-	LogStatus(onInit());
+	LogStatus(onInit(), " was initialized successfly", "Cannot initialize ");
 }
 
 Initializer::~Initializer() {
 	LOGI << "Destroying " << mName;
-	LogStatus(mDestroyTask());
+	LogStatus(mDestroyTask(), " was destroyed successfly", "Cannot destroy");
 }
 
-void Initializer::LogStatus(bool success) const {
+void Initializer::LogStatus(bool success, const std::string_view successMessage, const std::string_view failedMessage) const {
 	if (success) {
-		LOGI << mName << " was initialized successfly";
+		LOGI << mName << successMessage;
 		return;
 	}
-	LOGE << "Failed to initialize " << mName;
+	LOGE << failedMessage << mName;
 	if (mParent) {
 		mParent->OnFail(mName);
 	}

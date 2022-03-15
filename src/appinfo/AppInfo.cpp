@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Release"
+#define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4"
-#define GIT_COMMIT_DATE "Mon Mar 14 14:25:04 2022"
-#define GIT_COMMIT_MESSAGE "Lil core shaders refactoring"
+#define GIT_COMMIT_HASH "5295ef491a69678ba6e1b3620163e463be9831af"
+#define GIT_COMMIT_DATE "Tue Mar 15 10:11:41 2022"
+#define GIT_COMMIT_MESSAGE "Merge pull request #12 from seigtm/Golovinsky_Refactoring"
 
 namespace meov {
 

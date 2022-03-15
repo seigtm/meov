@@ -25,7 +25,9 @@ private:
 	std::string mName;
 	Task mDestroyTask;
 
-	void LogStatus(bool success) const;
+	void LogStatus(bool success,
+		const std::string_view successMessage,
+		const std::string_view failedMessage) const;
 };
 
 } // namespace meov::utilities
