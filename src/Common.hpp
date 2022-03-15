@@ -38,6 +38,5 @@
 #include <list>
 #include <vector>
 
-
 namespace fs = std::filesystem;
 using namespace gl;

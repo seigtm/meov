@@ -9,9 +9,9 @@
 #include "windows/Log.hpp"
 
 #include "OGLFrameBuffer.hpp"
+#include "ShadersProgram.hpp"
 #include "mesh.h"
 #include "vertex.h"
-#include "shader.h"
 #include "texture.h"
 
 #include "Core.hpp"
@@ -36,10 +36,17 @@ int main() {
     }
 
     // clang-format off
-    auto shader{ std::make_shared<meov::core::Shader>(
-        "shaders/vertex_test.glsl",
-        "shaders/fragment_test.glsl"
-    ) };
+
+    auto vertShader{ std::make_shared<meov::core::shaders::Shader>() };
+    vertShader->Initialize(meov::core::shaders::ShaderType::Vertex);
+
+    auto fragShader{ std::make_shared<meov::core::shaders::Shader>() };
+    fragShader->Initialize(meov::core::shaders::ShaderType::Fragment);
+
+    meov::core::shaders::Program program;
+    program.Initialize("Default shaders program");
+    program.Attach(vertShader);
+    program.Attach(fragShader);
 
     const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
     const glm::u8vec4 black{ 0x00, 0x00, 0x00, 0xFF };
@@ -116,8 +123,8 @@ int main() {
     ) };
 
     // clang-format on
-    meov::core::gl::OpenGLFrameBuffer buffer;
-    buffer.Initialize(-1, -1);
+    meov::core::gl::FrameBuffer buffer;
+    buffer.Initialize();
     glm::mat4 projection{ 1 };
     glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
@@ -135,11 +142,11 @@ int main() {
     while(!done) {
         clock.Update();
         model = glm::rotate<float>(model, clock.Delta(), glm::vec3{ 1.0f, 1.0f, 0.0f });
-        shader->Use();
-        shader->Get("projection").Set(projection);
-        shader->Get("view").Set(view);
-        shader->Get("model").Set(model);
-        shader->UnUse();
+        program.Use();
+        program.Get("projection")->Set(projection);
+        program.Get("view")->Set(view);
+        program.Get("model")->Set(model);
+        program.UnUse();
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -151,7 +158,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         buffer.Bind();
-        mesh->Draw(shader);
+        mesh->Draw(program);
         buffer.UnBind();
 
         ImGui::Begin("Scene");
@@ -212,6 +219,9 @@ int main() {
     }
 
     buffer.Destroy();
+    vertShader->Destroy();
+    fragShader->Destroy();
+    program.Destroy();
 
     return 0;
 }

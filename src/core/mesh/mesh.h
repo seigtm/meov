@@ -2,10 +2,11 @@
 
 #include <map>
 
+#include "ShadersProgram.hpp"
+
 namespace meov::core {
 
 class Vertex;
-class Shader;
 class Texture;
 
 class Mesh {
@@ -15,8 +16,7 @@ public:
          std::vector<std::shared_ptr<Texture>> &&textures);
     ~Mesh();
 
-    void Draw(const std::shared_ptr<Shader> &shader);
-    void Draw(Shader &shader);
+    void Draw(shaders::Program &program);
 
     bool HasIndices() const;
     size_t IndicesCount() const;
