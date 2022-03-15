@@ -14,6 +14,8 @@
 #include "vertex.h"
 #include "texture.h"
 
+#include "settings.hpp"
+
 #include "Core.hpp"
 
 int main() {
@@ -35,8 +37,11 @@ int main() {
         logStorage->Subscribe(logW1);
     }
 
-    // clang-format off
+    // FIXME: erase this shit later, it's for Settings tests!
+    auto& inst{ meov::utilities::Settings::Instance() };
+    LOGI << "Settings[Window][Height] = " << inst["Window"]["Width"].GetInt();
 
+    // clang-format off
     auto vertShader{ std::make_shared<meov::core::shaders::Shader>() };
     vertShader->Initialize(meov::core::shaders::ShaderType::Vertex);
 
@@ -121,8 +126,8 @@ int main() {
             meov::core::Texture::Make("textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse)
         }
     ) };
-
     // clang-format on
+
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
     glm::mat4 projection{ 1 };
@@ -215,7 +220,6 @@ int main() {
                     break;
             }
         }
-
     }
 
     buffer.Destroy();

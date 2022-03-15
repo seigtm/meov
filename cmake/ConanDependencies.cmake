@@ -19,6 +19,7 @@ macro(conan_install)
             glew/2.2.0
             plog/1.1.5
             assimp/5.1.0
+            rapidjson/cci.20211112
         OPTIONS
             ${_options}
         GENERATORS

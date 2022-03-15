@@ -48,6 +48,7 @@ find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
 find_package(assimp REQUIRED)
+find_package(RapidJSON REQUIRED)
 
 # Appending sources and headers of dependencies.
 add_subdirectory(dependencies)
@@ -67,6 +68,7 @@ target_link_libraries(${target}
         GLEW::GLEW
         plog::plog
         assimp::assimp
+        RapidJSON::RapidJSON
 
     PRIVATE
         deps_imgui
