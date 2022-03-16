@@ -5,6 +5,11 @@
 namespace meov::core {
 
 //=================================== Vertex ===================================//
+Vertex::Vertex(glm::vec3 &&pos, glm::u8vec4 &&clr, glm::vec2 &&texCoords) noexcept
+    : mPos{ std::move(pos) }
+    , mClr{ std::move(clr) }
+    , mTexCoords{ std::move(texCoords) } {}
+
 
 GLsizei Vertex::Length() { return sizeof(Vertex); }
 GLsizei Vertex::Count() { return sizeof(Vertex) / sizeof(float); }

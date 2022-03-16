@@ -5,6 +5,8 @@ namespace meov::core {
 //=================================== Vertex ===================================//
 
 struct Vertex {
+    explicit Vertex(glm::vec3 &&pos, glm::u8vec4 &&clr, glm::vec2 &&texCoords) noexcept;
+
     glm::vec3 mPos;
     glm::u8vec4 mClr;
     glm::vec2 mTexCoords;
