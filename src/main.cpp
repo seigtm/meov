@@ -187,6 +187,7 @@ int main() {
 
         // Poll and handle events (inputs, window resize, etc.).
         SDL_Event event;
+        bool wasResized{ false };
         while(SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
             switch(event.type) {
@@ -209,7 +210,10 @@ int main() {
                         break;
                     }
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                        wasResized = true;
                         glViewport(0, 0, event.window.data1, event.window.data2);
+                        inst["Window"]["Width"] = event.window.data1;
+                        inst["Window"]["Height"] = event.window.data2;
                         break;
                     } else if(event.window.event != SDL_WINDOWEVENT_CLOSE) {
                         break;
@@ -219,6 +223,10 @@ int main() {
                 default:
                     break;
             }
+        }
+        if(wasResized) {
+            inst.Save();
+            wasResized = false;
         }
     }
 

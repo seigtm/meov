@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "1f463ebc8d5f5a09dff5a8b9b621533ee35a5440-dirty"
-#define GIT_COMMIT_DATE "Tue Mar 15 10:28:30 2022"
-#define GIT_COMMIT_MESSAGE "Ooops"
+#define GIT_COMMIT_HASH "04cfd1a19dec087aa61957b09d585b16903c42d4-dirty"
+#define GIT_COMMIT_DATE "Tue Mar 15 18:05:08 2022"
+#define GIT_COMMIT_MESSAGE "First preudo-implementation of Settings singleton class."
 
 namespace meov {
 

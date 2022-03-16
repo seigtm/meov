@@ -9,6 +9,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/pointer.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
@@ -20,6 +21,11 @@ public:
     /// @brief Static method to get singleton instance of Settings.
     /// @return Reference to the static Settings object.
     static Settings& Instance();
+
+    /// @brief Writes the default settings congiguration to the JSON file.
+    void WriteDefaults();
+    /// @brief Save method which saves configuration to the JSON file.
+    void Save();
 
     /// @brief Wrapper around rapidjson::Document::operator[]().
     /// @param key member's key.
@@ -45,8 +51,6 @@ private:
     /// @details Private method because of Singleton ideoma.
     Settings();
 
-    /// @brief Writes the default settings congiguration to the JSON file.
-    void WriteDefaults();
     /// @brief Method that checks correctness of the JSON settings file structure.
     /// @return true is the structure correct and false otherwise.
     bool AreCorrect();
@@ -56,3 +60,25 @@ private:
 };
 
 }  // namespace meov::utilities
+
+/*
+
+TODO:
+
+1. Return and rethink Set(key, val) and Get(key, opt: defaultVal) methods.
+    They will create key-val pair if it doesn't exist it mDocument.
+    Maybe they should return std::optional or it will be hard-coded
+        inside them (test: GetValueByPointerWithDefault()).
+2. Remove AreCorrect() method.
+3. Settings::Configurable, from which other objects will inhert,
+    should (?) impelent something like OnLoad() method
+    and write their settings blocks.
+4. WriteDefaults() may not write anything at all.
+    Just create the JSON file.
+5. Remove [] operator implementation or change it to use Get() and Set() somehow.
+
+@@ Possible problems with this:
+-> Settings::instance()["Window"].value_or(default)["Width"].value_or(default);
+-> Settings::instance()["Window"]["Width"] (HOW?!).
+
+*/

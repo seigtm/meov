@@ -12,7 +12,7 @@ void Settings::WriteDefaults() {
     std::ofstream ofs{ mFilePath };
     // If somehow file can't be opened.
     if(!ofs.is_open()) {
-        LOGE << "Can't open settings file to save configuration (" << mFilePath.c_str() << ")!";
+        LOGE << "Can't open settings file to save default configuration (" << mFilePath.c_str() << ")!";
         return;
     }
     // Writing default configuration of settings file.
@@ -113,6 +113,22 @@ Settings::Settings()
         LOGI << "Recreating JSON settings file with default configuration (" << mFilePath.c_str() << ")";
         WriteDefaults();
     }
+}
+
+void Settings::Save() {
+    // Opening output file stream.
+    std::ofstream ofs{ mFilePath };
+    // If somehow file can't be opened.
+    if(!ofs.is_open()) {
+        LOGE << "Can't open settings file to save configuration (" << mFilePath.c_str() << ")!";
+        return;
+    }
+    // Writing default configuration of settings file.
+    rapidjson::OStreamWrapper osw(ofs);
+    rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+    mDocument.Accept(writer);
+
+    LOGI << "Saved settings configuration to JSON file (" << mFilePath.c_str() << ")";
 }
 
 rapidjson::Value& Settings::operator[](std::string const& key) {
