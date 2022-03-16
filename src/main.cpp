@@ -1,3 +1,12 @@
+/*
+TODO: (16.3.22)
+1. Material class. +
+2. Texture ctor.
+3. Node class.
+4. Properties.
+*/
+
+
 #define SDL_MAIN_HANDLED
 
 #include "Common.hpp"
@@ -15,6 +24,64 @@
 #include "texture.h"
 
 #include "Core.hpp"
+
+#include <assimp/Importer.hpp>   // C++ importer interface.
+#include <assimp/scene.h>        // Output data structure.
+#include <assimp/postprocess.h>  // Post processing flags.
+
+std::shared_ptr<meov::core::Mesh> DoTheImportThing(const std::string& pFile) {
+    // Create an instance of the Importer class
+    Assimp::Importer importer;
+
+    // And have it read the given file with some example postprocessing
+    // Usually - if speed is not the most important aspect for you - you'll
+    // probably to request more postprocessing than we do in this example.
+    const aiScene* scene = importer.ReadFile(pFile, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+
+    // If the import failed, report it
+    if(!scene) {
+        LOGE << importer.GetErrorString();
+        return nullptr;
+    }
+
+    // Now we can access the file's contents.
+    // scene->GetEmbeddedTexture("Box0.bin");
+    if(!scene->mNumMeshes) {
+        return nullptr;
+    }
+
+    auto& mesh{ scene->mMeshes[0] };
+
+    std::vector<meov::core::Vertex> vertices;
+    vertices.reserve(mesh->mNumVertices);
+
+    glm::u8vec4 white{ 0xff, 0xff, 0xff, 0xff };
+    for(int i{}; i < mesh->mNumVertices; ++i) {
+        glm::vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
+        glm::u8vec4 color;
+        if(mesh->mColors[0] == nullptr) {
+            color = white;
+        } else {
+            color = { mesh->mColors[0]->r * 255, mesh->mColors[0]->g * 255, mesh->mColors[0]->b * 255, mesh->mColors[0]->a * 255 };
+        }
+        // glm::vec2 texturePosition{ mesh->mTextureCoords[i]->x, mesh->mTextureCoords[i]->y };
+        glm::vec2 texturePosition{ 0, 0 };
+
+        vertices.emplace_back(std::move(position), std::move(color), std::move(texturePosition));
+    }
+
+    std::vector<unsigned> indices;
+    indices.reserve(mesh->mNumFaces * mesh->mFaces[0].mNumIndices);
+    for(int i{}; i < mesh->mNumFaces; ++i) {
+        indices.insert(
+            indices.end(),
+            mesh->mFaces[i].mIndices,
+            mesh->mFaces[i].mIndices + mesh->mFaces[i].mNumIndices);
+    }
+
+    // std::vector<std::shared_ptr<meov::core::Texture>> textures;
+    return std::make_shared<meov::core::Mesh>(std::move(vertices), std::move(indices), std::vector<std::shared_ptr<meov::core::Texture>>{});
+}
 
 int main() {
     stbi_set_flip_vertically_on_load(true);
@@ -54,73 +121,7 @@ int main() {
     const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
     const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
-    auto mesh{ std::make_shared<meov::core::Mesh>(
-        std::vector{
-            // front
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, white, glm::vec2{ 1.0f, 1.0f } }, // 0
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, white, glm::vec2{ 1.0f, 0.0f } }, // 1
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, white, glm::vec2{ 0.0f, 0.0f } }, // 2
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, white, glm::vec2{ 0.0f, 1.0f } }, // 3
-
-            // left
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, red, glm::vec2{ 1.0f, 1.0f } }, // 4
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, red, glm::vec2{ 1.0f, 0.0f } }, // 5
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, red, glm::vec2{ 0.0f, 0.0f } }, // 6
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, red, glm::vec2{ 0.0f, 1.0f } }, // 7
-
-            // right
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, green, glm::vec2{ 1.0f, 1.0f } }, // 8
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, green, glm::vec2{ 1.0f, 0.0f } }, // 9
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, green, glm::vec2{ 0.0f, 0.0f } }, // 10
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, green, glm::vec2{ 0.0f, 1.0f } }, // 11
-
-            // up
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, blue, glm::vec2{ 1.0f, 1.0f } }, // 12
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f, -0.5f }, blue, glm::vec2{ 1.0f, 0.0f } }, // 13
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f, -0.5f }, blue, glm::vec2{ 0.0f, 0.0f } }, // 14
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, blue, glm::vec2{ 0.0f, 1.0f } }, // 15
-
-            // down
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, red, glm::vec2{ 1.0f, 1.0f } }, // 16
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f, -0.5f }, green, glm::vec2{ 1.0f, 0.0f } }, // 17
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f, -0.5f }, blue, glm::vec2{ 0.0f, 0.0f } }, // 18
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, black, glm::vec2{ 0.0f, 1.0f } }, // 19
-
-            // back
-            meov::core::Vertex{ glm::vec3{  0.5f,  0.5f,  0.5f }, black, glm::vec2{ 1.0f, 1.0f } },
-            meov::core::Vertex{ glm::vec3{  0.5f, -0.5f,  0.5f }, black, glm::vec2{ 1.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec3{ -0.5f, -0.5f,  0.5f }, black, glm::vec2{ 0.0f, 0.0f } },
-            meov::core::Vertex{ glm::vec3{ -0.5f,  0.5f,  0.5f }, black, glm::vec2{ 0.0f, 1.0f } },
-        },
-        std::vector{
-            // front
-            0u, 1u, 3u,
-            1u, 2u, 3u,
-
-            // left
-            4u, 5u, 7u,
-            5u, 6u, 7u,
-
-            // right
-            8u, 9u, 11u,
-            9u, 10u, 11u,
-
-            // up
-            12u, 13u, 15u,
-            13u, 14u, 15u,
-
-            // down
-            16u, 17u, 19u,
-            17u, 18u, 19u,
-
-            // back
-            20u, 21u, 23u,
-            21u, 22u, 23u,
-        },
-        std::vector{
-            meov::core::Texture::Make("textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse)
-        }
-    ) };
+    auto mesh = DoTheImportThing("models/box/Box.gltf");
 
     // clang-format on
     meov::core::gl::FrameBuffer buffer;
@@ -215,7 +216,6 @@ int main() {
                     break;
             }
         }
-
     }
 
     buffer.Destroy();
