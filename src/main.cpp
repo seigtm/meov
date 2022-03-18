@@ -16,6 +16,8 @@ TODO: (16.3.22)
 
 #include "windows/Git.hpp"
 #include "windows/Log.hpp"
+#include "ParamWin.hpp"
+#include "MatrixParam.hpp"
 
 #include "OGLFrameBuffer.hpp"
 #include "ShadersProgram.hpp"
@@ -29,7 +31,8 @@ TODO: (16.3.22)
 #include <assimp/scene.h>        // Output data structure.
 #include <assimp/postprocess.h>  // Post processing flags.
 
-std::shared_ptr<meov::core::Mesh> DoTheImportThing(const std::string& pFile) {
+std::shared_ptr<meov::core::Mesh>
+DoTheImportThing(const std::string& pFile) {
     // Create an instance of the Importer class
     Assimp::Importer importer;
 
@@ -55,12 +58,13 @@ std::shared_ptr<meov::core::Mesh> DoTheImportThing(const std::string& pFile) {
     std::vector<meov::core::Vertex> vertices;
     vertices.reserve(mesh->mNumVertices);
 
-    glm::u8vec4 white{ 0xff, 0xff, 0xff, 0xff };
+    glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
+    glm::u8vec4 orange{ 0xE8, 0x80, 0x0D, 0xFF };
     for(int i{}; i < mesh->mNumVertices; ++i) {
         glm::vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         glm::u8vec4 color;
         if(mesh->mColors[0] == nullptr) {
-            color = white;
+            color = orange;
         } else {
             color = { mesh->mColors[0]->r * 255, mesh->mColors[0]->g * 255, mesh->mColors[0]->b * 255, mesh->mColors[0]->a * 255 };
         }
@@ -96,6 +100,7 @@ int main() {
     // Dear ImGui windows.
     meov::Window::Git gitW;
     meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1280, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
+    meov::Window::Parameters matrixParam{ "Object transform" };
 
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
@@ -130,8 +135,12 @@ int main() {
     glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
 
+    matrixParam.Add(std::make_shared<meov::Window::Matrix>("Model:", model));
+    matrixParam.Add(std::make_shared<meov::Window::Matrix>("View:", view));
+    matrixParam.Add(std::make_shared<meov::Window::Matrix>("Projection:", projection));
+
     constexpr float step{ 0.05f };
-    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -2.0f });
+    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -3.0f });
 
     // Main loop.
     LOGI << "Start main loop";
@@ -139,7 +148,7 @@ int main() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
     meov::utilities::time::Clock clock;
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while(!done) {
         clock.Update();
         model = glm::rotate<float>(model, clock.Delta(), glm::vec3{ 1.0f, 1.0f, 0.0f });
@@ -174,6 +183,8 @@ int main() {
         logW1->Draw();
         // Show Git info window.
         gitW.Draw();
+
+        matrixParam.Draw();
 
         // Rendering.
         ImGui::Render();
