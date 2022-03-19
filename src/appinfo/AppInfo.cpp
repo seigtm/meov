@@ -1,6 +1,6 @@
 #include "AppInfo.hpp"
 
-#define VERSION "v0.1.7"
+#define VERSION "v0.1.8"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "1f463ebc8d5f5a09dff5a8b9b621533ee35a5440-dirty"
-#define GIT_COMMIT_DATE "Tue Mar 15 10:28:30 2022"
-#define GIT_COMMIT_MESSAGE "Ooops"
+#define GIT_COMMIT_HASH "070fd921da59bf0b307faffd75a5f616a2b0c7aa-dirty"
+#define GIT_COMMIT_DATE "Wed Mar 16 17:35:37 2022"
+#define GIT_COMMIT_MESSAGE "Assimp first shitty steps."
 
 namespace meov {
 

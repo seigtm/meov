@@ -2,6 +2,7 @@
 
 #include "OGLShader.hpp"
 #include "OGLShadersProgram.hpp"
+#include "OGLGraphics.hpp"
 
 #include "OGLImplFactory.hpp"
 
@@ -15,6 +16,10 @@ std::shared_ptr<shaders::Shader::Impl> OGLImplFactory::MakeShaderImpl(
 
 std::shared_ptr<shaders::Program::Impl> OGLImplFactory::MakeProgramImpl(const std::string &name) {
     return std::make_shared<shaders::gl::OGLProgramImpl>(name);
+}
+
+std::shared_ptr<Graphics::Impl> OGLImplFactory::MakeGraphicsImpl() {
+    return std::make_shared<gl::OGLGraphicsImpl>();
 }
 
 } // namespace meov::core::factories

@@ -4,6 +4,7 @@
 #include "vertex.h"
 #include "Shader.hpp"
 #include "texture.h"
+#include "Graphics.hpp"
 
 namespace meov::core {
 
@@ -20,49 +21,12 @@ Mesh::~Mesh() {
     glDeleteVertexArrays(1, &VAO);
 }
 
-void Mesh::Draw(shaders::Program &program) {
-    if (!program.IsValid()) return;
+void Mesh::Draw(Graphics &g) const {
+    g.DrawMesh(*this);
+}
 
-    unsigned diffuseCount{ 1 };
-    unsigned specularCount{ 1 };
-    unsigned normalCount{ 1 };
-    unsigned heightCount{ 1 };
-
-    program.Use();
-
-    for(size_t i{}; i < mTextures.size(); ++i) {
-        auto &texture{ mTextures[i] };
-        if(!texture->Valid()) {
-            continue;
-        }
-        texture->Activate(i);
-        std::stringstream name;
-        name << "texture";
-        switch(texture->GetType()) {
-            case Texture::Type::Diffuse: {
-                name << "Diffuse" << diffuseCount++;
-            } break;
-            case Texture::Type::Specular: {
-                name << "Specular" << specularCount++;
-            } break;
-            case Texture::Type::Normal: {
-                name << "Normal" << normalCount++;
-            } break;
-            case Texture::Type::Height: {
-                name << "Height" << heightCount++;
-            } break;
-        }
-
-        texture->Bind();
-        if (auto &var{ program.Get(name.str()) }; var != nullptr)
-            var->Set(static_cast<int>(i));
-    }
-
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
-    program.UnUse();
-    glBindVertexArray(0);
-    glActiveTexture(GL_TEXTURE0);
+uint32_t Mesh::GetID() const {
+    return VAO;
 }
 
 bool Mesh::HasIndices() const {
@@ -75,6 +39,10 @@ size_t Mesh::IndicesCount() const {
 
 size_t Mesh::VerticesCount() const {
     return mVertices.size();
+}
+
+const std::vector<std::shared_ptr<Texture>> &Mesh::Textures() const {
+    return mTextures;
 }
 
 void Mesh::Load() {

@@ -10,6 +10,10 @@ Vertex::Vertex(glm::vec3 &&pos, glm::u8vec4 &&clr, glm::vec2 &&texCoords) noexce
     , mClr{ std::move(clr) }
     , mTexCoords{ std::move(texCoords) } {}
 
+Vertex::Vertex(const glm::vec3 &pos, const glm::u8vec4 &clr, const glm::vec2 &texCoords) noexcept
+    : mPos{ pos }
+    , mClr{ clr }
+    , mTexCoords{ texCoords } {}
 
 GLsizei Vertex::Length() { return sizeof(Vertex); }
 GLsizei Vertex::Count() { return sizeof(Vertex) / sizeof(float); }

@@ -1,13 +1,11 @@
 #pragma once
 
 #include <map>
-
-#include "ShadersProgram.hpp"
-
 namespace meov::core {
 
 class Vertex;
 class Texture;
+class Graphics;
 
 class Mesh {
 public:
@@ -16,11 +14,14 @@ public:
          std::vector<std::shared_ptr<Texture>> &&textures);
     ~Mesh();
 
-    void Draw(shaders::Program &program);
+    void Draw(Graphics &g) const;
 
+    uint32_t GetID() const;
     bool HasIndices() const;
     size_t IndicesCount() const;
     size_t VerticesCount() const;
+
+    const std::vector<std::shared_ptr<Texture>> &Textures() const;
 
 private:
     GLuint VAO{}, VBO{}, EBO{};
