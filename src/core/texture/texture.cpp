@@ -4,40 +4,34 @@
 
 namespace meov::core {
 
-std::shared_ptr<Texture> Texture::Make(const std::string_view &path, const Type type) {
-    return std::make_shared<Texture>(path, type);
-}
+Texture::Texture()
+    : mType{ Type::Invalid } {}
 
-Texture::Texture(const std::string_view &path, const Type type)
-    : mPath{ path }
-    , mType{ type } {
-    if(path.empty()) {
-        LOGW << "Creating texute with empty path parameter!";
-        // stbi_load_from_memory()
-        return;
-    }
-
-    int width, height, channels;
-    auto bytes{ stbi_load(path.data(), &width, &height, &channels, 0) };
-    if(nullptr == bytes) {
-        LOGE << "Error while loading texture from '" << path << "'";
-        LOGE << "    " << stbi_failure_reason();
-        return;
-    }
+Texture::Texture(const unsigned char *bytes, int width, int height, int channels, Type type)
+    : mType{ type } {
     glGenTextures(1, &mId);
     Bind();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    const GLenum format{ channels == 4 ? GL_RGBA : GL_RGB };
+    GLenum format;
+    switch(channels) {
+        case 1: format = GL_RED; break;
+        case 2: format = GL_RG; break;
+        case 3: format = GL_RGB; break;
+        case 4: format = GL_RGBA; break;
+        default:
+            LOGE << "stb_image library returned invalid channels number = " << channels;
+            return;
+    }
 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, bytes);
     glGenerateMipmap(GL_TEXTURE_2D);
-    stbi_image_free(bytes);
-    LOGD << "Texture " << path << " was loaded";
+    LOGD << "Texture was loaded";
     mValid = true;
 }
 

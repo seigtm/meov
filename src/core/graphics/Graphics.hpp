@@ -4,6 +4,7 @@
 #include <queue>
 #include <initializer_list>
 
+#include "Common.hpp"
 #include "ShadersProgram.hpp"
 
 namespace meov::core {
