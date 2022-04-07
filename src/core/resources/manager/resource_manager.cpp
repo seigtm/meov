@@ -32,10 +32,9 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(const std::string &name, 
         if(!program) {
             LOGE << "Error while loading texture " << name;
         }
-        return mPrograms[name] = std::move(program);
+        mPrograms[name] = std::move(program);
     }
-
-    return nullptr;
+    return mPrograms[name];
 }
 
 std::shared_ptr<Texture> Manager::LoadTexture(const std::string &name, Texture::Type type, bool reload) {
