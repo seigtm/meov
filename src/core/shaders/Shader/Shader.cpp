@@ -7,7 +7,7 @@
 namespace meov::core::shaders {
 
 std::string getShaderName(ShaderType type) {
-    switch (type) {
+    switch(type) {
         case ShaderType::Vertex: return "Vertex";
         case ShaderType::TesselationControl: return "Tesselation control";
         case ShaderType::TesselationEvaluation: return "Tesselation evaluation";
@@ -18,10 +18,22 @@ std::string getShaderName(ShaderType type) {
     return "Unknown shader type";
 }
 
+ShaderType getTypeByExtention(const std::string &ext) {
+    if(ext.empty()) return ShaderType::Invalid;
+
+    if(ext == "vs") return ShaderType::Vertex;
+    if(ext == "tcs") return ShaderType::TesselationControl;
+    if(ext == "tes") return ShaderType::TesselationEvaluation;
+    if(ext == "gs") return ShaderType::Geometry;
+    if(ext == "fs") return ShaderType::Fragment;
+    if(ext == "cs") return ShaderType::Compute;
+
+    return ShaderType::Invalid;
+}
+
 Shader::Impl::Impl(ShaderType type, uint32_t id)
     : mType{ type }
-    , mId{ id }
-{ }
+    , mId{ id } {}
 
 uint32_t Shader::Impl::GetID() const {
     return mId;
@@ -34,14 +46,6 @@ std::string Shader::Impl::GetTypeName() const {
     return getShaderName(mType);
 }
 
-std::string loadSources(const std::string_view &path) {
-    if(path.empty())
-        return "";
-    std::ifstream ifs{ path.data() };
-    return std::string{ { std::istreambuf_iterator<char>{ ifs } }, std::istreambuf_iterator<char>{} };
-}
-
-
 void Shader::Initialize(ShaderType type, const std::string_view &source) {
     mImpl = factories::ImplFactory::Instance()->MakeShaderImpl(type, source);
 }
@@ -50,11 +54,11 @@ void Shader::Destroy() {
 }
 
 uint32_t Shader::GetID() const {
-    if (mImpl) return mImpl->GetID();
+    if(mImpl) return mImpl->GetID();
     return 0;
 }
 ShaderType Shader::GetType() const {
-    if (mImpl) return mImpl->GetType();
+    if(mImpl) return mImpl->GetType();
     return ShaderType::Invalid;
 }
 std::string Shader::GetTypeName() const {

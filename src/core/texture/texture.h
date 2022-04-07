@@ -9,11 +9,11 @@ public:
         Specular,
         Normal,
         Height,
+        Invalid,
     };
 
-    static std::shared_ptr<Texture> Make(const std::string_view &path, const Type type);
-
-    Texture(const std::string_view &path, const Type type);
+    Texture();
+    Texture(const unsigned char *bytes, int width, int height, int channels, Type type);
     ~Texture();
 
     Texture(const Texture &other) = delete;
@@ -27,9 +27,7 @@ public:
     Type GetType() const;
 
 private:
-
     unsigned mId{};
-    std::string mPath;
     Type mType;
     bool mValid{ false };
 };

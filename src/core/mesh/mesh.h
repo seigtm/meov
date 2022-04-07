@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+
+#include "Common.hpp"
+
 namespace meov::core {
 
 class Vertex;

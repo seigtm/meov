@@ -16,9 +16,7 @@ enum class ShaderType {
 };
 
 std::string getShaderName(ShaderType type);
-
-/// @warning When we create the resource manager, this function will be deleted
-std::string loadSources(const std::string_view &path);
+ShaderType getTypeByExtention(const std::string &ext);
 
 class Shader final {
 public:
