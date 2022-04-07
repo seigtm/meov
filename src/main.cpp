@@ -51,7 +51,7 @@ int main() {
 
     // clang-format off
 
-    auto program{ RESOURCES->LoadProgram("/shaders/default") };
+    auto program{ RESOURCES->LoadProgram("shaders\\default") };
     graphics->PushProgram(*program);
 
     const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
@@ -60,7 +60,7 @@ int main() {
     const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
     const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
-    auto modelObject{ RESOURCES->LoadModel("/models/backpack/backpack.obj") };
+    auto modelObject{ RESOURCES->LoadModel("models\\backpack\\backpack.obj") };
     // meov::core::Model modelObject{"models\\boombox\\BoomBox.gltf"};
 
     // clang-format on
