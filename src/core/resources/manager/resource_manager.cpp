@@ -9,7 +9,7 @@
 namespace meov::core::resources {
 
 Manager::Manager()
-    : mResourcesRoot{ fs::current_path() / "assets" }
+    : mResourcesRoot{ fs::current_path() }
     , mLoader(std::make_shared<AssimpLoader>()) {}
 
 Manager::~Manager() {
@@ -31,13 +31,11 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(const std::string &name, 
         auto program = mLoader->LoadProgram(mResourcesRoot / name);
         if(!program) {
             LOGE << "Error while loading texture " << name;
-            return nullptr;
         }
-        mPrograms[name] = std::move(program);
-        return program;  // FIXME: MY ADDITION, MAY NOT BE RIGHT.
+        return mPrograms[name] = std::move(program);
     }
 
-    return nullptr;  // FIXME: MY ADDITION, MAY NOT BE RIGHT.
+    return nullptr;
 }
 
 std::shared_ptr<Texture> Manager::LoadTexture(const std::string &name, Texture::Type type, bool reload) {
