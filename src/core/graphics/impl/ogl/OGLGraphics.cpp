@@ -92,7 +92,7 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
     const auto &textures{ mesh.Textures() };
     for(size_t i{}; i < textures.size(); ++i) {
         auto &texture{ textures[i] };
-        if(!texture->Valid()) {
+        if(!(texture && texture->Valid())) {
             continue;
         }
         texture->Activate(i);
