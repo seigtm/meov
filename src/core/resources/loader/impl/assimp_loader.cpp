@@ -3,7 +3,6 @@
 namespace meov::core::resources {
 
 std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
-    // Reset mModel.
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -14,10 +13,11 @@ std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path)
         LOGI << "No meshes in model. Breaking load process.";
         return nullptr;
     }
+    mLastLoadingDirectory = path.parent_path();
     return std::make_shared<Model>(ProcessNode(scene->mRootNode, scene));
 }
 
-std::vector<std::shared_ptr<meov::core::Mesh>> AssimpLoader::ProcessNode(aiNode *node, const aiScene *scene) {
+std::vector<std::shared_ptr<meov::core::Mesh>> AssimpLoader::ProcessNode(aiNode *node, const aiScene *scene) const {
     std::vector<std::shared_ptr<Mesh>> meshes;
     meshes.reserve(node->mNumMeshes);
     for(size_t currentMeshIndex{}; currentMeshIndex < node->mNumMeshes; ++currentMeshIndex) {
@@ -27,14 +27,13 @@ std::vector<std::shared_ptr<meov::core::Mesh>> AssimpLoader::ProcessNode(aiNode 
     }
 
     for(size_t currentChildIndex{}; currentChildIndex < node->mNumChildren; currentChildIndex++) {
-        // meshes.emplace_back(ProcessNode(node->mChildren[currentChildIndex], scene));
-        auto processedMeshes{ ProcessNode(node->mChildren[currentChildIndex], scene) };
+        const auto processedMeshes{ ProcessNode(node->mChildren[currentChildIndex], scene) };
         meshes.insert(meshes.end(), processedMeshes.begin(), processedMeshes.end());
     }
     return meshes;
 }
 
-std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
+std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) const {
     std::vector<meov::core::Vertex> vertices;
     vertices.reserve(mesh->mNumVertices);
     std::vector<unsigned> indices;
@@ -66,38 +65,50 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
             indices.push_back(face.mIndices[j]);
     }
     // Process materials.
-    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-
-    return std::make_shared<meov::core::Mesh>(std::move(vertices), std::move(indices), LoadMaterialTextures(material));
+    return std::make_shared<meov::core::Mesh>(
+        std::move(vertices),
+        std::move(indices),
+        LoadMaterialTextures(scene->mMaterials[mesh->mMaterialIndex]));
 }
 
-std::vector<std::shared_ptr<meov::core::Texture>> AssimpLoader::LoadMaterialTextures(aiMaterial *mat) {
+std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMaterial *mat) const {
     const std::array textureTypes{ aiTextureType_DIFFUSE,
                                    aiTextureType_SPECULAR,
+                                   aiTextureType_AMBIENT,
                                    aiTextureType_HEIGHT,
-                                   aiTextureType_DIFFUSE };
+                                   aiTextureType_NORMALS };
+
+    const std::unordered_map<aiTextureType, Texture::Type> typeConv{
+        { aiTextureType_DIFFUSE, Texture::Type::Diffuse },
+        { aiTextureType_SPECULAR, Texture::Type::Specular },
+        { aiTextureType_HEIGHT, Texture::Type::Height },
+        { aiTextureType_NORMALS, Texture::Type::Normal },
+        { aiTextureType_AMBIENT, Texture::Type::Invalid }
+    };
 
     const auto ExtractTexturesNamesByType{
-        [&mat](aiTextureType type) {
+        [&](aiTextureType type) {
             const auto count{ mat->GetTextureCount(type) };
             std::set<std::string> names;
             for(unsigned current{}; current < count; ++current) {
                 aiString str;
                 mat->GetTexture(type, current, &str);
-                names.emplace(str.C_Str());
+                names.emplace((mLastLoadingDirectory / str.C_Str()).string());
             }
             return std::move(names);
         }
     };
 
-    std::vector<std::shared_ptr<meov::core::Texture>> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
 
     for(const auto type : textureTypes) {
         const auto names{ ExtractTexturesNamesByType(type) };
         std::transform(
             names.begin(), names.end(),
             std::back_inserter(textures),
-            [](const auto &name) { return RESOURCES->LoadTexture(name); });
+            [convertedType = typeConv.at(type)] (const auto &name) {
+                return RESOURCES->LoadTexture(name, convertedType);
+            });
     }
 
     return textures;

@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "60b246a6d86784fb0b9798a872ab94138fec4c4d-dirty"
-#define GIT_COMMIT_DATE "Sat Mar 19 13:44:46 2022"
-#define GIT_COMMIT_MESSAGE "Init Graphics"
+#define GIT_COMMIT_HASH "81ff4290d00b118847ee27276ea25af394a04711-dirty"
+#define GIT_COMMIT_DATE "Thu Apr 7 20:01:42 2022"
+#define GIT_COMMIT_MESSAGE "Manager::LoadProgram() return-flow fixes."
 
 namespace meov {
 
