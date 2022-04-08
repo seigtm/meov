@@ -51,7 +51,7 @@ int main() {
 
     // clang-format off
 
-    auto program{ RESOURCES->LoadProgram("shaders\\default") };
+    auto program{ RESOURCES->LoadProgram("shaders/default") };
     graphics->PushProgram(*program);
 
     const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
@@ -60,7 +60,7 @@ int main() {
     const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
     const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
-    auto modelObject{ RESOURCES->LoadModel("models\\backpack\\backpack.obj") };
+    auto modelObject{ RESOURCES->LoadModel("models/boombox/BoomBox.gltf") };
     // meov::core::Model modelObject{"models\\boombox\\BoomBox.gltf"};
 
     // clang-format on
@@ -73,18 +73,13 @@ int main() {
     glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
 
-    constexpr float step{ 0.05f };
-    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -2.0f });
+    constexpr float step{ 10 };
+    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -1.0f });
 
     // Main loop.
     LOGI << "Start main loop";
     bool done = false;
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-
-    /*
-    auto bestOfTheBestTex{ meov::core::Texture::Make("textures/best-of-the-best.png", meov::core::Texture::Type::Diffuse) };
-    auto wallTex{ meov::core::Texture::Make("textures/wall.jpg", meov::core::Texture::Type::Diffuse) };
-    */
 
     meov::utilities::time::Clock clock;
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -107,17 +102,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         buffer.Bind();
-        modelObject->Draw(*graphics);
+        if (modelObject)
+            modelObject->Draw(*graphics);
         buffer.UnBind();
-
-        /*
-        testBuffer.Bind();
-        graphics->PushColor(glm::u8vec4{ 0xFF, 0x00, 0x00, 0xFF });
-        graphics->DrawTexture(bestOfTheBestTex, { -0.5f, -0.5f, 0.5f }, 1.0f, 1.0f);
-        graphics->DrawTexture(wallTex, { -0.5f, -0.5f, -0.5f }, 1.0f, 1.0f);
-        graphics->PopColor();
-        testBuffer.UnBind();
-        */
 
         ImGui::Begin("Scene");
         const auto [width, height]{ ImGui::GetContentRegionAvail() };
@@ -126,15 +113,6 @@ int main() {
         uint32_t textureID = buffer.GetFrameTexture();
         ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ width, height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();
-
-        /*
-        ImGui::Begin("Test Scene");
-        const auto [twidth, theight]{ ImGui::GetContentRegionAvail() };
-        // Add rendered texture to ImGUI scene window.
-        textureID = testBuffer.GetFrameTexture();
-        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ twidth, theight }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-        ImGui::End();
-        */
 
         // Show singleton log window.
         logW1->Draw();

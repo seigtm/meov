@@ -21,11 +21,11 @@ public:
 
     static Manager *Instance();
 
-    std::shared_ptr<shaders::Program> LoadProgram(const std::string &name, bool reload = false);
-    std::shared_ptr<Texture> LoadTexture(const std::string &name,
+    std::shared_ptr<shaders::Program> LoadProgram(const fs::path &name, bool reload = false);
+    std::shared_ptr<Texture> LoadTexture(const fs::path &name,
                                          Texture::Type type = Texture::Type::Diffuse,
                                          bool reload = false);
-    std::shared_ptr<Model> LoadModel(const std::string &name, bool reload = false);
+    std::shared_ptr<Model> LoadModel(const fs::path &name, bool reload = false);
 
 private:
     const fs::path mResourcesRoot;
