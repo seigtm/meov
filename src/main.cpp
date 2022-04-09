@@ -69,7 +69,7 @@ int main() {
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
 
-    auto camera{ std::make_shared<meov::core::Camera>() };
+    auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 10.0f }) };
 
     glm::mat4 projection{ 1 };
     glm::mat4 model{ 1.f };
