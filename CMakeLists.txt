@@ -10,13 +10,13 @@ set(build_dir ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
-include(${root}/cmake/GitUtils.cmake)
+include(${root}/cmake/git_utils.cmake)
 grab_git_info(GIT_COMMIT_HASH GIT_COMMIT_DATE GIT_COMMIT_MESSAGE)
 message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HASH}]")
 
-include(${root}/cmake/ConfigFileMaker.cmake)
-make_config_file(${root}/src/appinfo/AppInfo.cpp)
-make_config_file(${root}/src/appinfo/Definitions.hpp)
+include(${root}/cmake/config_file_maker.cmake)
+make_config_file(${root}/src/app_info/app_info.cpp)
+make_config_file(${root}/src/app_info/definitions.hpp)
 
 #=== Sources ===#
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
@@ -36,9 +36,9 @@ list(REMOVE_DUPLICATES directories)
 list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
-include(${root}/cmake/ConanSetup.cmake)
+include(${root}/cmake/conan_setup.cmake)
 conan_setup()
-include(${root}/cmake/ConanDependencies.cmake)
+include(${root}/cmake/conan_dependencies.cmake)
 conan_install()
 
 find_package(OpenGL REQUIRED)

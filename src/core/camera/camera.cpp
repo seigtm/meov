@@ -1,4 +1,4 @@
-#include "Common.hpp"
+#include "common.hpp"
 
 #include "camera.hpp"
 
@@ -8,12 +8,12 @@ namespace {
 
 template<class T>
 T RoundByRange(T value, const T Min, const T Max) {
-    if (value < Min) return Min;
-    if (value > Max) return Max;
+    if(value < Min) return Min;
+    if(value > Max) return Max;
     return value;
 }
 
-}
+}  // namespace
 
 Camera::Camera(const glm::vec3 pos, const glm::vec3 up, float yaw, float pitch)
     : mWorldUp{ up }
@@ -50,10 +50,10 @@ float Camera::Zoom() const {
 
 void Camera::Move(Direction dir, float delta) {
     switch(dir) {
-        case Direction::Forward:  mPosition += mFrontDir * (mSpeed * delta); break;
+        case Direction::Forward: mPosition += mFrontDir * (mSpeed * delta); break;
         case Direction::Backward: mPosition -= mFrontDir * (mSpeed * delta); break;
-        case Direction::Left:     mPosition -= mRightDir * (mSpeed * delta); break;
-        case Direction::Right:    mPosition += mRightDir * (mSpeed * delta); break;
+        case Direction::Left: mPosition -= mRightDir * (mSpeed * delta); break;
+        case Direction::Right: mPosition += mRightDir * (mSpeed * delta); break;
         default: break;
     }
 }
@@ -61,7 +61,7 @@ void Camera::Move(Direction dir, float delta) {
 void Camera::OnMouseMove(float xOffset, float yOffset, bool constrainPitch) {
     mYaw += xOffset * mMouseSensitivity;
     mPitch += yOffset * mMouseSensitivity;
-    if (constrainPitch) {
+    if(constrainPitch) {
         constexpr float MaxPitch{ 89.0f };
         mPitch = RoundByRange(mPitch, -MaxPitch, MaxPitch);
     }

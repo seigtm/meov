@@ -9,23 +9,23 @@ TODO: (16.3.22)
 
 #define SDL_MAIN_HANDLED
 
-#include "Common.hpp"
-#include "AppInfo.hpp"
-#include "LogUtils.hpp"
-#include "TimeUtils.hpp"
+#include "common.hpp"
+#include "app_info.hpp"
+#include "log_utils.hpp"
+#include "time_utils.hpp"
 
-#include "windows/Git.hpp"
-#include "windows/Log.hpp"
+#include "windows/git_window.hpp"
+#include "windows/log_window.hpp"
 
-#include "OGLFrameBuffer.hpp"
-#include "ShadersProgram.hpp"
+#include "ogl_frame_buffer.hpp"
+#include "shaders_program.hpp"
 #include "mesh.h"
 #include "model.hpp"
 #include "vertex.h"
-#include "texture.h"
-#include "Graphics.hpp"
+#include "texture.hpp"
+#include "graphics.hpp"
 
-#include "Core.hpp"
+#include "core.hpp"
 #include "resource_manager.hpp"
 #include "camera.hpp"
 
@@ -61,7 +61,8 @@ int main() {
     const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
     const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
-    auto modelObject{ RESOURCES->LoadModel("models/boombox/BoomBox.gltf") };
+    auto modelObject{ RESOURCES->LoadModel("models/backpack/backpack.obj") };
+    // auto modelObject{ RESOURCES->LoadModel("models/boombox/BoomBox.gltf") };
     // meov::core::Model modelObject{"models\\boombox\\BoomBox.gltf"};
 
     // clang-format on
@@ -104,7 +105,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         buffer.Bind();
-        if (modelObject)
+        if(modelObject)
             modelObject->Draw(*graphics);
         buffer.UnBind();
 
@@ -115,8 +116,8 @@ int main() {
             glm::radians(camera->Zoom()), sceneWidth / sceneHeight, .001f, 100.0f);
         // Add rendered texture to ImGUI scene window.
         uint32_t textureID = buffer.GetFrameTexture();
-        ImGui::Image(reinterpret_cast<void*>(textureID),
-            ImVec2{ sceneWidth, sceneHeight }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::Image(reinterpret_cast<void *>(textureID),
+                     ImVec2{ sceneWidth, sceneHeight }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();
 
         // Show singleton log window.
@@ -137,8 +138,7 @@ int main() {
             "      [%.2f, %.2f, %.2f, %.2f]",
             view[0].x, view[0].y, view[0].z, view[0].w,
             view[1].x, view[1].y, view[1].z, view[1].w,
-            view[2].x, view[2].y, view[2].z, view[2].w
-        );
+            view[2].x, view[2].y, view[2].z, view[2].w);
         ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
         ImGui::End();
 
@@ -166,15 +166,14 @@ int main() {
                 } break;
                 case SDL_MOUSEBUTTONDOWN: {
                     const glm::vec2 current{ event.button.x, event.button.y };
-                    if (current.x < scenePosX || current.y < scenePosY) break;
-                    if (current.x > scenePosX + sceneWidth
-                     || current.y > scenePosY + sceneHeight) break;
+                    if(current.x < scenePosX || current.y < scenePosY) break;
+                    if(current.x > scenePosX + sceneWidth || current.y > scenePosY + sceneHeight) break;
                     SDL_SetRelativeMouseMode(SDL_TRUE);
                     isMousePressed = true;
                     lastMouseCoords = current;
                 } break;
                 case SDL_MOUSEMOTION: {
-                    if (!isMousePressed)
+                    if(!isMousePressed)
                         break;
 
                     const glm::vec2 current{ event.button.x, event.button.y };
