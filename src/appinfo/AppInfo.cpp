@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Release"
+#define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "85f096ded17ede45fdaadce5045eaaff23dbd818-dirty"
-#define GIT_COMMIT_DATE "Fri Apr 8 10:13:10 2022"
-#define GIT_COMMIT_MESSAGE "eriohaiohsdhjk;asdfoasdfghjkl"
+#define GIT_COMMIT_HASH "4ecd5cb6f4df865394fb909f8df8dca4d1a701e7-dirty"
+#define GIT_COMMIT_DATE "Fri Apr 8 15:38:49 2022"
+#define GIT_COMMIT_MESSAGE "assets/models/backpack/backpack.obj: convert to Git LFS"
 
 namespace meov {
 

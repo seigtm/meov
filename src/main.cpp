@@ -67,14 +67,15 @@ int main() {
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
 
-    meov::core::gl::FrameBuffer testBuffer;
-    testBuffer.Initialize();
     glm::mat4 projection{ 1 };
     glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
 
-    constexpr float step{ 10 };
-    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -1.0f });
+    bool isMousePressed{ false };
+    glm::vec2 lastMouseCoords{};
+
+    constexpr float step{ 0.05 };
+    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -0.05f });
 
     // Main loop.
     LOGI << "Start main loop";
@@ -85,7 +86,6 @@ int main() {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while(!done) {
         clock.Update();
-        model = glm::rotate<float>(model, clock.Delta(), glm::vec3{ 1.0f, 1.0f, 0.0f });
         program->Use();
         program->Get("projection")->Set(projection);
         program->Get("view")->Set(view);
@@ -108,7 +108,7 @@ int main() {
 
         ImGui::Begin("Scene");
         const auto [width, height]{ ImGui::GetContentRegionAvail() };
-        projection = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(45.0f), width / height, .001f, 100.0f);
         // Add rendered texture to ImGUI scene window.
         uint32_t textureID = buffer.GetFrameTexture();
         ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ width, height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -131,18 +131,41 @@ int main() {
             ImGui_ImplSDL2_ProcessEvent(&event);
             switch(event.type) {
                 case SDL_KEYDOWN: {
-                    auto& keysym = event.key.keysym;
+                    const auto &keysym = event.key.keysym;
                     LOGD << "Key pressed: " << SDL_GetKeyName(keysym.sym);
                     glm::vec3 velocity{};
+                    bool skip{ false };
                     switch(keysym.sym) {
                         case SDLK_s: velocity.z -= step; break;
                         case SDLK_w: velocity.z += step; break;
                         case SDLK_a: velocity.x += step; break;
                         case SDLK_d: velocity.x -= step; break;
+                        default: skip = true; break;
                     }
-                    if(velocity != glm::vec3{}) {
+                    if(!skip) {
                         view = glm::translate(view, velocity);
                     }
+                } break;
+                case SDL_MOUSEBUTTONDOWN: {
+                    isMousePressed = true;
+                    lastMouseCoords.x = event.button.x;
+                    lastMouseCoords.y = event.button.y;
+                } break;
+                case SDL_MOUSEMOTION: {
+                    if (!isMousePressed)
+                        break;
+
+                    glm::vec2 current{ event.button.x, event.button.y };
+
+                    const glm::vec3 direction{ glm::normalize(glm::vec3{
+                        current.y - lastMouseCoords.y,
+                        current.x - lastMouseCoords.x,
+                        0.0f
+                    })};
+                    model = glm::rotate<float>(model, 0.01f, direction);
+                } break;
+                case SDL_MOUSEBUTTONUP: {
+                    isMousePressed = false;
                 } break;
                 case SDL_WINDOWEVENT:
                     if(event.window.windowID != SDL_GetWindowID(core.mWindow)) {

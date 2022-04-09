@@ -23,7 +23,7 @@ std::vector<std::shared_ptr<meov::core::Mesh>> AssimpLoader::ProcessNode(aiNode 
     for(size_t currentMeshIndex{}; currentMeshIndex < node->mNumMeshes; ++currentMeshIndex) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[currentMeshIndex]];
         meshes.emplace_back(ProcessMesh(mesh, scene));
-        LOGI << "       Mesh processed!";
+        LOGI << "Mesh processed!";
     }
 
     for(size_t currentChildIndex{}; currentChildIndex < node->mNumChildren; currentChildIndex++) {
