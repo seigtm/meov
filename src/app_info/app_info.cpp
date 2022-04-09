@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "c751b33e0124282f1976489f4de26cc82620350f"
-#define GIT_COMMIT_DATE "Sat Apr 9 11:26:48 2022"
-#define GIT_COMMIT_MESSAGE "Removed not sussy duplicates created by accident."
+#define GIT_COMMIT_HASH "afca1f88807b4ba88aba6b78cd8a1fd2d44bbcfc"
+#define GIT_COMMIT_DATE "Sat Apr 9 11:35:00 2022"
+#define GIT_COMMIT_MESSAGE "Removed another duplicated directory created by accident."
 
 namespace meov {
 
