@@ -14,6 +14,7 @@ std::string getShaderName(ShaderType type) {
         case ShaderType::Geometry: return "Geometry";
         case ShaderType::Fragment: return "Fragment";
         case ShaderType::Compute: return "Compute";
+        default: break;
     }
     return "Unknown shader type";
 }
@@ -21,12 +22,13 @@ std::string getShaderName(ShaderType type) {
 ShaderType getTypeByExtention(const std::string &ext) {
     if(ext.empty()) return ShaderType::Invalid;
 
-    if(ext == "vs") return ShaderType::Vertex;
-    if(ext == "tcs") return ShaderType::TesselationControl;
-    if(ext == "tes") return ShaderType::TesselationEvaluation;
-    if(ext == "gs") return ShaderType::Geometry;
-    if(ext == "fs") return ShaderType::Fragment;
-    if(ext == "cs") return ShaderType::Compute;
+    constexpr auto npos{ std::string::npos };
+    if(ext.find(".vs") != npos) return ShaderType::Vertex;
+    if(ext.find(".fs") != npos) return ShaderType::Fragment;
+    if(ext.find(".gs") != npos) return ShaderType::Geometry;
+    if(ext.find(".cs") != npos) return ShaderType::Compute;
+    if(ext.find(".tcs") != npos) return ShaderType::TesselationControl;
+    if(ext.find(".tes") != npos) return ShaderType::TesselationEvaluation;
 
     return ShaderType::Invalid;
 }
