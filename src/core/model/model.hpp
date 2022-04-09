@@ -6,8 +6,8 @@
 
 // MEOV.
 #include "mesh.h"
-#include "texture.h"
-#include "Graphics.hpp"
+#include "texture.hpp"
+#include "graphics.hpp"
 
 namespace meov::core {
 

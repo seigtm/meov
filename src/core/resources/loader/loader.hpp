@@ -5,8 +5,8 @@
 #include <filesystem>
 
 // MEOV.
-#include "Shader.hpp"
-#include "texture.h"
+#include "shader.hpp"
+#include "texture.hpp"
 
 namespace fs = std::filesystem;
 

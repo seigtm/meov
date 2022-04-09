@@ -1,9 +1,9 @@
-#include "Common.hpp"
+#include "common.hpp"
 
 #include "resource_manager.hpp"
 
 #include "assimp_loader.hpp"
-#include "texture.h"
+#include "texture.hpp"
 #include "mesh.h"
 
 namespace meov::core::resources {

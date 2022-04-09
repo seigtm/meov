@@ -1,10 +1,10 @@
-#include "Common.hpp"
+#include "common.hpp"
 
 #include "mesh.h"
 #include "vertex.h"
-#include "Shader.hpp"
-#include "texture.h"
-#include "Graphics.hpp"
+#include "shader.hpp"
+#include "texture.hpp"
+#include "graphics.hpp"
 
 namespace meov::core {
 

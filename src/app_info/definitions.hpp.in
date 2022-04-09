@@ -1,0 +1,23 @@
+#pragma once
+
+#include <string_view>
+
+namespace meov::definitions {
+
+constexpr bool UsingOpenGL{ @USING_OPENGL@ };
+constexpr bool UsingVulcan{ @USING_VULCAN@ };
+
+constexpr std::string_view Version{ "v@CMAKE_PROJECT_VERSION@" };
+constexpr unsigned ShaderVersionMajor{ @SHADER_VERSION_MAJOR@ };
+constexpr unsigned ShaderVersionMinor{ @SHADER_VERSION_MINOR@ };
+constexpr unsigned ShaderVersionPatch{ @SHADER_VERSION_PATCH@ };
+constexpr std::string_view ShaderVersion{ "@SHADER_VERSION@" };
+constexpr std::string_view Program_name{ "@PROGRAM_NAME@" };
+
+constexpr std::string_view LogLevel{ "@LOG_LEVEL@" };
+
+constexpr std::string_view GitCommitHash{ "@GIT_COMMIT_HASH@" };
+constexpr std::string_view GitCommitDate{ "@GIT_COMMIT_DATE@" };
+constexpr std::string_view GitCommitMessage{ "@GIT_COMMIT_MESSAGE@" };
+
+} // namespace meov::definitions

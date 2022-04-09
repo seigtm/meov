@@ -6,7 +6,7 @@
 #include <filesystem>
 
 #include "loader.hpp"
-#include "ShadersProgram.hpp"
+#include "shaders_program.hpp"
 
 namespace meov::core::resources {
 
