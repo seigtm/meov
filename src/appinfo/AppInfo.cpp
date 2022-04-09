@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "4ecd5cb6f4df865394fb909f8df8dca4d1a701e7-dirty"
-#define GIT_COMMIT_DATE "Fri Apr 8 15:38:49 2022"
-#define GIT_COMMIT_MESSAGE "assets/models/backpack/backpack.obj: convert to Git LFS"
+#define GIT_COMMIT_HASH "cdd5c2c634590136994c729f6c5d439bd9e75426-dirty"
+#define GIT_COMMIT_DATE "Sat Apr 9 07:45:58 2022"
+#define GIT_COMMIT_MESSAGE "Some fun with pain. idk just some changes u know"
 
 namespace meov {
 

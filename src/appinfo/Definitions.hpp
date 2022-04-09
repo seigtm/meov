@@ -16,9 +16,9 @@ constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer
 
 constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "4ecd5cb6f4df865394fb909f8df8dca4d1a701e7-dirty" };
-constexpr std::string_view GitCommitDate{ "Fri Apr 8 15:38:49 2022" };
-constexpr std::string_view GitCommitMessage{ "assets/models/backpack/backpack.obj: convert to Git LFS" };
+constexpr std::string_view GitCommitHash{ "cdd5c2c634590136994c729f6c5d439bd9e75426-dirty" };
+constexpr std::string_view GitCommitDate{ "Sat Apr 9 07:45:58 2022" };
+constexpr std::string_view GitCommitMessage{ "Some fun with pain. idk just some changes u know" };
 
 
 
