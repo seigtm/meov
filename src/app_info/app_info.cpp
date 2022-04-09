@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "f8e0d39e83a79f0b42b4b9b00f8c00033bf2f727-dirty"
-#define GIT_COMMIT_DATE "Sat Apr 9 09:29:00 2022"
-#define GIT_COMMIT_MESSAGE "FLY Mazafaka"
+#define GIT_COMMIT_HASH "c751b33e0124282f1976489f4de26cc82620350f"
+#define GIT_COMMIT_DATE "Sat Apr 9 11:26:48 2022"
+#define GIT_COMMIT_MESSAGE "Removed not sussy duplicates created by accident."
 
 namespace meov {
 
