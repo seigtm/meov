@@ -98,19 +98,19 @@ classDiagram
     Setter <|.. SDLSetter
 
     %% ShadersProgram file
-    link Program "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shaders_program/shaders_program.hpp"
-    link Setter "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shaders_program/shaders_program.hpp"
-    link ProgramImpl "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shaders_program/shaders_program.hpp"
+    link Program "https://github.com/seigtm/meov/blob/master/src/core/shaders/shaders_program/shaders_program.hpp"
+    link Setter "https://github.com/seigtm/meov/blob/master/src/core/shaders/shaders_program/shaders_program.hpp"
+    link ProgramImpl "https://github.com/seigtm/meov/blob/master/src/core/shaders/shaders_program/shaders_program.hpp"
 
     %% OGLShaderProgramImpl
-    link OGLProgramImpl "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shaders_program/impl/ogl/ogl_shaders_program.hpp"
-    link OGLSetter "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shaders_program/impl/ogl/ogl_shaders_program.hpp"
+    link OGLProgramImpl "https://github.com/seigtm/meov/blob/master/src/core/shaders/shaders_program/impl/ogl/ogl_shaders_program.hpp"
+    link OGLSetter "https://github.com/seigtm/meov/blob/master/src/core/shaders/shaders_program/impl/ogl/ogl_shaders_program.hpp"
 
     %% Shader file
-    link Shader "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shader/shader.hpp"
-    link ShaderImpl "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shader/shader.hpp"
-    link ShaderType "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shader/shader.hpp"
+    link Shader "https://github.com/seigtm/meov/blob/master/src/core/shaders/shader/shader.hpp"
+    link ShaderImpl "https://github.com/seigtm/meov/blob/master/src/core/shaders/shader/shader.hpp"
+    link ShaderType "https://github.com/seigtm/meov/blob/master/src/core/shaders/shader/shader.hpp"
 
     %% OGLShader file
-    link OGLShaderImpl "https://github.com/seigtm/meov/blob/4b6cd9a1a2e4a6e92851244be6fa3d15aa7e7ff4/src/core/shaders/shader/impl/ogl/ogl_shader.hpp"
+    link OGLShaderImpl "https://github.com/seigtm/meov/blob/master/src/core/shaders/shader/impl/ogl/ogl_shader.hpp"
 ```

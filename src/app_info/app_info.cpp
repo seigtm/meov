@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "afca1f88807b4ba88aba6b78cd8a1fd2d44bbcfc"
-#define GIT_COMMIT_DATE "Sat Apr 9 11:35:00 2022"
-#define GIT_COMMIT_MESSAGE "Removed another duplicated directory created by accident."
+#define GIT_COMMIT_HASH "8d64764a99592970b5cc2aae79e11c339fc1d545-dirty"
+#define GIT_COMMIT_DATE "Sat Apr 9 11:50:18 2022"
+#define GIT_COMMIT_MESSAGE "Made the backpack model fit on the screen."
 
 namespace meov {
 
