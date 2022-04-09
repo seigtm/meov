@@ -27,6 +27,7 @@ TODO: (16.3.22)
 
 #include "Core.hpp"
 #include "resource_manager.hpp"
+#include "camera.hpp"
 
 int main() {
     stbi_set_flip_vertically_on_load(true);
@@ -67,15 +68,15 @@ int main() {
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
 
+    auto camera{ std::make_shared<meov::core::Camera>() };
+
     glm::mat4 projection{ 1 };
-    glm::mat4 view{ 1.f };
     glm::mat4 model{ 1.f };
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
 
     constexpr float step{ 0.05 };
-    view = glm::translate(view, glm::vec3{ 0.0f, 0.0f, -0.05f });
 
     // Main loop.
     LOGI << "Start main loop";
@@ -86,6 +87,7 @@ int main() {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while(!done) {
         clock.Update();
+        const auto view{ camera->ViewMatrix() };
         program->Use();
         program->Get("projection")->Set(projection);
         program->Get("view")->Set(view);
@@ -107,17 +109,38 @@ int main() {
         buffer.UnBind();
 
         ImGui::Begin("Scene");
-        const auto [width, height]{ ImGui::GetContentRegionAvail() };
-        projection = glm::perspective(glm::radians(45.0f), width / height, .001f, 100.0f);
+        const auto [scenePosX, scenePosY]{ ImGui::GetWindowPos() };
+        const auto [sceneWidth, sceneHeight]{ ImGui::GetContentRegionAvail() };
+        projection = glm::perspective(
+            glm::radians(camera->Zoom()), sceneWidth / sceneHeight, .001f, 100.0f);
         // Add rendered texture to ImGUI scene window.
         uint32_t textureID = buffer.GetFrameTexture();
-        ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ width, height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        ImGui::Image(reinterpret_cast<void*>(textureID),
+            ImVec2{ sceneWidth, sceneHeight }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();
 
         // Show singleton log window.
         logW1->Draw();
         // Show Git info window.
         gitW.Draw();
+
+        ImGui::Begin("Camera");
+        const auto &pos{ camera->Position() };
+        ImGui::Text("Position:    [%.2f, %.2f, %.2f]", pos.x, pos.y, pos.z);
+        ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", camera->Yaw(), camera->Pitch());
+        ImGui::Text("Speed:       [%.2f]", camera->Speed());
+        ImGui::Text("Sensitivity: [%.2f]", camera->MouseSensitivity());
+        ImGui::Text("Zoom:        [%.2f]", camera->Zoom());
+        ImGui::Text(
+            "View: [%.2f, %.2f, %.2f, %.2f]\n"
+            "      [%.2f, %.2f, %.2f, %.2f]\n"
+            "      [%.2f, %.2f, %.2f, %.2f]",
+            view[0].x, view[0].y, view[0].z, view[0].w,
+            view[1].x, view[1].y, view[1].z, view[1].w,
+            view[2].x, view[2].y, view[2].z, view[2].w
+        );
+        ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
+        ImGui::End();
 
         // Rendering.
         ImGui::Render();
@@ -131,41 +154,43 @@ int main() {
             ImGui_ImplSDL2_ProcessEvent(&event);
             switch(event.type) {
                 case SDL_KEYDOWN: {
+                    using namespace meov::core;
                     const auto &keysym = event.key.keysym;
-                    LOGD << "Key pressed: " << SDL_GetKeyName(keysym.sym);
-                    glm::vec3 velocity{};
-                    bool skip{ false };
                     switch(keysym.sym) {
-                        case SDLK_s: velocity.z -= step; break;
-                        case SDLK_w: velocity.z += step; break;
-                        case SDLK_a: velocity.x += step; break;
-                        case SDLK_d: velocity.x -= step; break;
-                        default: skip = true; break;
-                    }
-                    if(!skip) {
-                        view = glm::translate(view, velocity);
+                        case SDLK_s: camera->Move(Camera::Direction::Backward, clock.Delta()); break;
+                        case SDLK_w: camera->Move(Camera::Direction::Forward, clock.Delta()); break;
+                        case SDLK_a: camera->Move(Camera::Direction::Left, clock.Delta()); break;
+                        case SDLK_d: camera->Move(Camera::Direction::Right, clock.Delta()); break;
+                        default: break;
                     }
                 } break;
                 case SDL_MOUSEBUTTONDOWN: {
+                    const glm::vec2 current{ event.button.x, event.button.y };
+                    if (current.x < scenePosX || current.y < scenePosY) break;
+                    if (current.x > scenePosX + sceneWidth
+                     || current.y > scenePosY + sceneHeight) break;
+                    SDL_SetRelativeMouseMode(SDL_TRUE);
                     isMousePressed = true;
-                    lastMouseCoords.x = event.button.x;
-                    lastMouseCoords.y = event.button.y;
+                    lastMouseCoords = current;
                 } break;
                 case SDL_MOUSEMOTION: {
                     if (!isMousePressed)
                         break;
 
-                    glm::vec2 current{ event.button.x, event.button.y };
-
-                    const glm::vec3 direction{ glm::normalize(glm::vec3{
-                        current.y - lastMouseCoords.y,
+                    const glm::vec2 current{ event.button.x, event.button.y };
+                    const glm::vec2 offset{
                         current.x - lastMouseCoords.x,
-                        0.0f
-                    })};
-                    model = glm::rotate<float>(model, 0.01f, direction);
+                        lastMouseCoords.y - current.y
+                    };
+                    lastMouseCoords = current;
+                    camera->OnMouseMove(offset.x, offset.y);
                 } break;
                 case SDL_MOUSEBUTTONUP: {
+                    SDL_SetRelativeMouseMode(SDL_FALSE);
                     isMousePressed = false;
+                } break;
+                case SDL_MOUSEWHEEL: {
+                    camera->OnMouseScroll(event.wheel.y);
                 } break;
                 case SDL_WINDOWEVENT:
                     if(event.window.windowID != SDL_GetWindowID(core.mWindow)) {

@@ -5,7 +5,7 @@ namespace meov::utilities::time {
 void Clock::Update() {
 	mEnd = std::move(mBegin);
 	mBegin = HRC::now();
-	mDelta = mEnd - mBegin;
+	mDelta = mBegin - mEnd;
 }
 
 double Clock::Delta() const {
