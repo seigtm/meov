@@ -31,6 +31,11 @@ void Graphics::PopProgram() {
     if(mImpl) mImpl->PopProgram();
 }
 
+shaders::Program *Graphics::GetCurrentProgram() {
+    if(mImpl) mImpl->GetCurrentProgram();
+    return nullptr;
+}
+
 void Graphics::DrawDot(const glm::vec3 &position, const float radius) {
     if(mImpl) mImpl->DrawDot(position, radius);
 }
@@ -101,6 +106,11 @@ void Graphics::Impl::PushProgram(const shaders::Program &program) {
 }
 void Graphics::Impl::PopProgram() {
     if(!mProgramQueue.empty()) mProgramQueue.pop();
+}
+
+shaders::Program *Graphics::Impl::GetCurrentProgram() {
+    if(mProgramQueue.empty()) return nullptr;
+    return &(mProgramQueue.back());
 }
 
 

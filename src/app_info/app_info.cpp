@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "8d64764a99592970b5cc2aae79e11c339fc1d545-dirty"
-#define GIT_COMMIT_DATE "Sat Apr 9 11:50:18 2022"
-#define GIT_COMMIT_MESSAGE "Made the backpack model fit on the screen."
+#define GIT_COMMIT_HASH "83137a0f8abf8449bc9b8de16d7fc7418119a04c-dirty"
+#define GIT_COMMIT_DATE "Sat Apr 9 12:02:35 2022"
+#define GIT_COMMIT_MESSAGE "Fixed links in shaders.md mermaid diagram."
 
 namespace meov {
 

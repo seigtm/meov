@@ -30,6 +30,8 @@ public:
         virtual void PushProgram(const shaders::Program &program);
         virtual void PopProgram();
 
+        virtual shaders::Program *GetCurrentProgram();
+
         virtual void DrawDot(const glm::vec3 &position, const float radius = 1) = 0;
         virtual void DrawLine(std::initializer_list<glm::vec3> &&vertices) = 0;
 
@@ -57,6 +59,8 @@ public:
 
     void PushProgram(const shaders::Program &program);
     void PopProgram();
+
+    shaders::Program *GetCurrentProgram();
 
     void DrawDot(const glm::vec3 &position, const float radius = 1);
     void DrawLine(std::initializer_list<glm::vec3> &&vertices);

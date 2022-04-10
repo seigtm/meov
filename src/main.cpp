@@ -30,13 +30,11 @@ TODO: (16.3.22)
 #include "camera.hpp"
 
 int main() {
+    meov::utilities::time::Stopwatch stopwatch;
+    stopwatch.Start();
     stbi_set_flip_vertically_on_load(true);
     meov::utils::LogUtils::Instance()->Initialize();
-
-    LOGI << "Current directory: " << fs::current_path().string();
     meov::core::Core core{ std::vector<std::string>{} };
-
-    std::shared_ptr graphics{ std::make_shared<meov::core::Graphics>() };
 
     // Our state.
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };
@@ -45,31 +43,18 @@ int main() {
     meov::Window::Git gitW;
     meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1280, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
 
-    auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
-    if(logStorage != nullptr) {
+    if(auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() }; logStorage != nullptr) {
         logStorage->Subscribe(logW1);
     }
-
-    // clang-format off
-
-    auto program{ RESOURCES->LoadProgram("shaders/default") };
-    graphics->PushProgram(*program);
-
-    const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
-    const glm::u8vec4 black{ 0x00, 0x00, 0x00, 0xFF };
-    const glm::u8vec4 red{ 0xFF, 0x00, 0x00, 0xFF };
-    const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
-    const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
     auto modelObject{ RESOURCES->LoadModel("models/backpack/backpack.obj") };
     // auto modelObject{ RESOURCES->LoadModel("models/boombox/BoomBox.gltf") };
     // meov::core::Model modelObject{"models\\boombox\\BoomBox.gltf"};
 
-    // clang-format on
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
 
-    auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 10.0f }) };
+    auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, .0f }) };
 
     glm::mat4 projection{ 1 };
     glm::mat4 model{ 1.f };
@@ -84,20 +69,24 @@ int main() {
     bool done = false;
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
-    meov::utilities::time::Clock clock;
+    LOGD << "Initialization DONE: " << std::chrono::duration<double>{ stopwatch.CurrentTime() }.count() << " seconds";
+    stopwatch.Stop();
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while(!done) {
-        clock.Update();
+        core.Update();
         const auto view{ camera->ViewMatrix() };
-        program->Use();
-        program->Get("projection")->Set(projection);
-        program->Get("view")->Set(view);
-        program->Get("model")->Set(model);
-        program->UnUse();
+        auto program{ core.GetGraphics()->GetCurrentProgram() };
+        if (program) {
+            program->Use();
+            program->Get("projection")->Set(projection);
+            program->Get("view")->Set(view);
+            program->Get("model")->Set(model);
+            program->UnUse();
+        }
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(core.mWindow);
+        ImGui_ImplSDL2_NewFrame(core.GetSDLWindow());
         ImGui::NewFrame();
 
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
@@ -106,7 +95,7 @@ int main() {
 
         buffer.Bind();
         if(modelObject)
-            modelObject->Draw(*graphics);
+            modelObject->Draw(*core.GetGraphics());
         buffer.UnBind();
 
         ImGui::Begin("Scene");
@@ -146,7 +135,7 @@ int main() {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        SDL_GL_SwapWindow(core.mWindow);
+        SDL_GL_SwapWindow(core.GetSDLWindow());
 
         // Poll and handle events (inputs, window resize, etc.).
         SDL_Event event;
@@ -157,10 +146,10 @@ int main() {
                     using namespace meov::core;
                     const auto &keysym = event.key.keysym;
                     switch(keysym.sym) {
-                        case SDLK_s: camera->Move(Camera::Direction::Backward, clock.Delta()); break;
-                        case SDLK_w: camera->Move(Camera::Direction::Forward, clock.Delta()); break;
-                        case SDLK_a: camera->Move(Camera::Direction::Left, clock.Delta()); break;
-                        case SDLK_d: camera->Move(Camera::Direction::Right, clock.Delta()); break;
+                        case SDLK_s: camera->Move(Camera::Direction::Backward, core.GetDeltaTime()); break;
+                        case SDLK_w: camera->Move(Camera::Direction::Forward, core.GetDeltaTime()); break;
+                        case SDLK_a: camera->Move(Camera::Direction::Left, core.GetDeltaTime()); break;
+                        case SDLK_d: camera->Move(Camera::Direction::Right, core.GetDeltaTime()); break;
                         default: break;
                     }
                 } break;
@@ -192,7 +181,7 @@ int main() {
                     camera->OnMouseScroll(event.wheel.y);
                 } break;
                 case SDL_WINDOWEVENT:
-                    if(event.window.windowID != SDL_GetWindowID(core.mWindow)) {
+                    if(event.window.windowID != SDL_GetWindowID(core.GetSDLWindow())) {
                         break;
                     }
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED) {

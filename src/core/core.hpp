@@ -5,25 +5,51 @@
 #include <memory>
 
 #include "initializer.hpp"
+#include "time_utils.hpp"
 
 namespace meov::core {
 
+class Graphics;
+
 class Core final : public utilities::Initializer::Listener {
 public:
-	explicit Core(std::vector<std::string> &&argv);
+    explicit Core(std::vector<std::string> &&argv);
 
-	enum ExecutionResult{ SUCCESS, FAIL = -1 };
+    enum class ExecutionResult : int {
+        Success,
+        Fail = -1
+    };
 
-	ExecutionResult Run();
+    ExecutionResult Run();
 
-	SDL_Window *mWindow{ nullptr };
-	SDL_GLContext mWinContext{ nullptr };
+    void Update();
+    void Draw();
+
+    SDL_Window *GetSDLWindow();
+    std::shared_ptr<Graphics> GetGraphics();
+    double GetDeltaTime() const;
 
 private:
-	std::vector<utilities::Initializer::Shared> mInitTasks;
+    SDL_Window *mWindow{ nullptr };
+    SDL_GLContext mWinContext{ nullptr };
+    std::shared_ptr<Graphics> mGraphics;
+    utilities::time::Clock mClock;
 
-	// utilities::Initializer::Listener
-	void OnFail(const std::string_view &taskName) override;
+    std::vector<utilities::Initializer::Shared> mInitTasks;
+
+    // utilities::Initializer::Listener
+    void OnFail(const std::string_view &taskName) override;
 };
 
-} // namespace meov::core
+class CoreHolder {
+public:
+    explicit CoreHolder(Core &core);
+
+    Core &GetCore();
+    const Core &GetCore() const;
+
+private:
+    Core &mCoreRef;
+};
+
+}  // namespace meov::core

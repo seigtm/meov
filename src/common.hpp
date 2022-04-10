@@ -37,6 +37,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <exception>
 
 namespace fs = std::filesystem;
 using namespace gl;
