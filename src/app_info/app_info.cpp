@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "0da2f0196c7644227b5f7327d7e2747d99f1bf36-dirty"
-#define GIT_COMMIT_DATE "Mon Apr 11 13:54:41 2022"
-#define GIT_COMMIT_MESSAGE "GLM as submodule instead of conan package."
+#define GIT_COMMIT_HASH "3908a6f2410642529342131722b9049e89688bda-dirty"
+#define GIT_COMMIT_DATE "Mon Apr 11 15:51:44 2022"
+#define GIT_COMMIT_MESSAGE "SDL and GLBinding as submodules instead of conan packages."
 
 namespace meov {
 
