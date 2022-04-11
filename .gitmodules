@@ -6,3 +6,6 @@
     path = dependencies/imgui_filedialog
     url = https://github.com/aiekick/ImGuiFileDialog.git
     branch = "Lib_Only"
+[submodule "dependencies/glm"]
+    path = dependencies/glm
+    url = https://github.com/g-truc/glm.git
