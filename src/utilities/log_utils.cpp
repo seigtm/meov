@@ -4,6 +4,7 @@
 
 #include <plog/Init.h>
 #include <plog/Appenders/ColorConsoleAppender.h>
+#include <plog/Appenders/RollingFileAppender.h>
 #include <plog/Record.h>
 
 #include <sstream>

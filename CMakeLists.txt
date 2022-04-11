@@ -36,19 +36,6 @@ list(REMOVE_DUPLICATES directories)
 list(APPEND CMAKE_MODULE_PATH ${build_dir})
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
-include(${root}/cmake/conan_setup.cmake)
-conan_setup()
-include(${root}/cmake/conan_dependencies.cmake)
-conan_install()
-
-add_subdirectory(dependencies/glm)
-add_subdirectory(dependencies/sdl)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
-add_subdirectory(dependencies/glbinding)
-
-find_package(plog REQUIRED)
-find_package(assimp REQUIRED)
-
 # Appending sources and headers of dependencies.
 add_subdirectory(dependencies)
 
@@ -70,7 +57,6 @@ target_link_libraries(${target}
     PRIVATE
         deps_imgui
         deps_stb_image
-        
 )
 set_target_properties(${target}
     PROPERTIES

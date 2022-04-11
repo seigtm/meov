@@ -2,6 +2,14 @@
 
 set(current_dir ${CMAKE_CURRENT_SOURCE_DIR})
 
+add_subdirectory(${current_dir}/glm)
+add_subdirectory(${current_dir}/sdl)
+add_subdirectory(${current_dir}/plog)
+set(OPTION_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
+add_subdirectory(${current_dir}/glbinding)
+add_subdirectory(${current_dir}/assimp)
+
 #============= ImGui =============#
 
 set(_sources
