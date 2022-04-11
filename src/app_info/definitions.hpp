@@ -16,8 +16,8 @@ constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer
 
 constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "19bd0f065890333da3db427ebf8d13c0dbd62b5e-dirty" };
-constexpr std::string_view GitCommitDate{ "Mon Apr 11 13:49:04 2022" };
-constexpr std::string_view GitCommitMessage{ "GLM submodule added." };
+constexpr std::string_view GitCommitHash{ "0da2f0196c7644227b5f7327d7e2747d99f1bf36-dirty" };
+constexpr std::string_view GitCommitDate{ "Mon Apr 11 13:54:41 2022" };
+constexpr std::string_view GitCommitMessage{ "GLM as submodule instead of conan package." };
 
 } // namespace meov::definitions

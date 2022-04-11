@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "19bd0f065890333da3db427ebf8d13c0dbd62b5e-dirty"
-#define GIT_COMMIT_DATE "Mon Apr 11 13:49:04 2022"
-#define GIT_COMMIT_MESSAGE "GLM submodule added."
+#define GIT_COMMIT_HASH "0da2f0196c7644227b5f7327d7e2747d99f1bf36-dirty"
+#define GIT_COMMIT_DATE "Mon Apr 11 13:54:41 2022"
+#define GIT_COMMIT_MESSAGE "GLM as submodule instead of conan package."
 
 namespace meov {
 

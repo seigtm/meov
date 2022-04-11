@@ -14,7 +14,7 @@
 #include <backends/imgui_impl_sdl.h>
 #include <backends/imgui_impl_opengl3.h>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <initializer_list>
 #include <algorithm>
