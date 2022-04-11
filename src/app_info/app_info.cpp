@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "83137a0f8abf8449bc9b8de16d7fc7418119a04c-dirty"
-#define GIT_COMMIT_DATE "Sat Apr 9 12:02:35 2022"
-#define GIT_COMMIT_MESSAGE "Fixed links in shaders.md mermaid diagram."
+#define GIT_COMMIT_HASH "19bd0f065890333da3db427ebf8d13c0dbd62b5e-dirty"
+#define GIT_COMMIT_DATE "Mon Apr 11 13:49:04 2022"
+#define GIT_COMMIT_MESSAGE "GLM submodule added."
 
 namespace meov {
 
