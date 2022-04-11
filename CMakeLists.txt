@@ -42,11 +42,10 @@ include(${root}/cmake/conan_dependencies.cmake)
 conan_install()
 
 add_subdirectory(dependencies/glm)
+add_subdirectory(dependencies/sdl)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
+add_subdirectory(dependencies/glbinding)
 
-find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(glbinding REQUIRED)
-find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
 find_package(assimp REQUIRED)
 
@@ -65,13 +64,13 @@ target_link_libraries(${target}
         SDL2::SDL2-static
         glbinding::glbinding
         glm::glm
-        GLEW::GLEW
         plog::plog
         assimp::assimp
 
     PRIVATE
         deps_imgui
         deps_stb_image
+        
 )
 set_target_properties(${target}
     PROPERTIES

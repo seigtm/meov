@@ -9,3 +9,9 @@
 [submodule "dependencies/glm"]
     path = dependencies/glm
     url = https://github.com/g-truc/glm.git
+[submodule "dependencies/sdl"]
+    path = dependencies/sdl
+    url = https://github.com/libsdl-org/SDL.git
+[submodule "dependencies/glbinding"]
+    path = dependencies/glbinding
+    url = https://github.com/cginternals/glbinding.git
