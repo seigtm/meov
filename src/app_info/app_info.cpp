@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "8d64764a99592970b5cc2aae79e11c339fc1d545-dirty"
-#define GIT_COMMIT_DATE "Sat Apr 9 11:50:18 2022"
-#define GIT_COMMIT_MESSAGE "Made the backpack model fit on the screen."
+#define GIT_COMMIT_HASH "19bd0f065890333da3db427ebf8d13c0dbd62b5e-dirty"
+#define GIT_COMMIT_DATE "Mon Apr 11 13:49:04 2022"
+#define GIT_COMMIT_MESSAGE "GLM submodule added."
 
 namespace meov {
 

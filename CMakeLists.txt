@@ -41,10 +41,11 @@ conan_setup()
 include(${root}/cmake/conan_dependencies.cmake)
 conan_install()
 
+add_subdirectory(dependencies/glm)
+
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(glbinding REQUIRED)
-find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(plog REQUIRED)
 find_package(assimp REQUIRED)
