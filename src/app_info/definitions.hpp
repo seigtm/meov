@@ -14,10 +14,10 @@ constexpr unsigned ShaderVersionPatch{ 0 };
 constexpr std::string_view ShaderVersion{ "#version 450 core" };
 constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer" };
 
-constexpr std::string_view LogLevel{ "Release" };
+constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "3908a6f2410642529342131722b9049e89688bda-dirty" };
-constexpr std::string_view GitCommitDate{ "Mon Apr 11 15:51:44 2022" };
-constexpr std::string_view GitCommitMessage{ "SDL and GLBinding as submodules instead of conan packages." };
+constexpr std::string_view GitCommitHash{ "d49d674da8a45f16ffcc517b8d0bdd558af21067" };
+constexpr std::string_view GitCommitDate{ "Mon Apr 11 16:56:15 2022" };
+constexpr std::string_view GitCommitMessage{ "Every dependency is now git submodule, not conan package." };
 
 } // namespace meov::definitions
