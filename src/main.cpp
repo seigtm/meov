@@ -1,13 +1,6 @@
-/*
-TODO: (16.3.22)
-1. Material class. +
-2. Texture ctor.
-3. Node class.
-4. Properties.
-*/
-
-
 #define SDL_MAIN_HANDLED
+
+#include "ImGuiFileDialog.h"
 
 #include "common.hpp"
 #include "app_info.hpp"
@@ -16,6 +9,7 @@ TODO: (16.3.22)
 
 #include "windows/git_window.hpp"
 #include "windows/log_window.hpp"
+#include "windows/toolbar_window.hpp"
 
 #include "ogl_frame_buffer.hpp"
 #include "shaders_program.hpp"
@@ -41,15 +35,6 @@ int main() {
     // Our state.
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };
 
-    // Dear ImGui windows.
-    meov::Window::Git gitW;
-    meov::Window::Log::Reference logW1{ new meov::Window::Log{ "First", { 1280, 850 } } };  // FIXME: ambiguous '::Ref' from Subscriber.
-
-    auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
-    if(logStorage != nullptr) {
-        logStorage->Subscribe(logW1);
-    }
-
     // clang-format off
 
     auto program{ RESOURCES->LoadProgram("shaders/default") };
@@ -61,9 +46,7 @@ int main() {
     const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
     const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
 
-    auto modelObject{ RESOURCES->LoadModel("models/backpack/backpack.obj") };
-    // auto modelObject{ RESOURCES->LoadModel("models/boombox/BoomBox.gltf") };
-    // meov::core::Model modelObject{"models\\boombox\\BoomBox.gltf"};
+    auto modelObject{ RESOURCES->LoadModel("D:\\OneDrive\\GitHub\\meov\\assets\\models\\backpack\\backpack.obj") };
 
     // clang-format on
     meov::core::gl::FrameBuffer buffer;
@@ -79,13 +62,26 @@ int main() {
 
     constexpr float step{ 0.05 };
 
-    // Main loop.
-    LOGI << "Start main loop";
-    bool done = false;
-    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
+    // Visibility booleans for windows.
+    bool showScene{ true };
+    bool showLog{ true };
+    bool showGit{ true };
+    bool showCamera{ true };
 
+    // Main loop.
+    bool done{ false };
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     meov::utilities::time::Clock clock;
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // Dear ImGui windows.
+    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene };
+    meov::Window::Git gitW;
+    meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };
+    auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
+    if(logStorage != nullptr) {
+        logStorage->Subscribe(logW);
+    }
+
+    LOGI << "Start main loop";
     while(!done) {
         clock.Update();
         const auto view{ camera->ViewMatrix() };
@@ -109,38 +105,48 @@ int main() {
             modelObject->Draw(*graphics);
         buffer.UnBind();
 
-        ImGui::Begin("Scene");
-        const auto [scenePosX, scenePosY]{ ImGui::GetWindowPos() };
-        const auto [sceneWidth, sceneHeight]{ ImGui::GetContentRegionAvail() };
-        projection = glm::perspective(
-            glm::radians(camera->Zoom()), sceneWidth / sceneHeight, .001f, 100.0f);
-        // Add rendered texture to ImGUI scene window.
-        uint32_t textureID = buffer.GetFrameTexture();
-        ImGui::Image(reinterpret_cast<void *>(textureID),
-                     ImVec2{ sceneWidth, sceneHeight }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-        ImGui::End();
+        toolbarW.Draw();
+
+
+        // TODO: Move it to SceneWindow class and make getters for this vars.
+        ImVec2 scenePos{};
+        ImVec2 sceneSize{};
+        if(showScene) {
+            ImGui::Begin("Scene");
+            scenePos = ImGui::GetWindowPos();
+            sceneSize = ImGui::GetContentRegionAvail();
+            projection = glm::perspective(
+                glm::radians(camera->Zoom()), sceneSize.x / sceneSize.y, .001f, 100.0f);
+            // Add rendered texture to ImGUI scene window.
+            uint32_t textureID = buffer.GetFrameTexture();
+            ImGui::Image(reinterpret_cast<void *>(textureID),
+                         ImVec2{ sceneSize.x, sceneSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+            ImGui::End();
+        }
 
         // Show singleton log window.
-        logW1->Draw();
+        logW->Draw(showLog);
         // Show Git info window.
-        gitW.Draw();
+        gitW.Draw(showGit);
 
-        ImGui::Begin("Camera");
-        const auto &pos{ camera->Position() };
-        ImGui::Text("Position:    [%.2f, %.2f, %.2f]", pos.x, pos.y, pos.z);
-        ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", camera->Yaw(), camera->Pitch());
-        ImGui::Text("Speed:       [%.2f]", camera->Speed());
-        ImGui::Text("Sensitivity: [%.2f]", camera->MouseSensitivity());
-        ImGui::Text("Zoom:        [%.2f]", camera->Zoom());
-        ImGui::Text(
-            "View: [%.2f, %.2f, %.2f, %.2f]\n"
-            "      [%.2f, %.2f, %.2f, %.2f]\n"
-            "      [%.2f, %.2f, %.2f, %.2f]",
-            view[0].x, view[0].y, view[0].z, view[0].w,
-            view[1].x, view[1].y, view[1].z, view[1].w,
-            view[2].x, view[2].y, view[2].z, view[2].w);
-        ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
-        ImGui::End();
+        if(showCamera) {
+            ImGui::Begin("Camera");
+            const auto &pos{ camera->Position() };
+            ImGui::Text("Position:    [%.2f, %.2f, %.2f]", pos.x, pos.y, pos.z);
+            ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", camera->Yaw(), camera->Pitch());
+            ImGui::Text("Speed:       [%.2f]", camera->Speed());
+            ImGui::Text("Sensitivity: [%.2f]", camera->MouseSensitivity());
+            ImGui::Text("Zoom:        [%.2f]", camera->Zoom());
+            ImGui::Text(
+                "View: [%.2f, %.2f, %.2f, %.2f]\n"
+                "      [%.2f, %.2f, %.2f, %.2f]\n"
+                "      [%.2f, %.2f, %.2f, %.2f]",
+                view[0].x, view[0].y, view[0].z, view[0].w,
+                view[1].x, view[1].y, view[1].z, view[1].w,
+                view[2].x, view[2].y, view[2].z, view[2].w);
+            ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
+            ImGui::End();
+        }
 
         // Rendering.
         ImGui::Render();
@@ -166,8 +172,8 @@ int main() {
                 } break;
                 case SDL_MOUSEBUTTONDOWN: {
                     const glm::vec2 current{ event.button.x, event.button.y };
-                    if(current.x < scenePosX || current.y < scenePosY) break;
-                    if(current.x > scenePosX + sceneWidth || current.y > scenePosY + sceneHeight) break;
+                    if(current.x < scenePos.x || current.y < scenePos.y) break;
+                    if(current.x > scenePos.x + sceneSize.x || current.y > scenePos.y + sceneSize.y) break;
                     SDL_SetRelativeMouseMode(SDL_TRUE);
                     isMousePressed = true;
                     lastMouseCoords = current;

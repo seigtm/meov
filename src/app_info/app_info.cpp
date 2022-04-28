@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "d49d674da8a45f16ffcc517b8d0bdd558af21067"
-#define GIT_COMMIT_DATE "Mon Apr 11 16:56:15 2022"
-#define GIT_COMMIT_MESSAGE "Every dependency is now git submodule, not conan package."
+#define GIT_COMMIT_HASH "86503c3267a3926b1faf49001168b2ab6791978c-dirty"
+#define GIT_COMMIT_DATE "Sun Apr 24 12:56:09 2022"
+#define GIT_COMMIT_MESSAGE "Updated app info, app after reverting commit works kinda fine.."
 
 namespace meov {
 

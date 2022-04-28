@@ -17,7 +17,7 @@ public:
     virtual ~Base() = default;
 
     //! \brief Draw method. Call it inside your draw loop.
-    void Draw();
+    void Draw(bool visible = true);
 
     //! \brief Toggles Dear ImGui's 'NoTitleBar' flag.
     void ToggleNoTitleBar();

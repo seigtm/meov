@@ -89,6 +89,15 @@
         "queue": "cpp",
         "any": "cpp",
         "numeric": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "cinttypes": "cpp",
+        "condition_variable": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "shared_mutex": "cpp",
+        "stack": "cpp",
+        "unordered_set": "cpp"
     }
 }

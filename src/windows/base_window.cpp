@@ -8,7 +8,10 @@ Base::Base(std::string_view const title, ImVec2 const& size, bool isClosable, Im
     , _isClosable{ isClosable }
     , _flags{ flags } {}
 
-void Base::Draw() {
+void Base::Draw(bool visible) {
+    if(!visible)
+        return;
+
     ImGui::SetNextWindowSize(_size, ImGuiCond_Once);  // Resize will be called once per session.
     ImGui::Begin(_title.c_str(), &_isClosable, _flags);
     DrawImpl();
