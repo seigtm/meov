@@ -25,7 +25,7 @@ void ToolBar::DrawImpl() {
     // Open file with ImGuiFileDialog.
     if(ImGui::Button("Open File"))
         // Open modal.
-        ImGuiFileDialog::Instance()->OpenModal("ChooseFileDlgKey", "Choose File", ".obj,.gltf,.txt", ".");
+        ImGuiFileDialog::Instance()->OpenModal("ChooseFileDlgKey", "Choose File", ".obj,.gltf,.fbx", ".");
     // Display modal (should be separated from the 'open' call).
     if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
         if(ImGuiFileDialog::Instance()->IsOk()) {

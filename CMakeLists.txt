@@ -48,13 +48,12 @@ target_include_directories(${target}
 target_link_libraries(${target}
     PUBLIC
         ${OPENGL_opengl_LIBRARY}
-        SDL2::SDL2-static
+        # Don't really need to include this dep, 'cause we get it from Dear ImGui.
+        # SDL2::SDL2-static
         glbinding::glbinding
         glm::glm
         plog::plog
         assimp::assimp
-
-    PRIVATE
         deps_imgui
         deps_stb_image
 )

@@ -30,7 +30,7 @@ bool Program::Attach(const std::shared_ptr<Shader> &shader) {
 }
 bool Program::Detach(const std::shared_ptr<Shader> &shader) {
     if(!mImpl) return false;
-    return mImpl->Attach(shader);
+    return mImpl->Detach(shader);
 }
 
 void Program::Use() {

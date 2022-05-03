@@ -25,42 +25,36 @@
 
 int main() {
     stbi_set_flip_vertically_on_load(true);
+    // Logger utilities.
     meov::utils::LogUtils::Instance()->Initialize();
-
     LOGI << "Current directory: " << fs::current_path().string();
+
+    // Core application with SDL window in it.
     meov::core::Core core{ std::vector<std::string>{} };
 
+    // Graphics object.
     std::shared_ptr graphics{ std::make_shared<meov::core::Graphics>() };
 
-    // Our state.
-    const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };
-
-    // clang-format off
-
+    // Loading shader program.
     auto program{ RESOURCES->LoadProgram("shaders/default") };
+    // Pushing it to our graphics object.
     graphics->PushProgram(*program);
 
-    const glm::u8vec4 white{ 0xFF, 0xFF, 0xFF, 0xFF };
-    const glm::u8vec4 black{ 0x00, 0x00, 0x00, 0xFF };
-    const glm::u8vec4 red{ 0xFF, 0x00, 0x00, 0xFF };
-    const glm::u8vec4 green{ 0x00, 0xFF, 0x00, 0xFF };
-    const glm::u8vec4 blue{ 0x00, 0x00, 0xFF, 0xFF };
+    // Default model displayed when the application runs.
+    auto modelObject{ RESOURCES->LoadModel("models\\clothes.obj") };
 
-    auto modelObject{ RESOURCES->LoadModel("D:\\OneDrive\\GitHub\\meov\\assets\\models\\backpack\\backpack.obj") };
-
-    // clang-format on
+    // Frame buffer object initialization.
     meov::core::gl::FrameBuffer buffer;
     buffer.Initialize();
 
+    // Camera object and variables-helpers.
     auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 10.0f }) };
-
     glm::mat4 projection{ 1 };
     glm::mat4 model{ 1.f };
 
+    // Mouse pressed boolean and vector of last coordinates.
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
-
-    constexpr float step{ 0.05 };
 
     // Visibility booleans for windows.
     bool showScene{ true };
@@ -68,19 +62,21 @@ int main() {
     bool showGit{ true };
     bool showCamera{ true };
 
-    // Main loop.
+    // Main loop variables.
     bool done{ false };
-    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-    meov::utilities::time::Clock clock;
+    const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
+    meov::utilities::time::Clock clock;                                    // Timer.
     // Dear ImGui windows.
-    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene };
-    meov::Window::Git gitW;
-    meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };
+    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene };  // Toolbar.
+    meov::Window::Git gitW;                                                                        // Git info.
+    meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };            // Logger window.
+    // Subscribing log storage to our logger window.
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
         logStorage->Subscribe(logW);
     }
-
+    // Start main loop.
     LOGI << "Start main loop";
     while(!done) {
         clock.Update();
@@ -91,23 +87,21 @@ int main() {
         program->Get("model")->Set(model);
         program->UnUse();
 
-        // Start the Dear ImGui frame
+        // Start the Dear ImGui frame.
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(core.mWindow);
         ImGui::NewFrame();
-
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Draw model object.
         buffer.Bind();
         if(modelObject)
             modelObject->Draw(*graphics);
         buffer.UnBind();
 
-        toolbarW.Draw();
-
-
+        // Draw scene window.
         // TODO: Move it to SceneWindow class and make getters for this vars.
         ImVec2 scenePos{};
         ImVec2 sceneSize{};
@@ -124,11 +118,13 @@ int main() {
             ImGui::End();
         }
 
+        // Show toolbar window.
+        toolbarW.Draw();
         // Show singleton log window.
         logW->Draw(showLog);
         // Show Git info window.
         gitW.Draw(showGit);
-
+        // Draw camera window.
         if(showCamera) {
             ImGui::Begin("Camera");
             const auto &pos{ camera->Position() };
@@ -151,7 +147,6 @@ int main() {
         // Rendering.
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
         SDL_GL_SwapWindow(core.mWindow);
 
         // Poll and handle events (inputs, window resize, etc.).
@@ -215,7 +210,7 @@ int main() {
         }
     }
 
-    buffer.Destroy();
+    buffer.Destroy();  // Clean frame buffer.
 
     return 0;
 }

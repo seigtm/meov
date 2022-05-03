@@ -46,7 +46,7 @@ target_include_directories(deps_imgui
         ${current_dir}/imgui_filedialog
 )
 target_link_libraries(deps_imgui
-    PRIVATE
+    PUBLIC
         ${OPENGL_opengl_LIBRARY}
         SDL2::SDL2-static
 )

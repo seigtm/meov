@@ -37,11 +37,9 @@ void Graphics::DrawDot(const glm::vec3 &position, const float radius) {
 void Graphics::DrawLine(std::initializer_list<glm::vec3> &&vertices) {
     if(mImpl) mImpl->DrawLine(std::move(vertices));
 }
-
 void Graphics::DrawTriangle(const std::array<glm::vec3, 3> &positions) {
     if(mImpl) mImpl->DrawTriangle(positions);
 }
-
 void Graphics::DrawRectangle(const std::array<glm::vec3, 4> &positions) {
     if(mImpl) mImpl->DrawRectangle(positions);
 }
@@ -55,7 +53,6 @@ void Graphics::DrawRectangle(const glm::vec3 &position, const float width, const
         { position.x, position.y + height, position.z }           //
     });
 }
-
 void Graphics::DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) {
     if(mImpl) mImpl->DrawTexture(positions, tex);
 }
@@ -72,7 +69,6 @@ void Graphics::DrawTexture(const std::shared_ptr<Texture> &tex, const glm::vec3 
         tex                                                           //
     );
 }
-
 void Graphics::DrawMesh(const Mesh &mesh) {
     if(mImpl) mImpl->DrawMesh(mesh);
 }
@@ -102,6 +98,5 @@ void Graphics::Impl::PushProgram(const shaders::Program &program) {
 void Graphics::Impl::PopProgram() {
     if(!mProgramQueue.empty()) mProgramQueue.pop();
 }
-
 
 }  // namespace meov::core
