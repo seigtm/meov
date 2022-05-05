@@ -161,5 +161,10 @@ Setter *OGLSetter::Set(const glm::mat4 &matrix) {
     return this;
 }
 
+Setter *OGLSetter::Set(const glm::vec3 &vec) {
+    glUniform3fv(mId, 1, glm::value_ptr(vec));
+    return this;
+}
+
 
 }  // namespace meov::core::shaders::gl

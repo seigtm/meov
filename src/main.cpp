@@ -36,7 +36,7 @@ int main() {
     std::shared_ptr graphics{ std::make_shared<meov::core::Graphics>() };
 
     // Loading shader program.
-    auto program{ RESOURCES->LoadProgram("shaders/default") };
+    auto program{ RESOURCES->LoadProgram("shaders\\default") };
     // Pushing it to our graphics object.
     graphics->PushProgram(*program);
 
@@ -51,6 +51,8 @@ int main() {
     auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 10.0f }) };
     glm::mat4 projection{ 1 };
     glm::mat4 model{ 1.f };
+    glm::vec3 lightPos{ 1.f, 1.f, 1.f };
+    bool blinn{ true };  // Use Phong reflection model.
 
     // Mouse pressed boolean and vector of last coordinates.
     bool isMousePressed{ false };
@@ -127,12 +129,23 @@ int main() {
         // Draw camera window.
         if(showCamera) {
             ImGui::Begin("Camera");
-            const auto &pos{ camera->Position() };
-            ImGui::Text("Position:    [%.2f, %.2f, %.2f]", pos.x, pos.y, pos.z);
+            auto position{ camera->Position() };
+            if(ImGui::InputFloat3("Position", glm::value_ptr(position))) {
+                camera->SetPosition(std::move(position));
+            }
             ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", camera->Yaw(), camera->Pitch());
-            ImGui::Text("Speed:       [%.2f]", camera->Speed());
-            ImGui::Text("Sensitivity: [%.2f]", camera->MouseSensitivity());
-            ImGui::Text("Zoom:        [%.2f]", camera->Zoom());
+            auto speed{ camera->Speed() };
+            if(ImGui::InputFloat("Speed", &speed)) {
+                camera->SetSpeed(speed);
+            }
+            auto sensitivity{ camera->MouseSensitivity() };
+            if(ImGui::InputFloat("Sensitivity", &sensitivity)) {
+                camera->SetMouseSensitivity(sensitivity);
+            }
+            auto zoom{ camera->Zoom() };
+            if(ImGui::InputFloat("Zoom", &zoom)) {
+                camera->SetZoom(zoom);
+            }
             ImGui::Text(
                 "View: [%.2f, %.2f, %.2f, %.2f]\n"
                 "      [%.2f, %.2f, %.2f, %.2f]\n"
@@ -143,6 +156,15 @@ int main() {
             ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
             ImGui::End();
         }
+        // Draw lightning window.
+        ImGui::Begin("Lightning");
+        program->Use();
+        if(ImGui::InputFloat3("Lighting position", glm::value_ptr(lightPos)))
+            program->Get("lightPos")->Set(lightPos);
+        if(ImGui::Checkbox("Use phong", &blinn))
+            program->Get("blinn")->Set(blinn);
+        program->UnUse();
+        ImGui::End();
 
         // Rendering.
         ImGui::Render();
@@ -190,7 +212,7 @@ int main() {
                     isMousePressed = false;
                 } break;
                 case SDL_MOUSEWHEEL: {
-                    camera->OnMouseScroll(event.wheel.y);
+                    camera->OnMouseScroll(event.wheel.preciseY);
                 } break;
                 case SDL_WINDOWEVENT:
                     if(event.window.windowID != SDL_GetWindowID(core.mWindow)) {

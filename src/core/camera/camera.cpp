@@ -48,6 +48,19 @@ float Camera::Zoom() const {
     return mZoom;
 }
 
+void Camera::SetPosition(glm::vec3 &&position) {
+    mPosition = std::move(position);
+}
+void Camera::SetSpeed(float value) {
+    mSpeed = value;
+}
+void Camera::SetZoom(float value) {
+    mZoom = value;
+}
+void Camera::SetMouseSensitivity(float value) {
+    mMouseSensitivity = value;
+}
+
 void Camera::Move(Direction dir, float delta) {
     switch(dir) {
         case Direction::Forward: mPosition += mFrontDir * (mSpeed * delta); break;
@@ -69,7 +82,7 @@ void Camera::OnMouseMove(float xOffset, float yOffset, bool constrainPitch) {
 }
 
 void Camera::OnMouseScroll(float yOffset) {
-    constexpr float MinZoom{ 1.0f };
+    constexpr float MinZoom{ 0.0f };
     constexpr float MaxZoom{ 45.0f };
     mZoom = RoundByRange(mZoom - yOffset, MinZoom, MaxZoom);
 }

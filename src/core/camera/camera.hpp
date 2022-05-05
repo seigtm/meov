@@ -10,7 +10,7 @@ public:
     static constexpr float DefaultPitch{};
     static constexpr float DefaultSpeed{ 0.5f };
     static constexpr float DefaultSensitivity{ 0.1f };
-    static constexpr float DefaultZoom{ 45.0f };
+    static constexpr float DefaultZoom{ 35.0f };
 
     enum class Direction {
         Forward,
@@ -31,6 +31,11 @@ public:
     float Speed() const;
     float MouseSensitivity() const;
     float Zoom() const;
+
+    void SetPosition(glm::vec3 &&position);
+    void SetSpeed(float value);
+    void SetZoom(float value);
+    void SetMouseSensitivity(float value);
 
     void Move(Direction dir, float delta);
     void OnMouseMove(float xOffset, float yOffset, bool constrainPitch = true);

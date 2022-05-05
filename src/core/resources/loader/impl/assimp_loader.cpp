@@ -4,7 +4,7 @@ namespace meov::core::resources {
 
 std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << importer.GetErrorString();
         return nullptr;
@@ -94,6 +94,7 @@ std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMater
                 aiString str;
                 mat->GetTexture(type, current, &str);
                 names.emplace((mLastLoadingDirectory / str.C_Str()).string());
+                LOGI << "Texture " << str.C_Str() << " loaded!";
             }
             return std::move(names);
         }
@@ -106,7 +107,7 @@ std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMater
         std::transform(
             names.begin(), names.end(),
             std::back_inserter(textures),
-            [convertedType = typeConv.at(type)] (const auto &name) {
+            [convertedType = typeConv.at(type)](const auto &name) {
                 return RESOURCES->LoadTexture(name, convertedType);
             });
     }

@@ -60,6 +60,7 @@ public:
     Setter *Set(bool v1, bool v2, bool v3, bool v4) override;
 
     Setter *Set(const glm::mat4 &matrix) override;
+    Setter *Set(const glm::vec3 &vec) override;
 
 private:
     int mId{ -1 };

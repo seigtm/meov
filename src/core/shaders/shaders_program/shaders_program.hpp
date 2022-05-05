@@ -80,6 +80,7 @@ public:
     virtual Setter *Set(bool v1, bool v2, bool v3, bool v4) = 0;
 
     virtual Setter *Set(const glm::mat4 &matrix) = 0;
+    virtual Setter *Set(const glm::vec3 &vec) = 0;
 
 protected:
     Program &mParent;
