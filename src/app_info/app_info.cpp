@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "7abea73f16b75a6033957f87e3cea59a3d1044b6-dirty"
-#define GIT_COMMIT_DATE "Tue May 3 15:24:22 2022"
-#define GIT_COMMIT_MESSAGE "Refactoring in .gitattributes."
+#define GIT_COMMIT_HASH "0475224785396f3a2551c100a130341feab83333-dirty"
+#define GIT_COMMIT_DATE "Thu May 5 21:13:35 2022"
+#define GIT_COMMIT_MESSAGE "Made some shit (lightning) with my husband."
 
 namespace meov {
 

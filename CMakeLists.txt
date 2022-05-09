@@ -56,6 +56,7 @@ target_link_libraries(${target}
         assimp::assimp
         deps_imgui
         deps_stb_image
+    -static
 )
 set_target_properties(${target}
     PROPERTIES

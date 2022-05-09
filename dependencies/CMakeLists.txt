@@ -1,14 +1,22 @@
-# === Collecting all sources and headers of external dependencies here. ===#
-
+# Currently processed source directory variable.
 set(current_dir ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(${current_dir}/glm)
-add_subdirectory(${current_dir}/sdl)
-add_subdirectory(${current_dir}/plog)
-set(OPTION_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
-add_subdirectory(${current_dir}/glbinding)
-add_subdirectory(${current_dir}/assimp)
+# The function which adds the subdirectory to the build by the given `dir`
+#   and sets two options off.
+function(add_dep dir)
+    set(OPTION_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
+
+    add_subdirectory(${dir})
+endfunction(add_dep)
+
+# === Collecting all sources of external dependencies here. ===#
+
+add_dep(${current_dir}/glm)
+add_dep(${current_dir}/sdl)
+add_dep(${current_dir}/plog)
+add_dep(${current_dir}/glbinding)
+add_dep(${current_dir}/assimp)
 
 #============= ImGui =============#
 
@@ -20,24 +28,12 @@ set(_sources
         ${current_dir}/imgui/imgui_widgets.cpp
         ${current_dir}/imgui/imgui.cpp
 
-        ${current_dir}/imgui/imconfig.h
-        ${current_dir}/imgui/imgui_internal.h
-        ${current_dir}/imgui/imgui.h
-        ${current_dir}/imgui/imstb_rectpack.h
-        ${current_dir}/imgui/imstb_textedit.h
-        ${current_dir}/imgui/imstb_truetype.h
-
     # Dear ImGui's backends (submodule with docking branch).
         ${current_dir}/imgui/backends/imgui_impl_opengl3.cpp
         ${current_dir}/imgui/backends/imgui_impl_sdl.cpp
 
-        ${current_dir}/imgui/backends/imgui_impl_opengl3.h
-        ${current_dir}/imgui/backends/imgui_impl_opengl3_loader.h
-        ${current_dir}/imgui/backends/imgui_impl_sdl.h
-
     # Dear ImGui File Dialog (submodule with Lib_Only branch).
         ${current_dir}/imgui_filedialog/ImGuiFileDialog.cpp
-        ${current_dir}/imgui_filedialog/ImGuiFileDialog.h
 )
 add_library(deps_imgui OBJECT ${_sources})
 target_include_directories(deps_imgui
@@ -56,7 +52,6 @@ unset(_sources)
 
 set(_sources
         ${current_dir}/stb_image/stb_image.cpp
-        ${current_dir}/stb_image/stb_image.h
 )
 add_library(deps_stb_image OBJECT ${_sources})
 target_include_directories(deps_stb_image
