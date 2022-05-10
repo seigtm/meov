@@ -1,7 +1,7 @@
 #=== Common ===#
 cmake_minimum_required(VERSION 3.15)
 
-project(meov LANGUAGES CXX VERSION 0.1.10)
+project(meov LANGUAGES CXX VERSION 0.1.11)
 
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
@@ -57,6 +57,7 @@ target_link_libraries(${target}
         plog::plog
         assimp::assimp
         deps_imgui
+        deps_imgui_filedialog
         deps_stb_image
     -static
 )

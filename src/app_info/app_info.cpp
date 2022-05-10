@@ -1,6 +1,6 @@
 #include "app_info.hpp"
 
-#define VERSION "v0.1.10"
+#define VERSION "v0.1.11"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "02887e233aeb71d76874ec47443b9e05cc54c81a-dirty"
-#define GIT_COMMIT_DATE "Tue May 10 07:03:19 2022"
-#define GIT_COMMIT_MESSAGE "Move ImGUi and STB to find modules"
+#define GIT_COMMIT_HASH "f315e074e34dc9fdd46388ef5210a4476436daf8-dirty"
+#define GIT_COMMIT_DATE "Tue May 10 07:03:53 2022"
+#define GIT_COMMIT_MESSAGE "Update version"
 
 namespace meov {
 
