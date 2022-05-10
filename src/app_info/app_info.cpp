@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "f315e074e34dc9fdd46388ef5210a4476436daf8-dirty"
-#define GIT_COMMIT_DATE "Tue May 10 07:03:53 2022"
-#define GIT_COMMIT_MESSAGE "Update version"
+#define GIT_COMMIT_HASH "eaa676b287aab129580ac656ea39b62e4193415c-dirty"
+#define GIT_COMMIT_DATE "Tue May 10 07:27:24 2022"
+#define GIT_COMMIT_MESSAGE "We can restore this commit, BUT"
 
 namespace meov {
 
