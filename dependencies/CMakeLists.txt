@@ -22,42 +22,8 @@ add_dependency(assimp)
 
 #============= ImGui =============#
 
-set(_sources
-    # Dear ImGui's common (submodule with docking branch).
-        ${current_dir}/imgui/imgui_demo.cpp
-        ${current_dir}/imgui/imgui_draw.cpp
-        ${current_dir}/imgui/imgui_tables.cpp
-        ${current_dir}/imgui/imgui_widgets.cpp
-        ${current_dir}/imgui/imgui.cpp
-
-    # Dear ImGui's backends (submodule with docking branch).
-        ${current_dir}/imgui/backends/imgui_impl_opengl3.cpp
-        ${current_dir}/imgui/backends/imgui_impl_sdl.cpp
-
-    # Dear ImGui File Dialog (submodule with Lib_Only branch).
-        ${current_dir}/imgui_filedialog/ImGuiFileDialog.cpp
-)
-add_library(deps_imgui OBJECT ${_sources})
-target_include_directories(deps_imgui
-    PUBLIC
-        ${current_dir}/imgui
-        ${current_dir}/imgui_filedialog
-)
-target_link_libraries(deps_imgui
-    PUBLIC
-        ${OPENGL_opengl_LIBRARY}
-        SDL2::SDL2-static
-)
-unset(_sources)
+find_package(ImGui)
 
 #============= STB =============#
 
-set(_sources
-        ${current_dir}/stb_image/stb_image.cpp
-)
-add_library(deps_stb_image OBJECT ${_sources})
-target_include_directories(deps_stb_image
-    PUBLIC
-        ${current_dir}/stb_image
-)
-unset(_sources)
+find_package(STBImage)

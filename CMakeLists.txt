@@ -6,15 +6,16 @@ project(meov LANGUAGES CXX VERSION 0.1.9)
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
 set(build_dir ${CMAKE_CURRENT_BINARY_DIR})
+set(cmake_dir ${root}/cmake)
 
 set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
-include(${root}/cmake/git_utils.cmake)
+include(${cmake_dir}/git_utils.cmake)
 grab_git_info(GIT_COMMIT_HASH GIT_COMMIT_DATE GIT_COMMIT_MESSAGE)
 message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HASH}]")
 
-include(${root}/cmake/config_file_maker.cmake)
+include(${cmake_dir}/config_file_maker.cmake)
 make_config_file(${root}/src/app_info/app_info.cpp)
 make_config_file(${root}/src/app_info/definitions.hpp)
 
@@ -34,6 +35,7 @@ list(REMOVE_DUPLICATES directories)
 
 #=== Dependencies ===#
 list(APPEND CMAKE_MODULE_PATH ${build_dir})
+list(APPEND CMAKE_MODULE_PATH ${cmake_dir}/FindPackages)
 list(APPEND CMAKE_PREFIX_PATH ${build_dir})
 
 # Appending sources and headers of dependencies.
