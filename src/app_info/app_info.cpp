@@ -1,17 +1,17 @@
 #include "app_info.hpp"
 
-#define VERSION "v0.1.9"
+#define VERSION "v0.1.10"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Release"
+#define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "0475224785396f3a2551c100a130341feab83333-dirty"
-#define GIT_COMMIT_DATE "Thu May 5 21:13:35 2022"
-#define GIT_COMMIT_MESSAGE "Made some shit (lightning) with my husband."
+#define GIT_COMMIT_HASH "02887e233aeb71d76874ec47443b9e05cc54c81a-dirty"
+#define GIT_COMMIT_DATE "Tue May 10 07:03:19 2022"
+#define GIT_COMMIT_MESSAGE "Move ImGUi and STB to find modules"
 
 namespace meov {
 
