@@ -63,6 +63,7 @@ int main() {
     bool showLog{ true };
     bool showGit{ true };
     bool showCamera{ true };
+    bool showLightning{ true };
 
     // Main loop variables.
     bool done{ false };
@@ -70,9 +71,9 @@ int main() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
     meov::utilities::time::Clock clock;                                    // Timer.
     // Dear ImGui windows.
-    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene };  // Toolbar.
-    meov::Window::Git gitW;                                                                        // Git info.
-    meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };            // Logger window.
+    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene, showLightning };  // Toolbar.
+    meov::Window::Git gitW;                                                                                       // Git info.
+    meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };                           // Logger window.
     // Subscribing log storage to our logger window.
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
@@ -157,14 +158,16 @@ int main() {
             ImGui::End();
         }
         // Draw lightning window.
-        ImGui::Begin("Lightning");
-        program->Use();
-        if(ImGui::InputFloat3("Lighting position", glm::value_ptr(lightPos)))
-            program->Get("lightPos")->Set(lightPos);
-        if(ImGui::Checkbox("Use phong", &blinn))
-            program->Get("blinn")->Set(blinn);
-        program->UnUse();
-        ImGui::End();
+        if(showLightning) {
+            ImGui::Begin("Lightning");
+            program->Use();
+            if(ImGui::InputFloat3("Light position", glm::value_ptr(lightPos)))
+                program->Get("lightPos")->Set(lightPos);
+            if(ImGui::Checkbox("Use phong", &blinn))
+                program->Get("blinn")->Set(blinn);
+            program->UnUse();
+            ImGui::End();
+        }
 
         // Rendering.
         ImGui::Render();

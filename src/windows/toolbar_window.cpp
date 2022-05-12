@@ -12,14 +12,16 @@ ToolBar::ToolBar(std::shared_ptr<meov::core::Model> &model,
                  bool &showLog,
                  bool &showGit,
                  bool &showCamera,
-                 bool &showScene)
+                 bool &showScene,
+                 bool &showLightning)
     : Base{ "ToolBar" }
     , mModelPointer{ &model }
     , mDone{ &done }
     , mShowLog{ &showLog }
     , mShowGit{ &showGit }
     , mShowCamera{ &showCamera }
-    , mShowScene{ &showScene } {}
+    , mShowScene{ &showScene }
+    , mShowLightning{ &showLightning } {}
 
 void ToolBar::DrawImpl() {
     // Open file with ImGuiFileDialog.
@@ -48,6 +50,7 @@ void ToolBar::DrawImpl() {
     ImGui::Checkbox("Log", mShowLog);
     ImGui::Checkbox("Git info", mShowGit);
     ImGui::Checkbox("Camera", mShowCamera);
+    ImGui::Checkbox("Lightning", mShowLightning);
     ImGui::Checkbox("Scene", mShowScene);
 }
 

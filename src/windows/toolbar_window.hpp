@@ -13,7 +13,8 @@ public:
                      bool &showLog,
                      bool &showGit,
                      bool &showCamera,
-                     bool &showScene);
+                     bool &showScene,
+                     bool &showLightning);
 
 protected:
     void DrawImpl() override final;
@@ -26,6 +27,7 @@ private:
     bool *mShowGit;
     bool *mShowCamera;
     bool *mShowScene;
+    bool *mShowLightning;
 };
 
 }  // namespace meov::Window
