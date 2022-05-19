@@ -24,6 +24,10 @@
 #include "resource_manager.hpp"
 #include "camera.hpp"
 
+#include "TransformComponent.hpp"
+#include "ModelComponent.hpp"
+#include "object.hpp"
+
 int main() {
     stbi_set_flip_vertically_on_load(true);
     // Logger utilities.
@@ -42,7 +46,11 @@ int main() {
     graphics->PushProgram(*program);
 
     // Default model displayed when the application runs.
-    auto modelObject{ RESOURCES->LoadModel("models\\clothes.obj") };
+    auto object{ std::make_shared<meov::core::Object>("Test object") };
+    object->AddComponent<meov::core::components::TransformComponent>("Transform");
+    object->AddComponent<meov::core::components::ModelComponent>("Model", "models\\clothes.obj");
+
+    // auto modelObject{ RESOURCES->LoadModel("models\\clothes.obj") };
 
     // Frame buffer object initialization.
     meov::core::gl::FrameBuffer buffer;
@@ -72,11 +80,11 @@ int main() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
     meov::utilities::time::Clock clock;                                    // Timer.
     // Dear ImGui windows.
-    meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene, showLightning };  // Toolbar.
+    // meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene, showLightning };  // Toolbar.
     meov::Window::Git gitW;                                                                                       // Git info.
     meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };                           // Logger window.
-    meov::Window::Properties props;
-    props.Select(modelObject);
+    meov::Window::Properties propertiesW;
+    propertiesW.Select(object);
 
     // Subscribing log storage to our logger window.
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
@@ -93,6 +101,8 @@ int main() {
         program->Get("view")->Set(view);
         // program->Get("model")->Set(model);
         program->UnUse();
+        if(object)
+            object->Update(clock.Delta());
 
         // Start the Dear ImGui frame.
         ImGui_ImplOpenGL3_NewFrame();
@@ -104,8 +114,10 @@ int main() {
 
         // Draw model object.
         buffer.Bind();
-        if(modelObject)
-            modelObject->Draw(*graphics);
+        // if(modelObject)
+        // modelObject->Draw(*graphics);
+        if(object)
+            object->Draw(*graphics);
         buffer.UnBind();
 
         // Draw scene window.
@@ -125,10 +137,10 @@ int main() {
             ImGui::End();
         }
 
-        toolbarW.Draw();
+        // toolbarW.Draw();
         logW->Draw(showLog);
         gitW.Draw(showGit);
-        props.Draw();
+        propertiesW.Draw();
 
         if(showCamera) {
             ImGui::Begin("Camera");

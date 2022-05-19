@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "afe4fae02c40e543a2217efcb26bf6b36bade0e2-dirty"
-#define GIT_COMMIT_DATE "Thu May 12 10:17:25 2022"
-#define GIT_COMMIT_MESSAGE "Small refactoring of widgets."
+#define GIT_COMMIT_HASH "cbee06ab7d9437e2e7d61c10c1a1b504a01d78d5-dirty"
+#define GIT_COMMIT_DATE "Thu May 19 09:05:20 2022"
+#define GIT_COMMIT_MESSAGE "Add transform and properties"
 
 namespace meov {
 

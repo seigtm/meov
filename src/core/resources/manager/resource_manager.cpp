@@ -23,45 +23,48 @@ Manager *Manager::Instance() {
     return &manager;
 }
 
-std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &name, bool reload) {
-    if(name.empty()) return nullptr;
+std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, bool reload) {
+    if(path.empty()) return nullptr;
 
-    if(mPrograms.find(name.string()) == mPrograms.end() || reload) {
-        auto program = mLoader->LoadProgram(mResourcesRoot / name);
+    const auto name{ path.stem().string() };
+    if(mPrograms.find(name) == mPrograms.end() || reload) {
+        auto program = mLoader->LoadProgram(mResourcesRoot / path);
         if(!program) {
-            LOGE << "Error while loading texture " << name.string();
+            LOGE << "Error while loading texture " << path.string();
         }
-        mPrograms[name.string()] = std::move(program);
+        mPrograms[name] = std::move(program);
     }
-    return mPrograms[name.string()];
+    return mPrograms[name];
 }
 
-std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &name, Texture::Type type, bool reload) {
-    if(!mLoader || name.empty()) return nullptr;
+std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Type type, bool reload) {
+    if(!mLoader || path.empty()) return nullptr;
 
-    if(mTextures.find(name.string()) == mTextures.end() || reload) {
-        auto texture = mLoader->LoadTexture(mResourcesRoot / name, type);
+    const auto name{ path.stem().string() };
+    if(mTextures.find(name) == mTextures.end() || reload) {
+        auto texture = mLoader->LoadTexture(mResourcesRoot / path, type);
         if(!texture) {
-            LOGE << "Error while loading texture " << name.string();
+            LOGE << "Error while loading texture " << path.string();
             return nullptr;
         }
-        mTextures[name.string()] = std::move(texture);
+        mTextures[name] = std::move(texture);
     }
-    return mTextures[name.string()];
+    return mTextures[name];
 }
 
-std::shared_ptr<Model> Manager::LoadModel(const fs::path &name, bool reload) {
-    if(!mLoader || name.empty()) return nullptr;
+std::shared_ptr<Model> Manager::LoadModel(const fs::path &path, bool reload) {
+    if(!mLoader || path.empty()) return nullptr;
 
-    if(mModels.find(name.string()) == mModels.end() || reload) {
-        auto model = mLoader->LoadModel(mResourcesRoot / name);
+    const auto name{ path.stem().string() };
+    if(mModels.find(name) == mModels.end() || reload) {
+        auto model = mLoader->LoadModel(mResourcesRoot / path);
         if(!model) {
-            LOGE << "Error while loading mesh " << name.string();
+            LOGE << "Error while loading mesh " << path.string();
             return nullptr;
         }
-        mModels[name.string()] = std::move(model);
+        mModels[name] = std::move(model);
     }
-    return mModels[name.string()];
+    return mModels[name];
 }
 
 }  // namespace meov::core::resources
