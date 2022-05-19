@@ -1,0 +1,78 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 22.11.2011 12:50:55
+
+newmtl Lava_lamp_metal_bottom
+	Ns 53.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka lava_lamp_metal.jpg
+	map_Kd lava_lamp_metal.jpg
+
+newmtl Lava_lamp_glass
+	Ns 53.0000
+	Ni 1.5500
+	d 0.3000
+	Tr 0.7000
+	Tf 0.3000 0.3000 0.3000 
+	illum 2
+	Ka 0.2627 0.2627 0.2627
+	Kd 0.2627 0.2627 0.2627
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Lava_lamp_bubble_lava_1
+	Ns 51.0000
+	Ni 1.5000
+	d 0.9500
+	Tr 0.0500
+	Tf 0.9500 0.9500 0.9500 
+	illum 2
+	Ka 1.0000 0.0000 0.0000
+	Kd 1.0000 0.0000 0.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.7500 0.0000 0.0000
+
+newmtl Lava_lamp_bubble_lava_2
+	Ns 51.0000
+	Ni 1.5000
+	d 0.9500
+	Tr 0.0500
+	Tf 0.9500 0.9500 0.9500 
+	illum 2
+	Ka 1.0000 0.0000 0.0000
+	Kd 1.0000 0.0000 0.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.7500 0.0000 0.0000
+
+newmtl Lava_lamp_bubble_lava_3
+	Ns 51.0000
+	Ni 1.5000
+	d 0.9500
+	Tr 0.0500
+	Tf 0.9500 0.9500 0.9500 
+	illum 2
+	Ka 1.0000 0.0000 0.0000
+	Kd 1.0000 0.0000 0.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.7500 0.0000 0.0000
+
+newmtl Lava_lamp_metal_top
+	Ns 53.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka lava_lamp_metal.jpg
+	map_Kd lava_lamp_metal.jpg

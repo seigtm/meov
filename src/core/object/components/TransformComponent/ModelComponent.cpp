@@ -1,4 +1,6 @@
 #include "common.hpp"
+#include "holder.hpp"
+#include "TransformComponent.hpp"
 #include "ModelComponent.hpp"
 #include "ImGuiFileDialog.h"
 #include "resource_manager.hpp"
@@ -11,29 +13,42 @@ ModelComponent::ModelComponent(const fs::path &model)
     , mModel{ RESOURCES->LoadModel(model) } {}
 
 void ModelComponent::Draw(Graphics &g) {
+    auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+    if(transform) transform->PushTransform(g);
     if(Valid())
         mModel->Draw(g);
+    if(transform) transform->PopTransform(g);
 }
 
 void ModelComponent::Update(double) {
 }
 
 void ModelComponent::Serialize() {
-    const ImVec4 red{ 0.9f, 0.1f, 0.3f, 1.0f };
-    const ImVec4 white{ 0.9f, 0.9f, 0.9f, 1.0f };
+    struct ErrorWrapper {
+        bool mValid{ false };
+        explicit ErrorWrapper(bool valid)
+            : mValid{ valid } {
+            if(!mValid)
+                ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
+        }
+        ~ErrorWrapper() {
+            if(!mValid)
+                ImGui::PopStyleColor();
+        }
+    };
 
-    ImGui::PushStyleColor(ImGuiCol_Border, Valid() ? white : red);
-    if(!ImGui::CollapsingHeader(Name().c_str())) {
-        ImGui::PopStyleColor();
-        return;
+    {
+        ErrorWrapper ew{ Valid() };
+        if(!ImGui::CollapsingHeader(Name().c_str())) {
+            return;
+        }
     }
-    ImGui::PopStyleColor();
 
     auto *dialog{ ImGuiFileDialog::Instance() };
     constexpr std::string_view DialogName{ "ChooseFileDlgKey" };
     constexpr std::string_view Extensions{ ".obj,.gltf,.fbx,.stl" };
 
-    ImGui::TextColored(Valid() ? white : red, "Path: %s", mPath.string().c_str());
+    ImGui::Text("Path: %s", mPath.string().c_str());
     ImGui::SameLine();
     if(ImGui::Button("Change")) {
         dialog->OpenModal(DialogName.data(), "Choose model", Extensions.data(), ".");

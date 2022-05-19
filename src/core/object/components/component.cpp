@@ -3,10 +3,12 @@
 namespace meov::core::components {
 
 Component::Component(std::string &&name)
-    : mName{ std::move(name) } {}
+    : mixin::Named{ std::move(name) } {}
 
-const std::string &Component::Name() const {
-    return mName;
+void Component::Serialize() {}
+
+void Component::SetHolder(std::weak_ptr<Holder> &&holder) {
+    mHolder = std::move(holder);
 }
 
 }  // namespace meov::core::components

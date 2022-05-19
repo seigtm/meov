@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include "Named.h"
 
 namespace meov::core {
 
@@ -9,21 +10,23 @@ class Graphics;
 
 namespace components {
 
-class Component {
+class Holder;
+
+class Component : public mixin::Named {
 public:
     using Shared = std::shared_ptr<Component>;
 
     explicit Component(std::string &&name);
     virtual ~Component() = default;
 
-    const std::string &Name() const;
-
     virtual void Draw(Graphics &) = 0;
     virtual void Update(double) = 0;
-    virtual void Serialize() {}  // for ImGui
+    virtual void Serialize();  // for ImGui
 
-private:
-    const std::string mName;
+    void SetHolder(std::weak_ptr<Holder> &&holder);
+
+protected:
+    std::weak_ptr<Holder> mHolder;
 };
 
 }  // namespace components

@@ -9,22 +9,18 @@ Object::Object(std::string &&name)
 }
 
 void Object::Draw(Graphics &g) {
-    for(auto &&component : mComponents)
-        component->Draw(g);
+    ForEachComponent([&g](components::Component::Shared &comp) { comp->Draw(g); });
 }
 
 void Object::Update(double delta) {
-    for(auto &&component : mComponents)
-        component->Update(delta);
+    ForEachComponent([&delta](components::Component::Shared &comp) { comp->Update(delta); });
 }
 
 void Object::Serialize() {
     if(!ImGui::CollapsingHeader(Name().c_str()))
         return;
 
-    for(auto &&component : mComponents)
-        component->Serialize();
-
+    ForEachComponent([](components::Component::Shared &comp) { comp->Serialize(); });
     ImGui::Spacing();
 }
 

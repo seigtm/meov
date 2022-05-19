@@ -47,8 +47,8 @@ int main() {
 
     // Default model displayed when the application runs.
     auto object{ std::make_shared<meov::core::Object>("Test object") };
-    object->AddComponent<meov::core::components::TransformComponent>("Transform");
-    object->AddComponent<meov::core::components::ModelComponent>("Model", "models\\clothes.obj");
+    object->AddComponent<meov::core::components::TransformComponent>();
+    object->AddComponent<meov::core::components::ModelComponent>("models\\clothes.obj");
 
     // auto modelObject{ RESOURCES->LoadModel("models\\clothes.obj") };
 
