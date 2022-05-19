@@ -16,10 +16,13 @@ public:
                      bool &showScene,
                      bool &showLightning);
 
+    void setExtensions(const std::string_view ext);
+
 protected:
     void DrawImpl() override final;
 
 private:
+    std::string mExtensions{ ".obj,.gltf,.fbx,.stl" };
     // FIXME: Ultra cringy.
     std::shared_ptr<meov::core::Model> *mModelPointer;
     bool *mDone;

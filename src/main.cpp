@@ -10,6 +10,7 @@
 #include "windows/git_window.hpp"
 #include "windows/log_window.hpp"
 #include "windows/toolbar_window.hpp"
+#include "windows/properties.hpp"
 
 #include "ogl_frame_buffer.hpp"
 #include "shaders_program.hpp"
@@ -48,9 +49,9 @@ int main() {
     buffer.Initialize();
 
     // Camera object and variables-helpers.
-    auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 10.0f }) };
+    auto camera{ std::make_shared<meov::core::Camera>(glm::vec3{ .0f, .0f, 60.0f }) };
     glm::mat4 projection{ 1 };
-    glm::mat4 model{ 1.f };
+    // glm::mat4 model{ 1.f };
     glm::vec3 lightPos{ 1.f, 1.f, 1.f };
     bool blinn{ true };  // Use Phong reflection model.
 
@@ -74,6 +75,9 @@ int main() {
     meov::Window::ToolBar toolbarW{ modelObject, done, showLog, showGit, showCamera, showScene, showLightning };  // Toolbar.
     meov::Window::Git gitW;                                                                                       // Git info.
     meov::Window::Log::Reference logW{ new meov::Window::Log{ "Log", { 1280, 850 } } };                           // Logger window.
+    meov::Window::Properties props;
+    props.Select(modelObject);
+
     // Subscribing log storage to our logger window.
     auto logStorage{ meov::utils::LogUtils::Instance()->GetLogStorage() };
     if(logStorage != nullptr) {
@@ -87,7 +91,7 @@ int main() {
         program->Use();
         program->Get("projection")->Set(projection);
         program->Get("view")->Set(view);
-        program->Get("model")->Set(model);
+        // program->Get("model")->Set(model);
         program->UnUse();
 
         // Start the Dear ImGui frame.
@@ -121,13 +125,11 @@ int main() {
             ImGui::End();
         }
 
-        // Show toolbar window.
         toolbarW.Draw();
-        // Show singleton log window.
         logW->Draw(showLog);
-        // Show Git info window.
         gitW.Draw(showGit);
-        // Draw camera window.
+        props.Draw();
+
         if(showCamera) {
             ImGui::Begin("Camera");
             auto position{ camera->Position() };
@@ -154,7 +156,7 @@ int main() {
                 view[0].x, view[0].y, view[0].z, view[0].w,
                 view[1].x, view[1].y, view[1].z, view[1].w,
                 view[2].x, view[2].y, view[2].z, view[2].w);
-            ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
+            // ImGui::Text("Object position: [%.2f, %.2f, %.2f]", model[0].w, model[1].w, model[2].w);
             ImGui::End();
         }
         // Draw lightning window.

@@ -83,11 +83,15 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
 
     auto &program{ mProgramQueue.front() };
     program.Use();
+    program.Get("model")->Set(mResultTransform);
 
-    unsigned diffuseCount{ 1 };
-    unsigned specularCount{ 1 };
-    unsigned normalCount{ 1 };
-    unsigned heightCount{ 1 };
+    std::unordered_map<Texture::Type, unsigned> counters{
+        { Texture::Type::Diffuse, 1 },
+        { Texture::Type::Specular, 1 },
+        { Texture::Type::Normal, 1 },
+        { Texture::Type::Height, 1 },
+        { Texture::Type::Invalid, std::numeric_limits<unsigned>::max() }
+    };
 
     const auto &textures{ mesh.Textures() };
     for(size_t i{}; i < textures.size(); ++i) {
@@ -95,26 +99,10 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
         if(!(texture && texture->Valid())) {
             continue;
         }
-        texture->Activate(i);
-        std::stringstream name;
-        name << "texture";
-        switch(texture->GetType()) {
-            case Texture::Type::Diffuse: {
-                name << "Diffuse" << diffuseCount++;
-            } break;
-            case Texture::Type::Specular: {
-                name << "Specular" << specularCount++;
-            } break;
-            case Texture::Type::Normal: {
-                name << "Normal" << normalCount++;
-            } break;
-            case Texture::Type::Height: {
-                name << "Height" << heightCount++;
-            } break;
-        }
+        const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
 
         texture->Bind();
-        if(auto &var{ program.Get(name.str()) }; var != nullptr)
+        if(auto &var{ program.Get(name) }; var != nullptr)
             var->Set(static_cast<int>(i));
     }
 

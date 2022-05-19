@@ -8,7 +8,7 @@ class Camera {
 public:
     static constexpr float DefaultYaw{ -90.0f };
     static constexpr float DefaultPitch{};
-    static constexpr float DefaultSpeed{ 0.5f };
+    static constexpr float DefaultSpeed{ 50.f };
     static constexpr float DefaultSensitivity{ 0.1f };
     static constexpr float DefaultZoom{ 35.0f };
 

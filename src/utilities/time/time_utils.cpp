@@ -20,6 +20,7 @@ ch::nanoseconds Clock::OriginalDelta() const {
 void Stopwatch::Start() {
     mState = State::Running;
     mBegin = HRC::now();
+    mEnd = {};
 }
 
 void Stopwatch::Stop() {

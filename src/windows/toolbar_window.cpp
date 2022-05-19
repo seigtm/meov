@@ -23,21 +23,31 @@ ToolBar::ToolBar(std::shared_ptr<meov::core::Model> &model,
     , mShowScene{ &showScene }
     , mShowLightning{ &showLightning } {}
 
+void ToolBar::setExtensions(const std::string_view ext)
+{
+    if (ext.empty())
+        return;
+    mExtensions = std::string{ ext };
+}
+
 void ToolBar::DrawImpl() {
     // Open file with ImGuiFileDialog.
-    if(ImGui::Button("Open File"))
+    auto *dialog{ ImGuiFileDialog::Instance() };
+    constexpr std::string_view DialogName{ "ChooseFileDlgKey" };
+    if(ImGui::Button("Open File")) {
         // Open modal.
-        ImGuiFileDialog::Instance()->OpenModal("ChooseFileDlgKey", "Choose File", ".obj,.gltf,.fbx", ".");
+        dialog->OpenModal(DialogName.data(), "Choose File", mExtensions.c_str(), ".");
+    }
     // Display modal (should be separated from the 'open' call).
-    if(ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-        if(ImGuiFileDialog::Instance()->IsOk()) {
-            auto modelPath = ImGuiFileDialog::Instance()->GetFilePathName();
+    if(dialog->Display(DialogName.data())) {
+        if(dialog->IsOk()) {
+            auto modelPath = dialog->GetFilePathName();
             if(mModelPointer)
                 mModelPointer->swap(meov::core::resources::Manager::Instance()->LoadModel(modelPath));
             else
                 LOGE << "ToolBar has no pointer to the model Object in it.";
         }
-        ImGuiFileDialog::Instance()->Close();
+        dialog->Close();
     }
 
     // Close program.

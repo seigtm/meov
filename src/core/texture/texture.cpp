@@ -43,8 +43,20 @@ void Texture::Bind() {
     glBindTexture(GL_TEXTURE_2D, mId);
 }
 
-void Texture::Activate(const int id) {
+std::string Texture::Activate(const int id) {
     glActiveTexture(GL_TEXTURE0 + id);
+    switch(GetType()) {
+        case Texture::Type::Diffuse:
+            return "textureDiffuse";
+        case Texture::Type::Specular:
+            return "textureSpecular";
+        case Texture::Type::Normal:
+            return "textureNormal";
+        case Texture::Type::Height:
+            return "textureHeight";
+        default: break;
+    }
+    return "invalid texture";
 }
 
 bool Texture::Valid() const {

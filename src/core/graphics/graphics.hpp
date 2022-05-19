@@ -45,6 +45,7 @@ public:
         std::queue<glm::u8vec4> mColorQueue;
         std::queue<glm::mat4> mTransformQueue;
         std::queue<shaders::Program> mProgramQueue;
+        glm::mat4 mResultTransform{ 1.f };
     };
 
     Graphics::Graphics();

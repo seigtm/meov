@@ -87,9 +87,13 @@ void Graphics::Impl::PopColor() {
 
 void Graphics::Impl::PushTransform(const glm::mat4 &transform) {
     mTransformQueue.push(transform);
+    mResultTransform *= transform;
 }
 void Graphics::Impl::PopTransform() {
-    if(mTransformQueue.size() != 1) mTransformQueue.pop();
+    if(mTransformQueue.size() == 1)
+        return;
+    mResultTransform *= glm::inverse(mTransformQueue.front());
+    mTransformQueue.pop();
 }
 
 void Graphics::Impl::PushProgram(const shaders::Program &program) {

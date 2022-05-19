@@ -20,7 +20,7 @@ public:
     Texture &operator=(const Texture &other) = delete;
 
     void Bind();
-    void Activate(const int id);
+    [[nodiscard]] std::string Activate(const int id);
 
     bool Valid() const;
     unsigned GetID() const;
