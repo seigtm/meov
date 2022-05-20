@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "b0c5b835fad00ba1fb28536b21cacdf963cb9454-dirty"
-#define GIT_COMMIT_DATE "Thu May 19 11:42:56 2022"
-#define GIT_COMMIT_MESSAGE "Add object and components"
+#define GIT_COMMIT_HASH "0c53e4d3ed7ff127c03c5f49d21f3e06895846c8-dirty"
+#define GIT_COMMIT_DATE "Thu May 19 13:00:06 2022"
+#define GIT_COMMIT_MESSAGE "Tried to make visible lighting"
 
 namespace meov {
 

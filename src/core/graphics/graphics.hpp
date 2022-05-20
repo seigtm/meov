@@ -14,7 +14,7 @@ class Mesh;
 
 class Graphics final {
 public:
-    class Graphics::Impl {
+    class Impl {
         static constexpr glm::u8vec4 DefaultColor{ 0xFF, 0xFF, 0xFF, 0xFF };
         static constexpr glm::mat4 DefaultTransform{ 1 };
 
@@ -23,12 +23,16 @@ public:
 
         virtual void PushColor(const glm::u8vec4 &color);
         virtual void PopColor();
+        virtual glm::u8vec4 CurrentColor() const;
 
         virtual void PushTransform(const glm::mat4 &transform);
         virtual void PopTransform();
+        virtual glm::mat4 CurrentTransform() const;
+        virtual glm::mat4 ResultingTransform() const;
 
         virtual void PushProgram(const shaders::Program &program);
         virtual void PopProgram();
+        virtual shaders::Program CurrentProgram() const;
 
         virtual void DrawDot(const glm::vec3 &position, const float radius = 1) = 0;
         virtual void DrawLine(std::initializer_list<glm::vec3> &&vertices) = 0;
@@ -48,16 +52,20 @@ public:
         glm::mat4 mResultTransform{ 1.f };
     };
 
-    Graphics::Graphics();
+    Graphics();
 
     void PushColor(const glm::u8vec4 &color);
     void PopColor();
+    glm::u8vec4 CurrentColor() const;
 
     void PushTransform(const glm::mat4 &transform);
     void PopTransform();
+    glm::mat4 CurrentTransform() const;
+    glm::mat4 ResultingTransform() const;  // All pushed transforms
 
     void PushProgram(const shaders::Program &program);
     void PopProgram();
+    shaders::Program CurrentProgram() const;
 
     void DrawDot(const glm::vec3 &position, const float radius = 1);
     void DrawLine(std::initializer_list<glm::vec3> &&vertices);

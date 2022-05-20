@@ -24,6 +24,7 @@ public:
            float yaw = DefaultYaw,
            float pitch = DefaultPitch);
 
+    glm::mat4 Projection(const glm::vec2 &screenSize) const;
     glm::mat4 ViewMatrix() const;
     const glm::vec3 &Position() const;
     float Yaw() const;

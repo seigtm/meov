@@ -5,39 +5,32 @@
 
 namespace meov::core {
 
-constexpr int32_t DefaultFrameBufferWidth{ 1280 };
-constexpr int32_t DefaultFrameBufferHeight{ 760 };
-
-template<class Implementation>
 class FrameBuffer final {
 public:
-    void Initialize(
-        int32_t width = DefaultFrameBufferWidth,
-        int32_t height = DefaultFrameBufferHeight) {
-        mImpl.reset(new Implementation{ width, height });
-    }
-    void Destroy() {
-        mImpl.reset();
-    }
+    static constexpr int32_t DefaultWidth{ 1280 };
+    static constexpr int32_t DefaultHeight{ 760 };
 
-    void Bind() {
-        if (IsInitialized()) mImpl->Bind();
-    }
-    void UnBind() {
-        if (IsInitialized()) mImpl->UnBind();
-    }
+    class Impl {
+    public:
+        Impl(int32_t width, int32_t height);
+        virtual ~Impl() = default;
+        virtual void Bind(){};
+        virtual void UnBind(){};
+        virtual uint32_t GetFrameTexture() const = 0;
 
-    uint32_t GetFrameTexture() const {
-        if (IsInitialized()) {
-            return mImpl->GetFrameTexture();
-        }
-        return 0;
+    protected:
+        int32_t mWidth{ -1 };
+        int32_t mHeight{ -1 };
     };
 
-    bool IsInitialized() const { return mImpl != nullptr; }
+    FrameBuffer(int32_t width = DefaultWidth, int32_t height = DefaultHeight);
+
+    void Bind();
+    void UnBind();
+    uint32_t GetFrameTexture() const;
 
 protected:
-    std::unique_ptr<Implementation> mImpl;
+    std::shared_ptr<Impl> mImpl;
 };
 
 };  // namespace meov::core

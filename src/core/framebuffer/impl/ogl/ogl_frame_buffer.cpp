@@ -4,9 +4,11 @@
 
 namespace meov::core::gl {
 
-FrameBufferImplementation::FrameBufferImplementation(int32_t width, int32_t height)
-    : mWidth{ width >= 0 ? width : 1280 }
-    , mHeight{ height >= 0 ? height : 760 } {
+OGLFrameBufferImpl::OGLFrameBufferImpl(int32_t width, int32_t height)
+    : FrameBuffer::Impl{
+        width >= 0 ? width : FrameBuffer::DefaultWidth,
+        height >= 0 ? height : FrameBuffer::DefaultHeight
+    } {
     // Creating framebuffer object
     glGenFramebuffers(1, &mFBO);
 
@@ -37,7 +39,7 @@ FrameBufferImplementation::FrameBufferImplementation(int32_t width, int32_t heig
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-FrameBufferImplementation::~FrameBufferImplementation() {
+OGLFrameBufferImpl::~OGLFrameBufferImpl() {
     if(mFBO == 0) return;
 
     glDeleteTextures(1, &mTexId);
@@ -46,21 +48,25 @@ FrameBufferImplementation::~FrameBufferImplementation() {
     mTexId = mRBO = mFBO = 0;
 }
 
-void FrameBufferImplementation::Bind() {
+void OGLFrameBufferImpl::Bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, mWidth, mHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void FrameBufferImplementation::UnBind() {
+void OGLFrameBufferImpl::UnBind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-uint32_t FrameBufferImplementation::GetFrameTexture() {
+uint32_t OGLFrameBufferImpl::GetFrameTexture() const {
     return mTexId;
+}
+
+uint32_t OGLFrameBufferImpl::GetFrameDepthBuffer() const {
+    return mRBO;
 }
 
 };  // namespace meov::core::gl

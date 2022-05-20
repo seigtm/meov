@@ -2,6 +2,7 @@
 
 #include "shaders_program.hpp"
 #include "graphics.hpp"
+#include "frame_buffer.hpp"
 
 namespace meov::core::factories {
 
@@ -17,6 +18,9 @@ public:
         const std::string &name) = 0;
 
     virtual std::shared_ptr<Graphics::Impl> MakeGraphicsImpl() = 0;
+
+    virtual std::shared_ptr<FrameBuffer::Impl> MakeFrameBufferImpl(
+        int32_t width, int32_t height) = 0;
 };
 
 

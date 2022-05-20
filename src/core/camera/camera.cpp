@@ -24,6 +24,10 @@ Camera::Camera(const glm::vec3 pos, const glm::vec3 up, float yaw, float pitch)
     UpdateDirections();
 }
 
+glm::mat4 Camera::Projection(const glm::vec2 &screenSize) const {
+    return glm::perspective(glm::radians(mZoom), screenSize.x / screenSize.y, .001f, 1000.0f);
+}
+
 glm::mat4 Camera::ViewMatrix() const {
     return glm::lookAt(mPosition, mPosition + mFrontDir, mUpDir);
 }

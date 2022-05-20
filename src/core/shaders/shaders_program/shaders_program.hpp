@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "shader.hpp"
+#include "glm/glm.hpp"
 
 namespace meov::core::shaders {
 

@@ -3,6 +3,7 @@
 #include "ogl_shader.hpp"
 #include "ogl_shaders_program.hpp"
 #include "ogl_graphics.hpp"
+#include "ogl_frame_buffer.hpp"
 
 #include "ogl_impl_factory.hpp"
 
@@ -20,6 +21,10 @@ std::shared_ptr<shaders::Program::Impl> OGLImplFactory::MakeProgramImpl(const st
 
 std::shared_ptr<Graphics::Impl> OGLImplFactory::MakeGraphicsImpl() {
     return std::make_shared<gl::OGLGraphicsImpl>();
+}
+
+std::shared_ptr<FrameBuffer::Impl> OGLImplFactory::MakeFrameBufferImpl(int32_t width, int32_t height) {
+    return std::make_shared<gl::OGLFrameBufferImpl>(width, height);
 }
 
 }  // namespace meov::core::factories
