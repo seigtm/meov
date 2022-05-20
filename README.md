@@ -1,8 +1,70 @@
 # **_MEOV_**
 
+**‼️ Note**: this project is currently under development.
+
 **Minimalistic Easy Object Viewer**: lightweight and easy-to-use 3D object viewer.
 
-## **Scheme:**
+## **Diagrams:**
+
+### `Named`, `Virtual` and `Component` classes diagram:
+
+```mermaid
+classDiagram
+direction TB
+
+Object --|> Holder
+Object --|> Named
+
+Holder "1" o--> "*" Component
+Component "1" o..> "1" Holder : contains
+Component <|-- TransformComponent
+Component <|-- ModelComponent
+Component <|-- LightingComponent
+
+class Named {
+    -string mName
+
+    +Named(string&& name) ctor
+    +Name() string
+    +Rename(string&& name) void
+}
+
+class Component {
+    <<virtual>>
+    # weak_ptr~Holder~ mHolder
+
+    +Component(string&& name) ctor
+    +Draw()* void
+    +Update(double)* void
+    +Serialize()* void
+    +SetHolder(weak_ptr~Holder~&& holder) void
+}
+
+class TransformComponent
+class ModelComponent
+class LightingComponent
+
+class Holder {
+    -GetTypeName()$ string
+    -unordered_map~string, Component::Shared~ mComponents
+
+    +GetComponent() T ptr
+    +RemoveComponent() bool
+    +AddComponent(Args&&... args) T ptr
+    +ForEachComponent(function~void(Component::Shared&)~&& method)
+}
+
+class Object {
+    <<virtual>>
+    +Object(string&& name) ctor
+    +Draw(Graphics& g)* void
+    +Update(double delta)* void
+    +Serialize()* void
+}
+
+```
+
+### (OLD) Main scene things diagram:
 
 ```mermaid
 classDiagram
@@ -87,29 +149,7 @@ classDiagram
 
 ```
 
-```cpp
-
-meov::Core::Core()
-    : mGraphics{ std::make_unique<Graphics>() }
-{
-    // initialize
-}
-
-int meov::Core::run() {
-    Time timer;
-
-    while(mWindow->isOpen()) {
-        mScene->update(timer.getDelta());
-        mWindow->update(timer.getDelta());
-
-        mScene->render(mGraphics);
-        mWindow->draw(mGraphics);
-    }
-
-    return 0;
-}
-
-```
+## (Not implemented) JSON configuration file example:
 
 ```json
 [
