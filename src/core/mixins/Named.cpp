@@ -1,4 +1,4 @@
-#include "Named.h"
+#include "named.hpp"
 
 
 namespace meov::core::mixin {
@@ -10,9 +10,9 @@ const std::string &Named::Name() const {
     return mName;
 }
 void Named::Rename(std::string &&name) {
-	if (name.empty())
-		return;
-	mName = std::move(name);
+    if(name.empty())
+        return;
+    mName = std::move(name);
 }
 
 }  // namespace meov::core::mixin

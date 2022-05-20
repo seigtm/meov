@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component.hpp"
-#include "Transformable.h"
+#include "transformable.hpp"
 
 namespace meov::core::components {
 

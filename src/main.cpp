@@ -10,12 +10,12 @@
 #include "windows/git_window.hpp"
 #include "windows/log_window.hpp"
 #include "windows/toolbar_window.hpp"
-#include "windows/properties.hpp"
+#include "windows/properties_window.hpp"
 
 #include "shaders_program.hpp"
-#include "mesh.h"
+#include "mesh.hpp"
 #include "model.hpp"
-#include "vertex.h"
+#include "vertex.hpp"
 #include "texture.hpp"
 #include "graphics.hpp"
 
@@ -23,8 +23,8 @@
 #include "resource_manager.hpp"
 #include "camera.hpp"
 
-#include "TransformComponent.hpp"
-#include "ModelComponent.hpp"
+#include "transform_component.hpp"
+#include "model_component.hpp"
 #include "object.hpp"
 
 int main(int argc, char *argv[]) {

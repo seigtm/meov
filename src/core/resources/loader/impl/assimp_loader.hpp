@@ -11,7 +11,7 @@
 #include "loader.hpp"
 #include "model.hpp"
 #include "resource_manager.hpp"
-#include "vertex.h"
+#include "vertex.hpp"
 
 // Logger.
 #include <plog/Log.h>

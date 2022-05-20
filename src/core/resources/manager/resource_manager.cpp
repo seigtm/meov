@@ -4,7 +4,7 @@
 
 #include "assimp_loader.hpp"
 #include "texture.hpp"
-#include "mesh.h"
+#include "mesh.hpp"
 
 namespace meov::core::resources {
 

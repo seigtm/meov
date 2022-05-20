@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "Named.h"
+#include "named.hpp"
 #include "component.hpp"
 #include "holder.hpp"
 

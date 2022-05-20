@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-#include "TransformComponent.hpp"
+#include "transform_component.hpp"
 
 namespace meov::core::components {
 

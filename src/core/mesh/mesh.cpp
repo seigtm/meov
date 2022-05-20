@@ -1,7 +1,7 @@
 #include "common.hpp"
 
-#include "mesh.h"
-#include "vertex.h"
+#include "mesh.hpp"
+#include "vertex.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "graphics.hpp"

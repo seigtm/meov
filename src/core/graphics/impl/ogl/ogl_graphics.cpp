@@ -1,7 +1,7 @@
 #include "common.hpp"
 
-#include "mesh.h"
-#include "vertex.h"
+#include "mesh.hpp"
+#include "vertex.hpp"
 #include "texture.hpp"
 #include "ogl_graphics.hpp"
 

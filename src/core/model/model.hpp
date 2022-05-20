@@ -5,11 +5,11 @@
 #include <vector>
 
 // MEOV.
-#include "mesh.h"
+#include "mesh.hpp"
 #include "texture.hpp"
 #include "graphics.hpp"
 
-#include "Transformable.h"
+#include "transformable.hpp"
 
 namespace meov::core {
 

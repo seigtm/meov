@@ -10,7 +10,7 @@
 #include "windows/git_window.hpp"
 #include "windows/log_window.hpp"
 #include "windows/toolbar_window.hpp"
-#include "windows/properties.hpp"
+#include "windows/properties_window.hpp"
 
 namespace meov::core {
 

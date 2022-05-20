@@ -1,7 +1,7 @@
 #include "common.hpp"
 #include "holder.hpp"
-#include "TransformComponent.hpp"
-#include "ModelComponent.hpp"
+#include "transform_component.hpp"
+#include "model_component.hpp"
 #include "ImGuiFileDialog.h"
 #include "resource_manager.hpp"
 

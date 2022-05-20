@@ -5,8 +5,8 @@
 #include "core.hpp"
 
 #include "object.hpp"
-#include "TransformComponent.hpp"
-#include "ModelComponent.hpp"
+#include "transform_component.hpp"
+#include "model_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"

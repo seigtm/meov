@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-#include "vertex.h"
+#include "vertex.hpp"
 
 namespace meov::core {
 

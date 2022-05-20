@@ -1,5 +1,5 @@
 #include "common.hpp"
-#include "Definitions.hpp"
+#include "definitions.hpp"
 
 #include "impl_factory.hpp"
 #include "ogl_impl_factory.hpp"

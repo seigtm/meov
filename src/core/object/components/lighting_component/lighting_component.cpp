@@ -1,11 +1,11 @@
 #include "common.hpp"
 
-#include "LightingComponent.hpp"
+#include "lighting_component.hpp"
 #include "holder.hpp"
 #include "graphics.hpp"
 
-#include "TransformComponent.hpp"
-#include "ModelComponent.hpp"
+#include "transform_component.hpp"
+#include "model_component.hpp"
 
 namespace meov::core::components {
 
