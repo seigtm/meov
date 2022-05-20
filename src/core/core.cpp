@@ -7,6 +7,8 @@
 #include "object.hpp"
 #include "transform_component.hpp"
 #include "model_component.hpp"
+#include "move_component.hpp"
+#include "camera_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"
@@ -29,6 +31,11 @@ Core::ExecutionResult Core::Run() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
     // Default model displayed when the application runs.
+    auto camera{ mObjects.emplace_back(std::make_shared<Object>("Camera")) };
+    camera->AddComponent<components::TransformComponent>();
+    camera->AddComponent<components::MoveComponent>();
+    camera->AddComponent<components::CameraComponent>(mGraphics, glm::vec3{ .0f, .0f, 30.f });
+
     auto object{ mObjects.emplace_back(std::make_shared<Object>("Test object")) };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
@@ -300,6 +307,5 @@ Core::Core(std::vector<std::string>&& argv)
             }),
     } {
 }
-
 
 }  // namespace meov::core

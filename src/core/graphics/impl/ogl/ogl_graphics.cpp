@@ -117,5 +117,4 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
     glActiveTexture(GL_TEXTURE0);
 }
 
-
 }  // namespace meov::core::gl

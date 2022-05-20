@@ -30,6 +30,21 @@ glm::mat4 &Transformable::GetTransform() {
     return mTransform;
 }
 
+void Transformable::SetForwardDirection(const glm::vec3 &direction) {
+    mForwardDirection = direction;
+    mRightDirection = glm::normalize(glm::cross(mForwardDirection, mWorldUp));
+    mUpDirection = glm::normalize(glm::cross(mRightDirection, mForwardDirection));
+}
+glm::vec3 Transformable::GetForwardDirection() const {
+    return mForwardDirection;
+}
+glm::vec3 Transformable::GetRightDirection() const {
+    return mRightDirection;
+}
+glm::vec3 Transformable::GetUpDirection() const {
+    return mUpDirection;
+}
+
 Transformable::PushPopWrapper Transformable::MakePushPopWrapper(core::Graphics &g) const {
     return PushPopWrapper{ g, *this };
 }

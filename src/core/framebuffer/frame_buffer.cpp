@@ -21,7 +21,6 @@ uint32_t FrameBuffer::GetFrameTexture() const {
 };
 
 FrameBuffer::Impl::Impl(int32_t width, int32_t height)
-    : mWidth{ width }, mHeight{ height }
-{}
+    : mWidth{ width }, mHeight{ height } {}
 
 }  // namespace meov::core

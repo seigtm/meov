@@ -166,5 +166,4 @@ Setter *OGLSetter::Set(const glm::vec3 &vec) {
     return this;
 }
 
-
 }  // namespace meov::core::shaders::gl

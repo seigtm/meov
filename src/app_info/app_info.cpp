@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Release"
+#define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "4386b57941ed22cdc5b4e2d624ade8c4cfe3a556-dirty"
-#define GIT_COMMIT_DATE "Fri May 20 09:29:32 2022"
-#define GIT_COMMIT_MESSAGE "Clean main.cpp"
+#define GIT_COMMIT_HASH "a7f05466bf7a0797cffb5edb821a1da65c938ceb-dirty"
+#define GIT_COMMIT_DATE "Fri May 20 17:14:08 2022"
+#define GIT_COMMIT_MESSAGE "Updated readme."
 
 namespace meov {
 
