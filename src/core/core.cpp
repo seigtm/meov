@@ -39,7 +39,8 @@ Core::ExecutionResult Core::Run() {
     auto object{ mObjects.emplace_back(std::make_shared<Object>("Test object")) };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
-    SHIT_SHIT_SHIT.mPropWin.Select(object);
+
+    SHIT_SHIT_SHIT.mPropWin.Select(camera);
 
     mRunning = true;
     utils::LogUtils::Instance()->GetLogStorage()->Subscribe(SHIT_SHIT_SHIT.mLogWin);
@@ -73,12 +74,6 @@ void Core::RenderFrame() {
 }
 
 void Core::Update(double delta) {
-    auto program{ mGraphics->CurrentProgram() };
-    program.Use();
-    program.Get("projection")->Set(mProjection);
-    program.Get("view")->Set(mCamera->ViewMatrix());
-    program.UnUse();
-
     for(auto object : mObjects)
         object->Update(delta);
 }
@@ -100,7 +95,6 @@ void Core::Serialize() {
     ImGui::Begin("Scene");
     scenePos = im2glm(ImGui::GetWindowPos());
     sceneSize = im2glm(ImGui::GetContentRegionAvail());
-    mProjection = mCamera->Projection(sceneSize);
 
     // Add rendered texture to ImGUI scene window.
     uint32_t textureID = mFrameBuffer->GetFrameTexture();
@@ -123,10 +117,6 @@ void Core::HandleEvents() {
                 const auto& keysym = event.key.keysym;
                 const auto delta{ mClock.Delta() };
                 switch(keysym.sym) {
-                    case SDLK_s: mCamera->Move(Camera::Direction::Backward, delta); break;
-                    case SDLK_w: mCamera->Move(Camera::Direction::Forward, delta); break;
-                    case SDLK_a: mCamera->Move(Camera::Direction::Left, delta); break;
-                    case SDLK_d: mCamera->Move(Camera::Direction::Right, delta); break;
                     default: break;
                 }
             } break;
@@ -148,14 +138,14 @@ void Core::HandleEvents() {
                     lastMouseCoords.y - current.y
                 };
                 lastMouseCoords = current;
-                mCamera->OnMouseMove(offset.x, offset.y);
+                // mCamera->OnMouseMove(offset.x, offset.y);
             } break;
             case SDL_MOUSEBUTTONUP: {
                 SDL_SetRelativeMouseMode(SDL_FALSE);
                 isMousePressed = false;
             } break;
             case SDL_MOUSEWHEEL: {
-                mCamera->OnMouseScroll(event.wheel.preciseY);
+                // mCamera->OnMouseScroll(event.wheel.preciseY);
             } break;
             case SDL_WINDOWEVENT:
                 if(event.window.windowID != SDL_GetWindowID(mWindow)) {
@@ -299,7 +289,6 @@ Core::Core(std::vector<std::string>&& argv)
             [this] {
                 this->mGraphics = std::make_shared<Graphics>();
                 this->mFrameBuffer = std::make_shared<FrameBuffer>();
-                this->mCamera = std::make_shared<Camera>(glm::vec3{ .0f, .0f, 30.f });
                 return true;
             },
             [] {

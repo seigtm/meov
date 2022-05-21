@@ -17,6 +17,8 @@ public:
     void PushTransform(core::Graphics &g) const;
     void PopTransform(core::Graphics &g) const;
 
+    glm::vec3 GetPosition() const;
+
     const glm::mat4 &GetTransform() const;
     glm::mat4 &GetTransform();
 

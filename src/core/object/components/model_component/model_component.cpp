@@ -24,25 +24,12 @@ void ModelComponent::Update(double) {
 }
 
 void ModelComponent::Serialize() {
-    struct ErrorWrapper {
-        bool mValid{ false };
-        explicit ErrorWrapper(bool valid)
-            : mValid{ valid } {
-            if(!mValid)
-                ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
-        }
-        ~ErrorWrapper() {
-            if(!mValid)
-                ImGui::PopStyleColor();
-        }
-    };
-
-    {
-        ErrorWrapper ew{ Valid() };
-        if(!ImGui::CollapsingHeader(Name().c_str())) {
-            return;
-        }
+    if(!Valid()) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
+    if(!ImGui::CollapsingHeader(Name().c_str())) {
+        if(!Valid()) ImGui::PopStyleColor();
+        return;
     }
+    if(!Valid()) ImGui::PopStyleColor();
 
     auto *dialog{ ImGuiFileDialog::Instance() };
     constexpr std::string_view DialogName{ "ChooseFileDlgKey" };

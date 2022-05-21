@@ -20,28 +20,14 @@ void LightingComponent::Update(double delta) {
 }
 
 void LightingComponent::Serialize() {
-    struct ErrorWrapper {
-        bool mValid{ false };
-        explicit ErrorWrapper(bool valid)
-            : mValid{ valid } {
-            if(!mValid)
-                ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
-        }
-        ~ErrorWrapper() {
-            if(!mValid)
-                ImGui::PopStyleColor();
-        }
-    };
-
-    const bool valid{ Valid() };
-    {
-        ErrorWrapper ew{ valid };
-        if(!ImGui::CollapsingHeader(Name().c_str())) {
-            return;
-        }
+    const auto valid{ Valid() };
+    if(!valid) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
+    if(!ImGui::CollapsingHeader(Name().c_str())) {
+        if(!valid) ImGui::PopStyleColor();
+        return;
     }
-
     if(!valid) {
+        ImGui::PopStyleColor();
         auto holder{ mHolder.lock() };
         if(holder == nullptr) {
             ImGui::Text("Error! Holder not found!");

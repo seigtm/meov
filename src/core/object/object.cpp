@@ -20,7 +20,12 @@ void Object::Serialize() {
     if(!ImGui::CollapsingHeader(Name().c_str()))
         return;
 
-    ForEachComponent([](components::Component::Shared &comp) { comp->Serialize(); });
+    ImGui::Indent();
+    ForEachComponent([](components::Component::Shared &comp) {
+        comp->Serialize();
+        ImGui::Separator();
+    });
+    ImGui::Unindent();
     ImGui::Spacing();
 }
 

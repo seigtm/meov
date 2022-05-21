@@ -19,6 +19,7 @@ void TransformComponent::Serialize() {
 
     auto &trans{ GetTransform() };
     glm::vec4 position{ trans[3] };
+    ImGui::Text("\t\tX\t\t|\t\tY\t\t|\t\tZ");
     if(ImGui::InputFloat3("Position", glm::value_ptr(position))) {
         trans[3] = std::move(position);
     }

@@ -48,7 +48,6 @@ private:
     utilities::time::Clock mClock;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;
-    std::shared_ptr<Camera> mCamera;
     glm::mat4 mProjection{ 1 };
 
     std::vector<utilities::Initializer::Shared> mInitTasks;

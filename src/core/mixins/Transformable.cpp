@@ -23,6 +23,10 @@ void Transformable::PopTransform(core::Graphics &g) const {
     g.PopTransform();
 }
 
+glm::vec3 Transformable::GetPosition() const {
+    return mTransform[3];
+}
+
 const glm::mat4 &Transformable::GetTransform() const {
     return mTransform;
 }
