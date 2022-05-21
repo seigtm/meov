@@ -15,6 +15,8 @@
 #include "resource_manager.hpp"
 #include "camera.hpp"
 
+#include "event_manager.hpp"
+
 namespace meov::core {
 
 ImGuiWindows::ImGuiWindows()
@@ -107,58 +109,14 @@ void Core::Serialize() {
 
 void Core::HandleEvents() {
     SDL_Event event;
-
-
     while(SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
+        managers::KeyboardManager::HandleEvent(event);
+        managers::MouseManager::HandleEvent(event);
         switch(event.type) {
-            case SDL_KEYDOWN: {
-                using namespace meov::core;
-                const auto& keysym = event.key.keysym;
-                const auto delta{ mClock.Delta() };
-                switch(keysym.sym) {
-                    default: break;
-                }
-            } break;
-            case SDL_MOUSEBUTTONDOWN: {
-                const glm::vec2 current{ event.button.x, event.button.y };
-                if(current.x < scenePos.x || current.y < scenePos.y) break;
-                if(current.x > scenePos.x + sceneSize.x || current.y > scenePos.y + sceneSize.y) break;
-                SDL_SetRelativeMouseMode(SDL_TRUE);
-                isMousePressed = true;
-                lastMouseCoords = current;
-            } break;
-            case SDL_MOUSEMOTION: {
-                if(!isMousePressed)
-                    break;
-
-                const glm::vec2 current{ event.button.x, event.button.y };
-                const glm::vec2 offset{
-                    current.x - lastMouseCoords.x,
-                    lastMouseCoords.y - current.y
-                };
-                lastMouseCoords = current;
-                // mCamera->OnMouseMove(offset.x, offset.y);
-            } break;
-            case SDL_MOUSEBUTTONUP: {
-                SDL_SetRelativeMouseMode(SDL_FALSE);
-                isMousePressed = false;
-            } break;
-            case SDL_MOUSEWHEEL: {
-                // mCamera->OnMouseScroll(event.wheel.preciseY);
-            } break;
-            case SDL_WINDOWEVENT:
-                if(event.window.windowID != SDL_GetWindowID(mWindow)) {
-                    break;
-                }
-                if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                    glViewport(0, 0, event.window.data1, event.window.data2);
-                    break;
-                } else if(event.window.event != SDL_WINDOWEVENT_CLOSE) {
-                    break;
-                }
-            case SDL_QUIT:
+            case SDL_QUIT: {
                 mRunning = false;
+            } break;
             default:
                 break;
         }

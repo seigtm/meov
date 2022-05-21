@@ -102,7 +102,7 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
         const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
 
         texture->Bind();
-        if(auto &var{ program.Get(name) }; var != nullptr)
+        if(auto &&var{ program.Get(name) }; var != nullptr)
             var->Set(static_cast<int>(i));
     }
 
