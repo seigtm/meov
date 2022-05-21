@@ -15,10 +15,11 @@ public:
     void Update(double delta) override;
     void Serialize() override;
 
-    // bool Valid() const;
+    bool Valid() const;
 
 private:
-
+    glm::vec3 mVelocity{};
+    float mSpeed{ 50.f };
 };
 
 }  // namespace meov::core::components

@@ -83,7 +83,7 @@ void KeyboardManager::HandleEvent(SDL_Event &event) {
 }
 
 bool KeyboardManager::IsKeyPressed(SDL_Keycode code) {
-    return sKeyMap.count(code);
+    return sKeyMap[code];
 }
 
 bool KeyboardManager::IsKeyModificatorPressed(SDL_Keymod modificator) {

@@ -34,7 +34,7 @@ Core::ExecutionResult Core::Run() {
 
     // Default model displayed when the application runs.
     auto camera{ mObjects.emplace_back(std::make_shared<Object>("Camera")) };
-    camera->AddComponent<components::TransformComponent>();
+    // camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
     camera->AddComponent<components::CameraComponent>(mGraphics);
 

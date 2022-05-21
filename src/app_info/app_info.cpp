@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "f11c8279e94750a5f61890391b7ecc72a51d0376-dirty"
-#define GIT_COMMIT_DATE "Sat May 21 10:57:20 2022"
-#define GIT_COMMIT_MESSAGE "Removed flip-UV Assimp flag."
+#define GIT_COMMIT_HASH "790eb37e14e7c94aa63242a3350a079f07b54cb5-dirty"
+#define GIT_COMMIT_DATE "Sat May 21 12:37:01 2022"
+#define GIT_COMMIT_MESSAGE "SOME SHIT"
 
 namespace meov {
 

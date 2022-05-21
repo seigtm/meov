@@ -45,12 +45,15 @@ void CameraComponent::Serialize() {
     if(!valid) {
         ImGui::PopStyleColor();
         auto holder{ mHolder.lock() };
-        if(holder == nullptr)
+        if(holder == nullptr) {
+            ImGui::Unindent();
             return;
+        }
         ImGui::Text("Would you like to add TransformComponent?");
         if(ImGui::Button("Add transform component")) {
             holder->AddComponent<TransformComponent>();
         }
+        ImGui::Unindent();
         return;
     }
 
