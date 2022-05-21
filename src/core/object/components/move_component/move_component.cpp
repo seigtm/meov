@@ -3,7 +3,6 @@
 #include "common.hpp"
 
 #include "holder.hpp"
-#include "component.hpp"
 #include "transform_component.hpp"
 
 namespace meov::core::components {

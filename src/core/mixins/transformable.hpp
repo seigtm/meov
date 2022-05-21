@@ -44,5 +44,6 @@ private:
     glm::vec3 mForwardDirection{ 0.0f, 0.0f, -1.0f };
     glm::vec3 mUpDirection{ 1.0f, 0.0f, 0.0f };
     glm::vec3 mRightDirection{ 0.0f, 1.0f, 0.0f };
+};
 
 }  // namespace meov::core::mixin

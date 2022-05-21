@@ -2,6 +2,8 @@
 
 #include <glm/vec3.hpp>
 
+#include "component.hpp"
+
 namespace meov::core::components {
 
 class MoveComponent : public Component {

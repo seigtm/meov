@@ -34,7 +34,7 @@ Core::ExecutionResult Core::Run() {
     auto camera{ mObjects.emplace_back(std::make_shared<Object>("Camera")) };
     camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
-    camera->AddComponent<components::CameraComponent>(mGraphics, glm::vec3{ .0f, .0f, 30.f });
+    camera->AddComponent<components::CameraComponent>(mGraphics);
 
     auto object{ mObjects.emplace_back(std::make_shared<Object>("Test object")) };
     object->AddComponent<components::TransformComponent>();

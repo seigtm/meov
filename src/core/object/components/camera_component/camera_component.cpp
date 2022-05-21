@@ -1,21 +1,19 @@
 #include "camera_component.hpp"
 
+#include "holder.hpp"
 #include "graphics.hpp"
 #include "shaders_program.hpp"
-#include "holder.hpp"
 #include "transform_component.hpp"
 
 namespace meov::core::components {
 
-CameraComponent::CameraComponent(
-    std::weak_ptr<Graphics> &&graphics, const glm::vec3 &up, float yaw, float pitch)
+CameraComponent::CameraComponent(std::weak_ptr<Graphics> &&graphics, float yaw, float pitch)
     : Component{ "Camera component" }
-    , mWorldUp{ up }
     , mWeakGraphics{ std::move(graphics) }
     , mYaw{ yaw }
     , mPitch{ pitch } {}
 
-void CameraComponent::Draw([[maybe_unused]] Graphics &) {}
+void CameraComponent::Draw(Graphics &) {}
 
 void CameraComponent::Update(double delta) {
     auto holder{ mHolder.lock() };
@@ -26,7 +24,8 @@ void CameraComponent::Update(double delta) {
     if(graphics == nullptr || transform == nullptr)
         return;
 
-    UpdateDirection(transform);
+    UpdateDirections(*transform);
+    UpdateView(*transform);
 
     auto program{ graphics->CurrentProgram() };
     program.Use();
@@ -39,15 +38,16 @@ void CameraComponent::Serialize() {
     if(!ImGui::CollapsingHeader(Name().c_str())) return;
 }
 
-void CameraComponent::UpdateDirections(std::shared_ptr<TransformComponent> transform) {
+void CameraComponent::UpdateDirections(TransformComponent &transform) {
     const float radPitch{ glm::radians(mPitch) };
     const float radYaw{ glm::radians(mYaw) };
-    const glm::vec3 front{
+    transform.SetForwardDirection(glm::normalize(glm::vec3{
         glm::cos(radYaw) * cos(radPitch),
         glm::sin(radPitch),
-        glm::sin(radYaw) * glm::cos(radPitch)
-    };
-    transform->SetForwardDirection(glm::normalize(front));
+        glm::sin(radYaw) * glm::cos(radPitch) }));
+}
+
+void CameraComponent::UpdateView(TransformComponent &transform) {
 }
 
 }  // namespace meov::core::components
