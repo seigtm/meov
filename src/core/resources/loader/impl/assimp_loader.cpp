@@ -4,7 +4,7 @@ namespace meov::core::resources {
 
 std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate);
+    const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << importer.GetErrorString();
         return nullptr;
