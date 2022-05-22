@@ -9,6 +9,7 @@
 #include "model_component.hpp"
 #include "move_component.hpp"
 #include "camera_component.hpp"
+#include "lighting_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"
@@ -44,6 +45,10 @@ Core::ExecutionResult Core::Run() {
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
+    auto lighting{ mScene->AddObject("Lighting") };
+    lighting->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    lighting->AddComponent<components::LightingComponent>(mGraphics);
+    lighting->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
     // SHIT_SHIT_SHIT.mPropWin.Select(camera);

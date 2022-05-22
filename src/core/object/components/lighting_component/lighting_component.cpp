@@ -9,14 +9,27 @@
 
 namespace meov::core::components {
 
-LightingComponent::LightingComponent()
-    : Component{ "Lighting component" } {
+LightingComponent::LightingComponent(std::weak_ptr<Graphics> &&graphics)
+    : Component{ "Lighting component" }
+    , mWeakGraphics{ std::move(graphics) } {
 }
 
 void LightingComponent::Draw(Graphics &g) {
 }
 
 void LightingComponent::Update(double delta) {
+    if(!Valid())
+        return;
+
+    if (!mEnabled)
+        return;
+
+    auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+    auto program{ mWeakGraphics.lock()->CurrentProgram() };
+    program.Use();
+    program.Get("lightPos")->Set(transform->GetPosition());
+    program.Get("blinn")->Set(mUseBlinnPhongModel);
+    program.UnUse();
 }
 
 void LightingComponent::Serialize() {
@@ -42,10 +55,11 @@ void LightingComponent::Serialize() {
         return;
     }
     ImGui::Checkbox("Enabled", &mEnabled);
+    ImGui::Checkbox("Use blinn phong method", &mUseBlinnPhongModel);
 }
 
 bool LightingComponent::Valid() const {
-    return HasTransformComponent();
+    return HasTransformComponent() && mWeakGraphics.lock();
 }
 
 bool LightingComponent::HasTransformComponent() const {
