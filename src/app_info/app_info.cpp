@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "5fd123efdc88b7200e099a5194b6e26350e521eb-dirty"
-#define GIT_COMMIT_DATE "Sun May 22 11:20:45 2022"
-#define GIT_COMMIT_MESSAGE "Fix event_manager and camera component"
+#define GIT_COMMIT_HASH "25a10f7fc1617272aceb36e71bc9fe4ce480a107-dirty"
+#define GIT_COMMIT_DATE "Sun May 22 13:49:11 2022"
+#define GIT_COMMIT_MESSAGE "SHitted scene and its treee"
 
 namespace meov {
 
