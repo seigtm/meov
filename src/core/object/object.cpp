@@ -29,4 +29,15 @@ void Object::Serialize() {
     ImGui::Spacing();
 }
 
+bool Object::Enabled() const {
+    return mEnabled;
+}
+void Object::Enable() {
+    mEnabled = true;
+}
+void Object::Disable() {
+    mEnabled = false;
+}
+
+
 }  // namespace meov::core

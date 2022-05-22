@@ -15,6 +15,8 @@
 #include "resource_manager.hpp"
 #include "camera.hpp"
 
+#include "scene.hpp"
+
 #include "event_manager.hpp"
 
 namespace meov::core {
@@ -23,9 +25,10 @@ ImGuiWindows::ImGuiWindows()
     : mLogWin{ std::make_shared<Window::Log>("Logger", ImVec2{ 1280, 850 }) } {}
 
 void ImGuiWindows::Serialize() {
-    mLogWin->Draw(true);
-    mGitWin.Draw(true);
+    mLogWin->Draw();
+    mGitWin.Draw();
     mPropWin.Draw();
+    mSceneTree.Draw();
 }
 
 Core::ExecutionResult Core::Run() {
@@ -33,16 +36,17 @@ Core::ExecutionResult Core::Run() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
     // Default model displayed when the application runs.
-    auto camera{ mObjects.emplace_back(std::make_shared<Object>("Camera")) };
+    auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
     camera->AddComponent<components::CameraComponent>(mGraphics);
 
-    auto object{ mObjects.emplace_back(std::make_shared<Object>("Test object")) };
+    auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
 
-    SHIT_SHIT_SHIT.mPropWin.Select(camera);
+    SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
+    // SHIT_SHIT_SHIT.mPropWin.Select(camera);
 
     mRunning = true;
     utils::LogUtils::Instance()->GetLogStorage()->Subscribe(SHIT_SHIT_SHIT.mLogWin);
@@ -76,14 +80,13 @@ void Core::RenderFrame() {
 }
 
 void Core::Update(double delta) {
-    for(auto object : mObjects)
-        object->Update(delta);
+    mScene->Update(delta);
+    SHIT_SHIT_SHIT.mPropWin.Select(mScene->GetSelectedObjects());
 }
 
 void Core::Draw(Graphics& g) {
     mFrameBuffer->Bind();
-    for(auto object : mObjects)
-        object->Draw(g);
+    mScene->Draw(g);
     mFrameBuffer->UnBind();
 }
 
@@ -245,10 +248,11 @@ Core::Core(std::vector<std::string>&& argv)
                 return true;
             }),
         std::make_shared<utilities::Initializer>(
-            this, "Graphics",
+            this, "Core active components",
             [this] {
                 this->mGraphics = std::make_shared<Graphics>();
                 this->mFrameBuffer = std::make_shared<FrameBuffer>();
+                this->mScene = std::make_shared<Scene>();
                 return true;
             },
             [] {

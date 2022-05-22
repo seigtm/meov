@@ -13,10 +13,11 @@ ModelComponent::ModelComponent(const fs::path &model)
     , mModel{ RESOURCES->LoadModel(model) } {}
 
 void ModelComponent::Draw(Graphics &g) {
+    if(!Valid())
+        return;
     auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
     if(transform) transform->PushTransform(g);
-    if(Valid())
-        mModel->Draw(g);
+    mModel->Draw(g);
     if(transform) transform->PopTransform(g);
 }
 
@@ -50,7 +51,8 @@ void ModelComponent::Serialize() {
 }
 
 bool ModelComponent::Valid() const {
-    return mModel != nullptr;
+    const auto holder{ mHolder.lock() };
+    return holder && mModel;
 }
 
 }  // namespace meov::core::components

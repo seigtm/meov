@@ -8,17 +8,19 @@ namespace meov::Window {
 Properties::Properties(ImVec2 const &size, bool isClosable)
     : Base{ "Properties", size, isClosable } {}
 
-void Properties::Select(std::weak_ptr<core::Object> &&object) {
-    mObject = std::move(object);
+void Properties::Select(std::vector<std::weak_ptr<core::Object>> &&object) {
+    mObjects = std::move(object);
 }
 
 void Properties::Reset() {
-    mObject.reset();
+    mObjects.clear();
 }
 
 void Properties::DrawImpl() {
-    if(auto &&obj{ mObject.lock() }; obj)
-        obj->Serialize();
+    for(auto &&weakObj : mObjects) {
+        if(auto &&obj{ weakObj.lock() }; obj)
+            obj->Serialize();
+    }
 }
 
 }  // namespace meov::Window

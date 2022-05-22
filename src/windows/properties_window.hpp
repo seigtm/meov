@@ -13,11 +13,11 @@ class Properties final : public Base {
 public:
     Properties(ImVec2 const &size = {}, bool isClosable = false);
 
-    void Select(std::weak_ptr<core::Object> &&object);
+    void Select(std::vector<std::weak_ptr<core::Object>> &&objects);
     void Reset();
 
 private:
-    std::weak_ptr<core::Object> mObject;
+    std::vector<std::weak_ptr<core::Object>> mObjects;
 
     void DrawImpl() override;
 };

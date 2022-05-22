@@ -10,19 +10,21 @@
 #include "windows/git_window.hpp"
 #include "windows/log_window.hpp"
 #include "windows/properties_window.hpp"
+#include "windows/scene_tree.hpp"
 
 namespace meov::core {
 
 class Graphics;
 class Object;
 class FrameBuffer;
-class Camera;  // todo: Remove class and make CameraComponent
+class Scene;
 
 class ImGuiWindows {
 public:
     Window::Git mGitWin;
     std::shared_ptr<Window::Log> mLogWin;
     Window::Properties mPropWin;
+    Window::SceneTree mSceneTree;
 
     ImGuiWindows();
     void Serialize();
@@ -45,12 +47,12 @@ private:
 
     bool mRunning{ false };
     utilities::time::Clock mClock;
+    std::shared_ptr<Scene> mScene;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;
     glm::mat4 mProjection{ 1 };
 
     std::vector<utilities::Initializer::Shared> mInitTasks;
-    std::vector<std::shared_ptr<Object>> mObjects;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
