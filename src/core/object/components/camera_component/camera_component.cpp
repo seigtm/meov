@@ -5,13 +5,30 @@
 #include "shaders_program.hpp"
 #include "transform_component.hpp"
 
+namespace {
+
+template<class T>
+T RoundByRange(T value, const T Min, const T Max) {
+    if(value < Min) return Min;
+    if(value > Max) return Max;
+    return value;
+}
+
+}  // namespace
+
 namespace meov::core::components {
 
 CameraComponent::CameraComponent(std::weak_ptr<Graphics> &&graphics, float yaw, float pitch)
     : Component{ "Camera component" }
     , mWeakGraphics{ std::move(graphics) }
     , mYaw{ yaw }
-    , mPitch{ pitch } {}
+    , mPitch{ pitch } {
+    managers::MouseManager::AddListener(this);
+}
+
+CameraComponent::~CameraComponent() {
+    managers::MouseManager::RemoveListener(this);
+}
 
 void CameraComponent::Draw(Graphics &) {}
 
@@ -63,11 +80,12 @@ void CameraComponent::Serialize() {
         return;
     }
 
-    ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", mYaw, mPitch);
+    ImGui::Text("Yaw: %.4f, Pitch: %.4f", mYaw, mPitch);
     ImGui::InputFloat("Sensitivity", &mSensitivity);
     ImGui::InputFloat("Zoom", &mZoom);
     ImGui::InputFloat("Near", &mNear);
     ImGui::InputFloat("Far", &mFar);
+    ImGui::Checkbox("Constrain pitch", &mConstrainPitch);
     ImGui::Spacing();
     ImGui::Text("View matrix:");
     ImGui::InputFloat4("| 0", glm::value_ptr(mViewMatrix[0]));
@@ -91,10 +109,10 @@ bool CameraComponent::Valid() const {
 void CameraComponent::UpdateDirections(TransformComponent &transform) {
     const float radPitch{ glm::radians(mPitch) };
     const float radYaw{ glm::radians(mYaw) };
-    transform.SetForwardDirection(glm::normalize(glm::vec3{
+    transform.SetForwardDirection(glm::vec3{
         glm::cos(radYaw) * cos(radPitch),
         glm::sin(radPitch),
-        glm::sin(radYaw) * glm::cos(radPitch) }));
+        glm::sin(radYaw) * glm::cos(radPitch) });
 }
 
 void CameraComponent::UpdateView(TransformComponent &transform) {
@@ -108,5 +126,53 @@ void CameraComponent::UpdateView(TransformComponent &transform) {
 void CameraComponent::UpdateProjection(const glm::vec2 screen) {
     mProjection = glm::perspective(glm::radians(mZoom), screen.x / screen.y, mNear, mFar);
 }
+
+void CameraComponent::OnMousePressed(
+    managers::MouseManager::Button button, const glm::vec2 &position) {
+    if(button != managers::MouseManager::Button::Left)
+        return;
+
+    mLastMouseCoords = position;
+    mIsMouseGrabbed = true;
+}
+
+void CameraComponent::OnMouseReleased(
+    managers::MouseManager::Button button, const glm::vec2 &position) {
+    if(button != managers::MouseManager::Button::Left)
+        return;
+
+    mIsMouseGrabbed = false;
+}
+
+
+void CameraComponent::OnMouseMove(const glm::vec2 &position) {
+    if(!mIsMouseGrabbed)
+        return;
+
+    const glm::vec2 offset{
+        position.x - mLastMouseCoords.x,
+        mLastMouseCoords.y - position.y
+    };
+    mLastMouseCoords = position;
+
+    mYaw += offset.x * mSensitivity;
+    if(mYaw >= 360)
+        mYaw = 0;
+    else if(mYaw < 0)
+        mYaw = 359 + mYaw;
+
+    mPitch += offset.y * mSensitivity;
+    if(mConstrainPitch) {
+        constexpr float MaxPitch{ 89.0f };
+        mPitch = RoundByRange(mPitch, -MaxPitch, MaxPitch);
+    }
+}
+
+void CameraComponent::OnMouseScroll(const glm::vec2 &direction) {
+    constexpr float MinZoom{ 0.0f };
+    constexpr float MaxZoom{ 45.0f };
+    mZoom = RoundByRange(mZoom - direction.y, MinZoom, MaxZoom);
+}
+
 
 }  // namespace meov::core::components

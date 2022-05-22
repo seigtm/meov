@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "component.hpp"
+#include "event_manager.hpp"
 
 namespace meov::core {
 class Graphics;
@@ -15,7 +16,7 @@ class TransformComponent;
 
 namespace camera::defaults {
 
-constexpr float Yaw{ -90.0f };
+constexpr float Yaw{ 270.0f };
 constexpr float Pitch{};
 constexpr float Sensitivity{ 0.1f };
 constexpr float Zoom{ 35.0f };
@@ -25,12 +26,14 @@ constexpr float Far{ 1000.f };
 }  // namespace camera::defaults
 
 
-class CameraComponent final : public Component {
+class CameraComponent final
+    : public Component,
+      public managers::MouseManager::Listener {
 public:
     explicit CameraComponent(std::weak_ptr<Graphics> &&graphics,
                              float yaw = camera::defaults::Yaw,
                              float pitch = camera::defaults::Pitch);
-    ~CameraComponent() override = default;
+    ~CameraComponent() override;
 
     void Draw(Graphics &) override;
     void Update(double delta) override;
@@ -43,6 +46,9 @@ private:
     glm::mat4 mViewMatrix{ 1 };
     glm::mat4 mProjection{ 1 };
 
+    glm::vec2 mLastMouseCoords{};
+    bool mIsMouseGrabbed{ false };
+
     float mYaw;
     float mPitch;
     float mSensitivity{ camera::defaults::Sensitivity };
@@ -50,9 +56,16 @@ private:
     float mNear{ camera::defaults::Near };
     float mFar{ camera::defaults::Far };
 
+    bool mConstrainPitch{ true };
+
     void UpdateDirections(TransformComponent &transform);
     void UpdateView(TransformComponent &transform);
     void UpdateProjection(const glm::vec2 screenSize);
+
+    void OnMousePressed(managers::MouseManager::Button button, const glm::vec2 &position) override;
+    void OnMouseReleased(managers::MouseManager::Button button, const glm::vec2 &position) override;
+    void OnMouseMove(const glm::vec2 &position) override;
+    void OnMouseScroll(const glm::vec2 &direction) override;
 };
 
 }  // namespace meov::core::components

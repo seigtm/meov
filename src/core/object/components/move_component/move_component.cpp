@@ -20,9 +20,7 @@ void MoveComponent::Update(double delta) {
     if(!Valid())
         return;
 
-
     auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
-
     mVelocity = GetDirection(*transform) * mSpeed * static_cast<float>(delta);
     transform->Move(mVelocity);
 }
@@ -76,24 +74,24 @@ glm::vec3 MoveComponent::GetDirection(TransformComponent &transform) const {
 
     glm::vec3 direction{};
     if(KeyboardManager::IsKeyPressed(SDLK_a)) {
-        direction.x += -right.x;
+        direction += -right;
     }
     if(KeyboardManager::IsKeyPressed(SDLK_d)) {
-        direction.x += right.x;
+        direction += right;
     }
 
     if(KeyboardManager::IsKeyPressed(SDLK_q)) {
-        direction.y += up.y;
+        direction += up;
     }
     if(KeyboardManager::IsKeyPressed(SDLK_e)) {
-        direction.y += -up.y;
+        direction += -up;
     }
 
     if(KeyboardManager::IsKeyPressed(SDLK_w)) {
-        direction.z += forward.z;
+        direction += forward;
     }
     if(KeyboardManager::IsKeyPressed(SDLK_s)) {
-        direction.z += -forward.z;
+        direction += -forward;
     }
     return direction;
 }

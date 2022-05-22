@@ -4,7 +4,7 @@
 
 namespace meov::core::managers {
 
-std::vector<std::weak_ptr<MouseManager::Listener>> MouseManager::sListeners{};
+std::vector<MouseManager::Listener *> MouseManager::sListeners{};
 std::unordered_map<SDL_Keycode, bool> KeyboardManager::sKeyMap{};
 
 //========================== MouseManager ===========================//
@@ -13,28 +13,28 @@ void MouseManager::HandleEvent(SDL_Event &event) {
     if(sListeners.empty())
         return;
 
-    std::function<void(std::shared_ptr<Listener>)> method;
+    std::function<void(Listener &)> method;
     switch(event.type) {
         case SDL_MOUSEBUTTONDOWN: {
-            method = [button = event.button](std::shared_ptr<Listener> listener) {
-                listener->OnMousePressed(Convert(button.which), { button.x, button.y });
+            method = [button = event.button](Listener &listener) {
+                listener.OnMousePressed(Convert(button.button), { button.x, button.y });
             };
         } break;
         case SDL_MOUSEBUTTONUP: {
-            method = [button = event.button](std::shared_ptr<Listener> listener) {
-                listener->OnMouseReleased(Convert(button.which), { button.x, button.y });
+            method = [button = event.button](Listener &listener) {
+                listener.OnMouseReleased(Convert(button.button), { button.x, button.y });
             };
         } break;
         case SDL_MOUSEMOTION: {
-            method = [motion = event.motion](std::shared_ptr<Listener> listener) {
-                listener->OnMouseReleased(Convert(motion.which), { motion.x, motion.y });
+            method = [motion = event.motion](Listener &listener) {
+                listener.OnMouseMove({ motion.x, motion.y });
             };
         } break;
         case SDL_MOUSEWHEEL: {
-            method = [wheel = event.wheel](std::shared_ptr<Listener> listener) {
+            method = [wheel = event.wheel](Listener &listener) {
                 const float coef{ wheel.direction == SDL_MOUSEWHEEL_FLIPPED ? -1.f : 1.f };
-                listener->OnMouseScroll({ wheel.preciseX * coef,
-                                          wheel.preciseY * coef });
+                listener.OnMouseScroll({ wheel.preciseX * coef,
+                                         wheel.preciseY * coef });
             };
         } break;
         default:
@@ -42,8 +42,8 @@ void MouseManager::HandleEvent(SDL_Event &event) {
     }
 
     for(auto iter = sListeners.begin(); iter != sListeners.end(); ++iter) {
-        if(auto listener{ iter->lock() }; listener) {
-            method(listener);
+        if(Listener * listener{ *iter }; listener) {
+            method(*listener);
         } else {
             iter = sListeners.erase(iter);
             if(iter == sListeners.end()) break;
@@ -51,20 +51,13 @@ void MouseManager::HandleEvent(SDL_Event &event) {
     }
 }
 
-void MouseManager::AddListener(std::weak_ptr<Listener> &&listener) {
-    if(!listener.expired())
-        sListeners.emplace_back(std::move(listener));
+void MouseManager::AddListener(Listener *listener) {
+    if(listener != nullptr)
+        sListeners.emplace_back(listener);
 }
 
-void MouseManager::RemoveListener(const std::shared_ptr<Listener> &listener) {
-    auto found{
-        std::find_if(sListeners.begin(), sListeners.end(), [&listener](std::weak_ptr<Listener> weak) {
-            if(auto target{ weak.lock() }; target && target == listener) {
-                return true;
-            }
-            return false;
-        })
-    };
+void MouseManager::RemoveListener(const Listener *listener) {
+    auto found{ std::find(sListeners.begin(), sListeners.end(), listener) };
     if(found != sListeners.end())
         sListeners.erase(found);
 }

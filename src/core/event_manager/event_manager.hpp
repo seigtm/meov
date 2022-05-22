@@ -26,16 +26,16 @@ public:
     public:
         virtual void OnMousePressed(Button button, const glm::vec2 &position){};
         virtual void OnMouseReleased(Button button, const glm::vec2 &position){};
-        virtual void OnMouseMove(Button button, const glm::vec2 &position){};
+        virtual void OnMouseMove(const glm::vec2 &position){};
         virtual void OnMouseScroll(const glm::vec2 &direction){};
     };
 
     static void HandleEvent(SDL_Event &event);
-    static void AddListener(std::weak_ptr<Listener> &&listener);
-    static void RemoveListener(const std::shared_ptr<Listener> &listener);
+    static void AddListener(Listener *listener);
+    static void RemoveListener(const Listener *listener);
 
 private:
-    static std::vector<std::weak_ptr<Listener>> sListeners;
+    static std::vector<Listener *> sListeners;
 
     static Button Convert(uint32_t button);
 };

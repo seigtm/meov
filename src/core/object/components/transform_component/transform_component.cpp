@@ -17,6 +17,7 @@ void TransformComponent::Update(double) {
 void TransformComponent::Serialize() {
     if(!ImGui::CollapsingHeader(Name().c_str())) return;
 
+    ImGui::Indent();
     auto &trans{ GetTransform() };
     glm::vec4 position{ trans[3] };
     ImGui::Text("\t\tX\t\t|\t\tY\t\t|\t\tZ");
@@ -43,6 +44,7 @@ void TransformComponent::Serialize() {
     //     rotated = glm::rotate(rotated, rotation.z, { 0.f, 0.f, 1.f });
     //     trans *= rotated;
     // }
+    ImGui::Unindent();
 }
 
 
