@@ -35,7 +35,7 @@ glm::mat4 &Transformable::GetTransform() {
 }
 
 void Transformable::SetForwardDirection(const glm::vec3 &direction) {
-    mForwardDirection = direction;
+    mForwardDirection = glm::normalize(direction);
     mRightDirection = glm::normalize(glm::cross(mForwardDirection, mWorldUp));
     mUpDirection = glm::normalize(glm::cross(mRightDirection, mForwardDirection));
 }

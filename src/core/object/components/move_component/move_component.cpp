@@ -20,29 +20,11 @@ void MoveComponent::Update(double delta) {
     if(!Valid())
         return;
 
-    if(!managers::KeyboardManager::IsKeyPressed(SDLK_w) && !managers::KeyboardManager::IsKeyPressed(SDLK_s) && !managers::KeyboardManager::IsKeyPressed(SDLK_a) && !managers::KeyboardManager::IsKeyPressed(SDLK_d)) {
-        return;
-    }
 
     auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
 
-    const auto forward{ glm::normalize(transform->GetForwardDirection()) };
-    const auto right{ glm::normalize(transform->GetRightDirection()) };
-
-    glm::vec3 force;
-    if(managers::KeyboardManager::IsKeyPressed(SDLK_w)) {
-        force = forward * mSpeed;
-    } else if(managers::KeyboardManager::IsKeyPressed(SDLK_s)) {
-        force = -forward * mSpeed;
-    }
-
-    if(managers::KeyboardManager::IsKeyPressed(SDLK_a)) {
-        force = right * mSpeed;
-    } else if(managers::KeyboardManager::IsKeyPressed(SDLK_d)) {
-        force = -right * mSpeed;
-    }
-
-    transform->Move(force * static_cast<float>(delta));
+    mVelocity = GetDirection(*transform) * mSpeed * static_cast<float>(delta);
+    transform->Move(mVelocity);
 }
 
 void MoveComponent::Serialize() {
@@ -79,6 +61,41 @@ bool MoveComponent::Valid() const {
     if(auto holder{ mHolder.lock() }; holder)
         return holder->GetComponent<TransformComponent>() != nullptr;
     return false;
+}
+
+glm::vec3 MoveComponent::GetDirection(TransformComponent &transform) const {
+    using namespace managers;
+
+    if(!KeyboardManager::IsAnyKeyPressed({ SDLK_w, SDLK_s, SDLK_a, SDLK_d, SDLK_q, SDLK_e })) {
+        return {};
+    }
+
+    const auto forward{ transform.GetForwardDirection() };
+    const auto right{ transform.GetRightDirection() };
+    const auto up{ transform.GetUpDirection() };
+
+    glm::vec3 direction{};
+    if(KeyboardManager::IsKeyPressed(SDLK_a)) {
+        direction.x += -right.x;
+    }
+    if(KeyboardManager::IsKeyPressed(SDLK_d)) {
+        direction.x += right.x;
+    }
+
+    if(KeyboardManager::IsKeyPressed(SDLK_q)) {
+        direction.y += up.y;
+    }
+    if(KeyboardManager::IsKeyPressed(SDLK_e)) {
+        direction.y += -up.y;
+    }
+
+    if(KeyboardManager::IsKeyPressed(SDLK_w)) {
+        direction.z += forward.z;
+    }
+    if(KeyboardManager::IsKeyPressed(SDLK_s)) {
+        direction.z += -forward.z;
+    }
+    return direction;
 }
 
 }  // namespace meov::core::components

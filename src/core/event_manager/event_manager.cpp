@@ -86,6 +86,10 @@ bool KeyboardManager::IsKeyPressed(SDL_Keycode code) {
     return sKeyMap[code];
 }
 
+bool KeyboardManager::IsAnyKeyPressed(std::initializer_list<SDL_Keycode> &&keys) {
+    return std::any_of(keys.begin(), keys.end(), [](SDL_Keycode key) { return IsKeyPressed(key); });
+}
+
 bool KeyboardManager::IsKeyModificatorPressed(SDL_Keymod modificator) {
     return SDL_GetModState() == modificator;
 }

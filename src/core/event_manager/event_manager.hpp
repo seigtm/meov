@@ -45,6 +45,7 @@ public:
     static void HandleEvent(SDL_Event &event);
 
     static bool IsKeyPressed(SDL_Keycode);
+    static bool IsAnyKeyPressed(std::initializer_list<SDL_Keycode> &&keys);
     static bool IsKeyModificatorPressed(SDL_Keymod);
 
     static bool IsMyEvent(SDL_Event &event);

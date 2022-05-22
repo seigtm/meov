@@ -27,6 +27,12 @@ void CameraComponent::Update(double delta) {
     UpdateDirections(*transform);
     UpdateView(*transform);
 
+    /// FIXME: Remove hardcoded shit
+    ImGui::Begin("Scene");
+    const auto [w, h]{ ImGui::GetWindowSize() };
+    ImGui::End();
+    UpdateProjection({ w, h });
+
     auto program{ graphics->CurrentProgram() };
     program.Use();
     program.Get("projection")->Set(mProjection);
@@ -60,6 +66,8 @@ void CameraComponent::Serialize() {
     ImGui::Text("Yaw | Pitch: [%.2f | %.2f]", mYaw, mPitch);
     ImGui::InputFloat("Sensitivity", &mSensitivity);
     ImGui::InputFloat("Zoom", &mZoom);
+    ImGui::InputFloat("Near", &mNear);
+    ImGui::InputFloat("Far", &mFar);
     ImGui::Spacing();
     ImGui::Text("View matrix:");
     ImGui::InputFloat4("| 0", glm::value_ptr(mViewMatrix[0]));
@@ -95,6 +103,10 @@ void CameraComponent::UpdateView(TransformComponent &transform) {
         position,
         position + transform.GetForwardDirection(),
         transform.GetUpDirection());
+}
+
+void CameraComponent::UpdateProjection(const glm::vec2 screen) {
+    mProjection = glm::perspective(glm::radians(mZoom), screen.x / screen.y, mNear, mFar);
 }
 
 }  // namespace meov::core::components

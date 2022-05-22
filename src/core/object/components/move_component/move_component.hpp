@@ -6,6 +6,8 @@
 
 namespace meov::core::components {
 
+class TransformComponent;
+
 class MoveComponent : public Component {
 public:
     explicit MoveComponent();
@@ -20,6 +22,8 @@ public:
 private:
     glm::vec3 mVelocity{};
     float mSpeed{ 50.f };
+
+    glm::vec3 GetDirection(TransformComponent &transform) const;
 };
 
 }  // namespace meov::core::components
