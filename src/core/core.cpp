@@ -10,6 +10,7 @@
 #include "move_component.hpp"
 #include "camera_component.hpp"
 #include "lighting_component.hpp"
+#include "skybox_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"
@@ -36,7 +37,10 @@ Core::ExecutionResult Core::Run() {
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
-    // Default model displayed when the application runs.
+    // TODO: Make skybox component and object.
+    auto skybox{ mScene->AddObject("Skybox") };
+    skybox->AddComponent<components::SkyboxComponent>("textures\\skybox");
+
     auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
@@ -44,7 +48,9 @@ Core::ExecutionResult Core::Run() {
 
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
+    // Default model displayed when the application runs.
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
+
     auto lighting{ mScene->AddObject("Lighting") };
     lighting->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
     lighting->AddComponent<components::LightingComponent>(mGraphics);

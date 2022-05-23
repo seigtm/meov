@@ -35,6 +35,36 @@ Texture::Texture(const unsigned char *bytes, int width, int height, int channels
     mValid = true;
 }
 
+Texture::Texture(std::array<unsigned char *, 6> bytes, int width, int height, int channels)
+    : mType{ Type::Cubemap } {
+    glGenTextures(1, &mId);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, mId);
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    GLenum format;
+    switch(channels) {
+        case 1: format = GL_RED; break;
+        case 2: format = GL_RG; break;
+        case 3: format = GL_RGB; break;
+        case 4: format = GL_RGBA; break;
+        default:
+            LOGE << "stb_image library returned invalid channels number = " << channels;
+            return;
+    }
+
+    for(unsigned i{}; i < bytes.size(); ++i) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes.at(i));
+    }
+
+    LOGD << "Skybox texture with id = " << mId << " was loaded.";
+    mValid = true;
+}
+
 Texture::~Texture() {
     glDeleteTextures(1, &mId);
 }

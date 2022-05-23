@@ -7,11 +7,45 @@ namespace meov::core::resources {
 
 std::shared_ptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture::Type type) {
     if(path.empty()) {
-        LOGW << "Creating texute with empty path parameter!";
+        LOGW << "Creating texture with empty path parameter!";
         return nullptr;
     }
 
     int width, height, channels;
+    if(type == Texture::Type::Cubemap) {
+        // Vector of correctly named faces files.
+        const std::vector<std::string> faces{
+            "right.jpg",
+            "left.jpg",
+            "top.jpg",
+            "bottom.jpg",
+            "front.jpg",
+            "back.jpg"
+        };
+        // Array of bytes.
+        std::array<unsigned char*, 6> bytes;
+        // Load every face.
+        for(unsigned i{}; i < bytes.size(); ++i) {
+            const auto filename{ path / faces.at(i) };
+            bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
+            if(nullptr == bytes[i]) {
+                LOGE << "Error while loading texture "
+                     << "'" << faces.at(i) << "'"
+                     << " from '" << path.string() << "'";
+                LOGE << "    " << stbi_failure_reason();
+                return nullptr;  // FIXME: Don't return just now. You should clean the memory from previous loaded images.
+            }
+        }
+        // Create texture with array<bytes> c-tor.
+        auto texture{ std::make_shared<meov::core::Texture>(bytes, width, height, channels) };  // FIXME: We hope that every cubemap image has the same width, height and channels.
+        // Clean-up in the end.
+        for(auto b : bytes) {
+            stbi_image_free(b);
+        }
+        // Return texture object.
+        return texture;
+        // TODO: Refactor this shit later, because it's ultra cringy.
+    }
     auto bytes{ stbi_load(path.string().c_str(), &width, &height, &channels, 0) };
     if(nullptr == bytes) {
         LOGE << "Error while loading texture from '" << path.string() << "'";
@@ -39,7 +73,7 @@ std::shared_ptr<shaders::Shader> Loader::LoadShader(const fs::path& path,
     shader->Initialize(type, sources);
     return shader;
 
-    // OLD: (Shader has no contructor which takes Type and std::string).
+    // OLD: (Shader has no c-tor which takes Type and std::string).
     // return std::make_shared<shaders::Shader>(type, sources);
 }
 
