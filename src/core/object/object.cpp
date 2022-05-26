@@ -8,12 +8,28 @@ Object::Object(std::string &&name)
     : mixin::Named{ std::move(name) } {
 }
 
+void Object::PreDraw(Graphics &g) {
+    ForEachComponent([&g](components::Component::Shared &comp) { comp->PreDraw(g); });
+}
+
 void Object::Draw(Graphics &g) {
     ForEachComponent([&g](components::Component::Shared &comp) { comp->Draw(g); });
 }
 
+void Object::PostDraw(Graphics &g) {
+    ForEachComponent([&g](components::Component::Shared &comp) { comp->PostDraw(g); });
+}
+
+void Object::PreUpdate(double delta) {
+    ForEachComponent([&delta](components::Component::Shared &comp) { comp->PreUpdate(delta); });
+}
+
 void Object::Update(double delta) {
     ForEachComponent([&delta](components::Component::Shared &comp) { comp->Update(delta); });
+}
+
+void Object::PostUpdate(double delta) {
+    ForEachComponent([&delta](components::Component::Shared &comp) { comp->PostUpdate(delta); });
 }
 
 void Object::Serialize() {
