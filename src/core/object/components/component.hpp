@@ -20,8 +20,12 @@ public:
     explicit Component(std::string &&name);
     virtual ~Component() = default;
 
+    virtual void PreDraw(Graphics &);
     virtual void Draw(Graphics &) = 0;
+    virtual void PostDraw(Graphics &);
+    virtual void PreUpdate(double);
     virtual void Update(double) = 0;
+    virtual void PostUpdate(double);
     virtual void Serialize();  // for ImGui
 
     void SetHolder(std::weak_ptr<Holder> &&holder);

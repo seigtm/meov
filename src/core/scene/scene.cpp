@@ -9,13 +9,21 @@ namespace meov::core {
 
 void Scene::Draw(Graphics &g) {
     for(auto &&obj : mObjects) {
-        if(obj && obj->Enabled()) obj->Draw(g);
+        if(obj && obj->Enabled()) {
+            obj->PreDraw(g);
+            obj->Draw(g);
+            obj->PostDraw(g);
+        }
     }
 }
 
 void Scene::Update(double delta) {
     for(auto &&obj : mObjects) {
-        if(obj && obj->Enabled()) obj->Update(delta);
+        if(obj && obj->Enabled()) {
+            obj->PreUpdate(delta);
+            obj->Update(delta);
+            obj->PostUpdate(delta);
+        }
     }
 }
 
