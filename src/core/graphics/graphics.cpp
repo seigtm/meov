@@ -94,46 +94,46 @@ Graphics::Impl::Impl() {
 }
 
 void Graphics::Impl::PushColor(const glm::u8vec4 &color) {
-    mColorQueue.push(color);
+    mColorQueue.push_back(color);
 }
 void Graphics::Impl::PopColor() {
-    if(mColorQueue.size() != 1) mColorQueue.pop();
+    if(mColorQueue.size() != 1) mColorQueue.pop_back();
 }
 glm::u8vec4 Graphics::Impl::CurrentColor() const {
     if(mColorQueue.empty())
         return {};
-    return mColorQueue.front();
+    return mColorQueue.back();
 }
 
 void Graphics::Impl::PushTransform(const glm::mat4 &transform) {
-    mTransformQueue.push(transform);
+    mTransformQueue.push_back(transform);
     mResultTransform *= transform;
 }
 void Graphics::Impl::PopTransform() {
     if(mTransformQueue.size() == 1)
         return;
-    mResultTransform *= glm::inverse(mTransformQueue.front());
-    mTransformQueue.pop();
+    mResultTransform *= glm::inverse(mTransformQueue.back());
+    mTransformQueue.pop_back();
 }
 glm::mat4 Graphics::Impl::CurrentTransform() const {
     if(mTransformQueue.empty())
         return glm::mat4{ 1 };
-    return mTransformQueue.front();
+    return mTransformQueue.back();
 }
 glm::mat4 Graphics::Impl::ResultingTransform() const {
     return mResultTransform;
 }
 
 void Graphics::Impl::PushProgram(const shaders::Program &program) {
-    mProgramQueue.push(program);
+    mProgramQueue.push_back(program);
 }
 void Graphics::Impl::PopProgram() {
-    if(!mProgramQueue.empty()) mProgramQueue.pop();
+    if(!mProgramQueue.empty()) mProgramQueue.pop_back();
 }
 shaders::Program Graphics::Impl::CurrentProgram() const {
     if(mProgramQueue.empty())
         return {};
-    return mProgramQueue.front();
+    return mProgramQueue.back();
 }
 
 }  // namespace meov::core

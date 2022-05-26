@@ -11,6 +11,7 @@
 #include "camera_component.hpp"
 #include "lighting_component.hpp"
 #include "skybox_component.hpp"
+#include "shader_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"
@@ -38,10 +39,11 @@ Core::ExecutionResult Core::Run() {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
     // TODO: Make skybox component and object.
+    // TODO: Make something like Graphics::DrawSkybox() method using OpenGL methods.
     auto skybox{ mScene->AddObject("Skybox") };
     // skybox->AddComponent<components::ModelComponent>("models\\prikol\\prikol.obj");
     skybox->AddComponent<components::SkyboxComponent>("models\\prikol");
-    // TODO: Make something like Graphics::DrawSkybox() method using OpenGL methods.
+    object->AddComponent<components::ShaderComponent>("shaders\\skybox\\skybox");
 
     auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();

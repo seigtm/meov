@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <queue>
+#include <deque>
 #include <initializer_list>
 
 #include "common.hpp"
@@ -46,9 +46,9 @@ public:
         virtual void DrawMesh(const Mesh &mesh) = 0;
 
     protected:
-        std::queue<glm::u8vec4> mColorQueue;
-        std::queue<glm::mat4> mTransformQueue;
-        std::queue<shaders::Program> mProgramQueue;
+        std::deque<glm::u8vec4> mColorQueue;
+        std::deque<glm::mat4> mTransformQueue;
+        std::deque<shaders::Program> mProgramQueue;
         glm::mat4 mResultTransform{ 1.f };
     };
 
