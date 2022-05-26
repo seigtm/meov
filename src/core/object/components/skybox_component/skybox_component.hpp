@@ -19,6 +19,8 @@ public:
     bool Valid() const;
 
 private:
+    bool mDirtyFlag{ true };
+
     fs::path mPath;
     std::shared_ptr<Texture> mSkyboxTexture;
 };

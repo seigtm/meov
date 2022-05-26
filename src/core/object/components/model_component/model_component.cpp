@@ -50,6 +50,10 @@ void ModelComponent::Serialize() {
     }
 }
 
+bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
+    mModel = model;
+}
+
 bool ModelComponent::Valid() const {
     const auto holder{ mHolder.lock() };
     return holder && mModel;
