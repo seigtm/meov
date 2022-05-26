@@ -52,6 +52,21 @@ std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Typ
     return mTextures[name];
 }
 
+std::shared_ptr<Texture> Manager::LoadSkybox(const fs::path &path, bool reload) {
+    if(!mLoader || path.empty()) return nullptr;
+
+    const auto name{ path.stem().string() };
+    if(mTextures.find(name) == mTextures.end() || reload) {
+        auto texture = mLoader->LoadSkybox(mResourcesRoot / path);
+        if(!texture) {
+            LOGE << "Error while loading skybox texture " << path.string();
+            return nullptr;
+        }
+        mTextures[name] = std::move(texture);
+    }
+    return mTextures[name];
+}
+
 std::shared_ptr<Model> Manager::LoadModel(const fs::path &path, bool reload) {
     if(!mLoader || path.empty()) return nullptr;
 

@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "b0cc23bad7de78ac6a7a5296ca845778c29c890a-dirty"
-#define GIT_COMMIT_DATE "Sun May 22 15:05:41 2022"
-#define GIT_COMMIT_MESSAGE "Lighting component"
+#define GIT_COMMIT_HASH "908dbe497621118b812058b7961d66c466fbf68b-dirty"
+#define GIT_COMMIT_DATE "Mon May 23 12:05:50 2022"
+#define GIT_COMMIT_MESSAGE "Skybox component implementation begins..."
 
 namespace meov {
 

@@ -25,6 +25,7 @@ public:
     std::shared_ptr<Texture> LoadTexture(const fs::path &name,
                                          Texture::Type type = Texture::Type::Invalid,
                                          bool reload = false);
+    std::shared_ptr<Texture> LoadSkybox(const fs::path &name, bool reload = false);
     std::shared_ptr<Model> LoadModel(const fs::path &name, bool reload = false);
 
 private:
