@@ -28,9 +28,11 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, boo
 
     const auto name{ path.stem().string() };
     if(mPrograms.find(name) == mPrograms.end() || reload) {
+        LOGW << fs::path{ mResourcesRoot / path }.c_str();
         auto program = mLoader->LoadProgram(mResourcesRoot / path);
-        if(!program) {
-            LOGE << "Error while loading texture " << path.string();
+        if(!program || !program->IsValid()) {
+            LOGE << "Error while loading program " << path.string();
+            return nullptr;  // We don't want to append an invalid program to the container.
         }
         mPrograms[name] = std::move(program);
     }

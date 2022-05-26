@@ -15,7 +15,10 @@ OGLProgramImpl::~OGLProgramImpl() {
 }
 
 bool OGLProgramImpl::Attach(const std::shared_ptr<Shader> &shader) {
-    if(shader == nullptr || !shader->IsValid()) return false;
+    if(shader == nullptr || !shader->IsValid()) {
+        mValid = false;
+        return false;
+    }
 
     glAttachShader(mId, shader->GetID());
 

@@ -14,7 +14,7 @@ void OGLGraphicsImpl::DrawDot(const glm::vec3 &position, const float radius) {
 void OGLGraphicsImpl::DrawLine(std::initializer_list<glm::vec3> &&positions) {
     if(mProgramQueue.empty()) return;
 
-    const auto &clr{ mColorQueue.front() };
+    const auto &clr{ mColorQueue.back() };
     std::vector<Vertex> vertices;
     vertices.resize(positions.size());
     std::transform(
@@ -34,7 +34,7 @@ void OGLGraphicsImpl::DrawLine(std::initializer_list<glm::vec3> &&positions) {
 void OGLGraphicsImpl::DrawTriangle(const std::array<glm::vec3, 3> &positions) {
     if(mProgramQueue.empty()) return;
 
-    const auto &clr{ mColorQueue.front() };
+    const auto &clr{ mColorQueue.back() };
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 0.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 0.5f, 1.0f } },
@@ -49,7 +49,7 @@ void OGLGraphicsImpl::DrawTriangle(const std::array<glm::vec3, 3> &positions) {
 void OGLGraphicsImpl::DrawRectangle(const std::array<glm::vec3, 4> &positions) {
     if(mProgramQueue.empty()) return;
 
-    const auto &clr{ mColorQueue.front() };
+    const auto &clr{ mColorQueue.back() };
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 1.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 1.0f, 1.0f } },
@@ -65,7 +65,7 @@ void OGLGraphicsImpl::DrawRectangle(const std::array<glm::vec3, 4> &positions) {
 void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) {
     if(mProgramQueue.empty()) return;
 
-    const auto &clr{ mColorQueue.front() };
+    const auto &clr{ mColorQueue.back() };
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 1.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 1.0f, 1.0f } },
@@ -81,7 +81,7 @@ void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, con
 void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
     if(mProgramQueue.empty()) return;
 
-    auto &program{ mProgramQueue.front() };
+    auto &program{ mProgramQueue.back() };
     program.Use();
     program.Get("model")->Set(mResultTransform);
 

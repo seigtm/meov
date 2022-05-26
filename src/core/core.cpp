@@ -30,6 +30,7 @@ void ImGuiWindows::Serialize() {
     mGitWin.Draw();
     mPropWin.Draw();
     mSceneTree.Draw();
+    mShaderWin.Draw();
 }
 
 Core::ExecutionResult Core::Run() {
@@ -51,6 +52,7 @@ Core::ExecutionResult Core::Run() {
     lighting->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
+    SHIT_SHIT_SHIT.mShaderWin.Select(mGraphics);
     // SHIT_SHIT_SHIT.mPropWin.Select(camera);
 
     mRunning = true;
@@ -216,12 +218,12 @@ Core::Core(std::vector<std::string>&& argv)
                     });
                 glEnable(GL_DEPTH_TEST);
 #if defined(_DEBUG)
-                LOGD << "Debug callbacks initialization";
-                glEnable(GL_DEBUG_OUTPUT);
-                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-                glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
+    // LOGD << "Debug callbacks initialization";
+    // glEnable(GL_DEBUG_OUTPUT);
+    // glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    // glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
 
-                SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
+    // SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
 #endif
                 return true;
             },

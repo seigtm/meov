@@ -21,15 +21,16 @@ void LightingComponent::Update(double delta) {
     if(!Valid())
         return;
 
-    if (!mEnabled)
+    if(!mEnabled)
         return;
 
     auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
-    auto program{ mWeakGraphics.lock()->CurrentProgram() };
-    program.Use();
-    program.Get("lightPos")->Set(transform->GetPosition());
-    program.Get("blinn")->Set(mUseBlinnPhongModel);
-    program.UnUse();
+    if (auto program{ mWeakGraphics.lock()->CurrentProgram() }; program.IsValid()) {
+        program.Use();
+        program.Get("lightPos")->Set(transform->GetPosition());
+        program.Get("blinn")->Set(mUseBlinnPhongModel);
+        program.UnUse();
+    }
 }
 
 void LightingComponent::Serialize() {
