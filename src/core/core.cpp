@@ -10,6 +10,7 @@
 #include "move_component.hpp"
 #include "camera_component.hpp"
 #include "lighting_component.hpp"
+#include "shader_component.hpp"
 
 #include "graphics.hpp"
 #include "frame_buffer.hpp"
@@ -45,6 +46,8 @@ Core::ExecutionResult Core::Run() {
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models\\clothes.obj");
+    object->AddComponent<components::ShaderComponent>("lolkek_shaders\\skybox\\skybox");
+
     auto lighting{ mScene->AddObject("Lighting") };
     lighting->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
     lighting->AddComponent<components::LightingComponent>(mGraphics);

@@ -11,6 +11,7 @@
 #include <stb_image.h>
 
 #include <imgui.h>
+#include <imgui_stdlib.h>
 #include <backends/imgui_impl_sdl.h>
 #include <backends/imgui_impl_opengl3.h>
 

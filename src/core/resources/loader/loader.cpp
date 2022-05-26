@@ -48,6 +48,8 @@ std::shared_ptr<shaders::Program> Loader::LoadProgram(const fs::path& path) {
 
     const auto name{ path.filename() };
     const auto root{ path.parent_path() };
+    if(!fs::exists(root))
+        return nullptr;
 
     auto program{ std::make_shared<shaders::Program>() };
     program->Initialize(name.string());
