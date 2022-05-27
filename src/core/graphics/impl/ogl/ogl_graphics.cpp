@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include "model.hpp"
 #include "mesh.hpp"
 #include "vertex.hpp"
 #include "texture.hpp"
@@ -83,8 +84,29 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
 
     auto &program{ CurrentProgram() };
     program.Use();
+    program.Get("projection")->Set(GetProjection());
+    program.Get("view")->Set(GetViewMatrix());
+    program.Get("model")->Set(ResultingTransform());
+    DrawMeshRaw(mesh, program);
+    program.UnUse();
+}
+
+void OGLGraphicsImpl::DrawModel(const Model &model) {
+    if(mProgramQueue.empty() || model.GetMeshes().empty()) return;
+
+    auto &program{ CurrentProgram() };
+    program.Use();
+    program.Get("projection")->Set(GetProjection());
+    program.Get("view")->Set(GetViewMatrix());
     program.Get("model")->Set(ResultingTransform());
 
+    for(auto &&mesh : model.GetMeshes())
+        if(mesh) DrawMeshRaw(*mesh, program);
+
+    program.UnUse();
+}
+
+void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
     std::unordered_map<Texture::Type, unsigned> counters{
         { Texture::Type::Diffuse, 1 },
         { Texture::Type::Specular, 1 },
@@ -111,9 +133,8 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
     if(mesh.HasIndices()) {
         glDrawElements(mRenderMode, mesh.IndicesCount(), GL_UNSIGNED_INT, 0);
     } else {
-        glDrawArrays(mRenderMode, mesh.GetID(), mesh.VerticesCount());
+        glDrawArrays(mRenderMode, 0, mesh.VerticesCount());
     }
-    program.UnUse();
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0);
 }

@@ -7,9 +7,7 @@ Model::Model(std::vector<std::shared_ptr<core::Mesh>>&& meshes)
 
 void Model::Draw(core::Graphics& g) const {
     auto wrapper{ MakePushPopWrapper(g) };
-    for(auto const& mesh : mMeshes) {
-        mesh->Draw(g);
-    }
+    g.DrawModel(*this);
 }
 
 const std::vector<std::shared_ptr<Mesh>>& Model::GetMeshes() const {

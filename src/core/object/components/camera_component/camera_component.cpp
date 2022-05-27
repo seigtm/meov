@@ -51,11 +51,8 @@ void CameraComponent::Update(double delta) {
     ImGui::End();
     UpdateProjection({ w, h });
 
-    auto program{ graphics->CurrentProgram() };
-    program.Use();
-    program.Get("projection")->Set(mProjection);
-    program.Get("view")->Set(mViewMatrix);
-    program.UnUse();
+    graphics->SetProjection(mProjection);
+    graphics->SetViewMatrix(mViewMatrix);
 }
 
 void CameraComponent::Serialize() {

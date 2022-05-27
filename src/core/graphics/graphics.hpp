@@ -11,6 +11,7 @@ namespace meov::core {
 
 class Texture;
 class Mesh;
+class Model;
 
 class Graphics final {
 public:
@@ -20,6 +21,12 @@ public:
 
     public:
         Impl();
+
+        virtual void SetViewMatrix(const glm::mat4 &view);
+        virtual void SetProjection(const glm::mat4 &projection);
+
+        virtual const glm::mat4 &GetViewMatrix() const;
+        virtual const glm::mat4 &GetProjection() const;
 
         virtual void PushColor(const glm::u8vec4 &color);
         virtual void PopColor();
@@ -44,15 +51,24 @@ public:
         virtual void DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) = 0;
 
         virtual void DrawMesh(const Mesh &mesh) = 0;
+        virtual void DrawModel(const Model &model) = 0;
 
     protected:
         std::deque<glm::u8vec4> mColorQueue;
         std::deque<glm::mat4> mTransformQueue;
         std::deque<shaders::Program> mProgramQueue;
+        glm::mat4 mView{ 1.f };
+        glm::mat4 mProjection{ 1.f };
         glm::mat4 mResultTransform{ 1.f };
     };
 
     Graphics();
+
+    void SetViewMatrix(const glm::mat4 &view);
+    void SetProjection(const glm::mat4 &projection);
+
+    const glm::mat4 &GetViewMatrix() const;
+    const glm::mat4 &GetProjection() const;
 
     void PushColor(const glm::u8vec4 &color);
     void PopColor();
@@ -79,6 +95,7 @@ public:
     void DrawTexture(const std::shared_ptr<Texture> &tex, const glm::vec3 position, const float width, const float height);
 
     void DrawMesh(const Mesh &mesh);
+    void DrawModel(const Model &model);
 
 private:
     std::shared_ptr<Impl> mImpl;

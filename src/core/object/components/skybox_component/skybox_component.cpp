@@ -113,6 +113,12 @@ void SkyboxComponent::OnInvalidSerialize() {
 
 void SkyboxComponent::OnValidSerialize() {
     ImGui::Text("Current texture: %s", mPath.string().c_str());
+    const bool isValid{ mSkyboxTexture && mSkyboxTexture->Valid() };
+    ImGui::Text("Texture status: %s", isValid ? "valid" : "invalid");
+
+    if(ImGui::Button("Reload mesh?")) {
+        mDirtyFlag = true;
+    }
 }
 
 }  // namespace meov::core::components

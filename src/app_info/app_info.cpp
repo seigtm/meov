@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "fc092d06f910726ff8e13e249ab3907b013373be-dirty"
-#define GIT_COMMIT_DATE "Thu May 26 18:22:03 2022"
-#define GIT_COMMIT_MESSAGE "Merge branch 'master' into Baranov_Skybox"
+#define GIT_COMMIT_HASH "0e779d1f26ab6ee4916163365b776778435e4036-dirty"
+#define GIT_COMMIT_DATE "Fri May 27 07:56:04 2022"
+#define GIT_COMMIT_MESSAGE "skybox_component aroundwork"
 
 namespace meov {
 
