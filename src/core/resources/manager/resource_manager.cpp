@@ -23,7 +23,8 @@ Manager *Manager::Instance() {
     return &manager;
 }
 
-std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, bool reload) {
+std::shared_ptr<shaders::Program> Manager::LoadProgram(fs::path path, bool reload) {
+    path.make_preferred();
     if(path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };
@@ -38,7 +39,8 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, boo
     return mPrograms[name];
 }
 
-std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Type type, bool reload) {
+std::shared_ptr<Texture> Manager::LoadTexture(fs::path path, Texture::Type type, bool reload) {
+    path.make_preferred();
     if(!mLoader || path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };
@@ -53,7 +55,8 @@ std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Typ
     return mTextures[name];
 }
 
-std::shared_ptr<Texture> Manager::LoadSkybox(const fs::path &path, bool reload) {
+std::shared_ptr<Texture> Manager::LoadSkybox(fs::path path, bool reload) {
+    path.make_preferred();
     if(!mLoader || path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };
@@ -68,7 +71,8 @@ std::shared_ptr<Texture> Manager::LoadSkybox(const fs::path &path, bool reload) 
     return mTextures[name];
 }
 
-std::shared_ptr<Model> Manager::LoadModel(const fs::path &path, bool reload) {
+std::shared_ptr<Model> Manager::LoadModel(fs::path path, bool reload) {
+    path.make_preferred();
     if(!mLoader || path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };

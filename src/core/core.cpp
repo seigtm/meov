@@ -41,9 +41,9 @@ Core::ExecutionResult Core::Run() {
     // TODO: Make skybox component and object.
     // TODO: Make something like Graphics::DrawSkybox() method using OpenGL methods.
     auto skybox{ mScene->AddObject("Skybox") };
-    // skybox->AddComponent<components::ModelComponent>("models\\prikol\\prikol.obj");
-    skybox->AddComponent<components::SkyboxComponent>("models\\prikol");
-    object->AddComponent<components::ShaderComponent>("shaders\\skybox\\skybox");
+    // skybox->AddComponent<components::ModelComponent>("models/prikol/prikol.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/prikol");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
 
     auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();

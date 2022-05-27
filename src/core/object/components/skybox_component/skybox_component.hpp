@@ -12,7 +12,9 @@ public:
     explicit SkyboxComponent(const fs::path &path);
     ~SkyboxComponent() override = default;
 
+    void PreDraw(Graphics &g) override;
     void Draw(Graphics &g) override;
+    void PostDraw(Graphics &g) override;
     void Update(double) override;
     void Serialize() override;
 
@@ -23,6 +25,9 @@ private:
 
     fs::path mPath;
     std::shared_ptr<Texture> mSkyboxTexture;
+
+    void OnInvalidSerialize();
+    void OnValidSerialize();
 };
 
 }  // namespace meov::core::components

@@ -12,6 +12,10 @@ ModelComponent::ModelComponent(const fs::path &model)
     , mPath{ model }
     , mModel{ RESOURCES->LoadModel(model) } {}
 
+ModelComponent::ModelComponent(const std::shared_ptr<core::Model> &model)
+    : Component{ "Model component" }
+    , mModel{ model } {}
+
 void ModelComponent::Draw(Graphics &g) {
     if(!Valid())
         return;
@@ -35,6 +39,7 @@ void ModelComponent::Serialize() {
     auto *dialog{ ImGuiFileDialog::Instance() };
     constexpr std::string_view DialogName{ "ChooseFileDlgKey" };
     constexpr std::string_view Extensions{ ".obj,.gltf,.fbx,.stl" };
+    ImGui::Indent();
 
     ImGui::Text("Path: %s", mPath.string().c_str());
     ImGui::SameLine();
@@ -48,10 +53,14 @@ void ModelComponent::Serialize() {
         }
         dialog->Close();
     }
+    ImGui::Unindent();
 }
 
 bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
+    if(model == nullptr)
+        return false;
     mModel = model;
+    return true;
 }
 
 bool ModelComponent::Valid() const {

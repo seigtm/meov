@@ -71,7 +71,7 @@ Texture::~Texture() {
 }
 
 void Texture::Bind() {
-    glBindTexture(GL_TEXTURE_2D, mId);
+    glBindTexture(mType == Type::Cubemap ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D, mId);
 }
 
 std::string Texture::Activate(const int id) {
@@ -85,6 +85,8 @@ std::string Texture::Activate(const int id) {
             return "textureNormal";
         case Texture::Type::Height:
             return "textureHeight";
+        case Texture::Type::Cubemap:
+            return "textureCubemap";
         default: break;
     }
     return "invalid texture";

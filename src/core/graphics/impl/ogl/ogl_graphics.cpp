@@ -90,6 +90,7 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
         { Texture::Type::Specular, 1 },
         { Texture::Type::Normal, 1 },
         { Texture::Type::Height, 1 },
+        { Texture::Type::Cubemap, 1 },
         { Texture::Type::Invalid, std::numeric_limits<unsigned>::max() }
     };
 

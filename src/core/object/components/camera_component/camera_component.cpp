@@ -45,6 +45,7 @@ void CameraComponent::Update(double delta) {
     UpdateView(*transform);
 
     /// FIXME: Remove hardcoded shit
+    /// !FIXME: WE NEED IT INSIDE THE SKYBOX SHADER!!!!
     ImGui::Begin("Scene");
     const auto [w, h]{ ImGui::GetWindowSize() };
     ImGui::End();
