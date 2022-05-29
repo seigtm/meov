@@ -127,7 +127,7 @@ void CameraComponent::UpdateProjection(const glm::vec2 screen) {
 
 void CameraComponent::OnMousePressed(
     managers::MouseManager::Button button, const glm::vec2 &position) {
-    if(button != managers::MouseManager::Button::Left)
+    if(button != mListenButton)
         return;
 
     mLastMouseCoords = position;
@@ -136,7 +136,7 @@ void CameraComponent::OnMousePressed(
 
 void CameraComponent::OnMouseReleased(
     managers::MouseManager::Button button, const glm::vec2 &position) {
-    if(button != managers::MouseManager::Button::Left)
+    if(button != mListenButton)
         return;
 
     mIsMouseGrabbed = false;

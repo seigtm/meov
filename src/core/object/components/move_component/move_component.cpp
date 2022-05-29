@@ -49,7 +49,7 @@ void MoveComponent::Serialize() {
         return;
     }
 
-    ImGui::InputFloat3("Velocity", glm::value_ptr(mVelocity));
+    ImGui::DragFloat3("Velocity", glm::value_ptr(mVelocity));
     ImGui::InputFloat("Speed", &mSpeed);
 
     ImGui::Unindent();

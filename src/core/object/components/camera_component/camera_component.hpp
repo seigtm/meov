@@ -29,6 +29,8 @@ constexpr float Far{ 1000.f };
 class CameraComponent final
     : public Component,
       public managers::MouseManager::Listener {
+    using button = core::managers::MouseManager::Button;
+
 public:
     explicit CameraComponent(std::weak_ptr<Graphics> &&graphics,
                              float yaw = camera::defaults::Yaw,
@@ -46,6 +48,7 @@ private:
     glm::mat4 mViewMatrix{ 1 };
     glm::mat4 mProjection{ 1 };
 
+    button mListenButton{ button::Middle };
     glm::vec2 mLastMouseCoords{};
     bool mIsMouseGrabbed{ false };
 

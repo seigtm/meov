@@ -11,6 +11,7 @@
 #include "windows/log_window.hpp"
 #include "windows/properties_window.hpp"
 #include "windows/scene_tree.hpp"
+#include "windows/scene_window.hpp"
 
 namespace meov::core {
 
@@ -25,6 +26,7 @@ public:
     std::shared_ptr<Window::Log> mLogWin;
     Window::Properties mPropWin;
     Window::SceneTree mSceneTree;
+    Window::Scene mSceneWin;
 
     ImGuiWindows();
     void Serialize();

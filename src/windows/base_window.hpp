@@ -30,7 +30,13 @@ public:
     //! \brief Toggles Dear ImGui's 'NoResize' flag.
     void ToggleNoResize();
 
+    ImVec2 Position() const;
+    ImVec2 Size() const;
+
 protected:
+    ImVec2 mSize{};
+    ImVec2 mPos{};
+
     //! \brief Implementation of draw call inside Dear ImGui's Begin()/End().
     //! Override this with your interface widgets' calls.
     virtual void DrawImpl() = 0;
@@ -42,10 +48,9 @@ private:
      */
     void ToggleFlag(ImGuiWindowFlags flag);
 
-    std::string _title;
-    ImVec2 _size;
-    bool _isClosable;
-    ImGuiWindowFlags _flags;
+    std::string mTitle;
+    bool mIsClosable;
+    ImGuiWindowFlags mFlags;
 };
 
 }  // namespace meov::Window

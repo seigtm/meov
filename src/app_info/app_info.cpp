@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "0e779d1f26ab6ee4916163365b776778435e4036-dirty"
-#define GIT_COMMIT_DATE "Fri May 27 07:56:04 2022"
-#define GIT_COMMIT_MESSAGE "skybox_component aroundwork"
+#define GIT_COMMIT_HASH "181da37cf976c4cb6e10785753cbada84516a83f-dirty"
+#define GIT_COMMIT_DATE "Fri May 27 08:48:44 2022"
+#define GIT_COMMIT_MESSAGE "I Fix something and add model rendering optimization"
 
 namespace meov {
 
