@@ -142,12 +142,10 @@ glm::u8vec4 Graphics::Impl::CurrentColor() const {
 
 void Graphics::Impl::PushTransform(const glm::mat4 &transform) {
     mTransformQueue.push_back(transform);
-    mResultTransform *= transform;
 }
 void Graphics::Impl::PopTransform() {
     if(mTransformQueue.size() == 1)
         return;
-    mResultTransform *= glm::inverse(mTransformQueue.back());
     mTransformQueue.pop_back();
 }
 glm::mat4 Graphics::Impl::CurrentTransform() const {
@@ -156,7 +154,11 @@ glm::mat4 Graphics::Impl::CurrentTransform() const {
     return mTransformQueue.back();
 }
 glm::mat4 Graphics::Impl::ResultingTransform() const {
-    return mResultTransform;
+    return std::reduce(
+        mTransformQueue.begin(),
+        mTransformQueue.end(),
+        glm::mat4{ 1 },
+        std::multiplies<glm::mat4>());
 }
 
 void Graphics::Impl::PushProgram(const shaders::Program &program) {

@@ -51,9 +51,9 @@ Texture::Texture(std::array<unsigned char *, 6> bytes, int width, int height, in
             return;
     }
 
-    for(unsigned i{}; i < bytes.size(); ++i) {
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes.at(i));
-        stbi_image_free(bytes.at(i));  // FIXME: maybe it's cringe.
+    size_t counter{};
+    for(auto *image : bytes) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + counter++, 0, format, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -78,15 +78,15 @@ std::string Texture::Activate(const int id) {
     glActiveTexture(GL_TEXTURE0 + id);
     switch(GetType()) {
         case Texture::Type::Diffuse:
-            return "textureDiffuse";
+            return "diffuse";
         case Texture::Type::Specular:
-            return "textureSpecular";
+            return "specular";
         case Texture::Type::Normal:
-            return "textureNormal";
+            return "normal";
         case Texture::Type::Height:
-            return "textureHeight";
+            return "height";
         case Texture::Type::Cubemap:
-            return "textureCubemap";
+            return "cubemap";
         default: break;
     }
     return "invalid texture";

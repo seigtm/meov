@@ -65,12 +65,12 @@ Core::ExecutionResult Core::Run() {
     auto lighting{ mScene->AddObject("Lighting") };
     lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
     lighting->AddComponent<components::PointLightingComponent>();
-    lighting->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
+    lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     auto spotLight{ mScene->AddObject("Spot light") };
     spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
     spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-    spotLight->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
+    spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
     SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);

@@ -67,13 +67,15 @@ void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, con
     if(mProgramQueue.empty()) return;
 
     const auto &clr{ CurrentColor() };
+    Material mat;
+    mat[Texture::Type::Diffuse] = tex;
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 1.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 1.0f, 1.0f } },
           Vertex{ positions[2], clr, glm::vec2{ 1.0f, 0.0f } },
           Vertex{ positions[3], clr, glm::vec2{ 0.0f, 0.0f } } },
         { 0u, 1u, 2u, 0u, 3u, 2u },
-        { tex }
+        std::move(mat)
     };
 
     DrawMesh(mesh);
@@ -107,38 +109,23 @@ void OGLGraphicsImpl::DrawModel(const Model &model) {
 }
 
 void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
-    std::unordered_map<Texture::Type, unsigned> counters{
-        { Texture::Type::Diffuse, 1 },
-        { Texture::Type::Specular, 1 },
-        { Texture::Type::Normal, 1 },
-        { Texture::Type::Height, 1 },
-        { Texture::Type::Cubemap, 1 },
-        { Texture::Type::Invalid, std::numeric_limits<unsigned>::max() }
+    const std::array<Texture::Type, 4> types{
+        Texture::Type::Diffuse,
+        Texture::Type::Specular,
+        Texture::Type::Normal,
+        Texture::Type::Height,
     };
 
     const auto &material{ mesh.Material() };
-    if(auto diff{ material.mDiffuse }; diff && diff->Valid()) {
-        diff->Activate(0);
-        diff->Bind();
-        program.Get("material.diffuse")->Set(0);
+    int counter{};
+    for(const auto type : types) {
+        if(auto texture{ material[type] }; texture) {
+            const std::string name{ texture->Activate(counter++) };
+            texture->Bind();
+            program.Get("material." + name)->Set(counter);
+        }
     }
-    if(auto spec{ material.mSpecular }; spec && spec->Valid()) {
-        spec->Activate(1);
-        spec->Bind();
-        program.Get("material.specular")->Set(1);
-    }
-    program.Get("material.shininess")->Set(material.mShininess);
-    // for(size_t i{}; i < textures.size(); ++i) {
-    //     auto &texture{ textures[i] };
-    //     if(!(texture && texture->Valid())) {
-    //         continue;
-    //     }
-    //     const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
-
-    //     texture->Bind();
-    //     if(auto &&var{ program.Get(name) }; var != nullptr)
-    //         var->Set(static_cast<int>(i));
-    // }
+    program.Get("material.shininess")->Set(material.GetShininess());
 
     glBindVertexArray(mesh.GetID());
     if(mesh.HasIndices()) {

@@ -89,37 +89,26 @@ Material AssimpLoader::LoadMaterial(aiMaterial *mat) const {
     const auto ExtractTexturesNamesByType{
         [&](aiTextureType type) {
             const auto count{ mat->GetTextureCount(type) };
-            std::set<std::string> names;
             for(unsigned current{}; current < count; ++current) {
                 aiString str;
                 mat->GetTexture(type, current, &str);
-                names.emplace((mLastLoadingDirectory / str.C_Str()).string());
-                LOGI << "Texture " << str.C_Str() << " loaded!";
+                return mLastLoadingDirectory / str.C_Str();
             }
-            return std::move(names);
+            return fs::path{};
         }
     };
 
-    Material materials;
-    std::vector<std::shared_ptr<Texture>> diffuses;
-    std::vector<std::shared_ptr<Texture>> speculars;
+    Material material;
 
     for(const auto type : textureTypes) {
-        const auto names{ ExtractTexturesNamesByType(type) };
-        const auto loader = [convertedType = typeConv.at(type)](const auto &name) {
-            return RESOURCES->LoadTexture(name, convertedType);
-        };
-
-        if(type == aiTextureType_DIFFUSE)
-            std::transform(names.begin(), names.end(), std::back_inserter(diffuses), loader);
-        else if(type == aiTextureType_SPECULAR)
-            std::transform(names.begin(), names.end(), std::back_inserter(speculars), loader);
+        const auto name{ ExtractTexturesNamesByType(type) };
+        if(name.empty())
+            continue;
+        const auto converted{ typeConv.at(type) };
+        material[converted] = RESOURCES->LoadTexture(name, converted);
     }
 
-    materials.mDiffuse = diffuses.empty() ? nullptr : diffuses[0];
-    materials.mSpecular = speculars.empty() ? nullptr : speculars[0];
-
-    return materials;
+    return material;
 }
 
 }  // namespace meov::core::resources
