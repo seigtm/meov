@@ -47,9 +47,22 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     // Array of bytes.
     std::array<unsigned char*, 6> bytes;
     // Load every face.
+    int previousWidth{};
+    int previousHeight{};
+    int previousChannels{};
     for(unsigned i{}; i < bytes.size(); ++i) {
         const auto filename{ path / faces.at(i) };
         bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
+        // Check that all images have the same width, height and number of channels.
+        if(i == 0) {
+            previousWidth = width;
+            previousHeight = height;
+            previousChannels = channels;
+        } else if(previousWidth != width || previousHeight != height || previousChannels != channels) {
+            const std::string errmsg{ "Can't load skybox because its images don't have the same size and number of channels." };
+            LOGE << errmsg << " Path: " << path.c_str();
+            throw std::invalid_argument{ errmsg };
+        }
         if(nullptr == bytes[i]) {
             LOGE << "Error while loading texture "
                  << "'" << faces.at(i) << "'"
