@@ -5,7 +5,7 @@ out vec4 FragColor;
 in VS_OUT {
     vec3 FragPos;
     vec4 Color;
-    vec2 TexCoords;
+    vec3 TexCoords;
     vec4 ViewPos;
 }
 fs_in;

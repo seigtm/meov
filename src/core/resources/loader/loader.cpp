@@ -42,6 +42,8 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
         "front.jpg",
         "back.jpg"
     };
+    // Disabling vertical flip to get textures right.
+    stbi_set_flip_vertically_on_load(false);
     // Array of bytes.
     std::array<unsigned char*, 6> bytes;
     // Load every face.
@@ -53,6 +55,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
                  << "'" << faces.at(i) << "'"
                  << " from '" << path.string() << "'";
             LOGE << "    " << stbi_failure_reason();
+            stbi_set_flip_vertically_on_load(true);
             return nullptr;  // FIXME: Don't return just now. You should clean the memory from previous loaded images.
         }
     }
@@ -62,8 +65,10 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     // for(auto b : bytes) {
     // stbi_image_free(b);
     // }
-    // Return texture object.
     LOGI << "Skybox texture '" << path.c_str() << "' was loaded!";
+    // Return flip back to normal.
+    stbi_set_flip_vertically_on_load(true);
+    // Return texture object.
     return texture;
 }
 

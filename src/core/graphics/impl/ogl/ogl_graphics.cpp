@@ -117,6 +117,7 @@ void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
     };
 
     const auto &textures{ mesh.Textures() };
+    CurrentProgram().Get("hasTextures")->Set(!textures.empty());
     for(size_t i{}; i < textures.size(); ++i) {
         auto &texture{ textures[i] };
         if(!(texture && texture->Valid())) {

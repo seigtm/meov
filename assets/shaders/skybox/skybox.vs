@@ -6,7 +6,7 @@ layout(location = 2) in vec2 aTexPos;
 out VS_OUT {
     vec3 FragPos;
     vec4 Color;
-    vec2 TexCoords;
+    vec3 TexCoords;
     vec4 ViewPos;
 }
 vs_out;
@@ -18,7 +18,7 @@ uniform mat4 model = mat4(1);
 void main() {
     vs_out.FragPos = aPos;
     vs_out.Color = aColor;
-    vs_out.TexCoords = aTexPos;
+    vs_out.TexCoords = aPos;
     vs_out.ViewPos = view * vec4(0);
 
     vec4 pos = projection * view * model * vec4(aPos, 1.0);

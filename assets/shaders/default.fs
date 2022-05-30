@@ -4,6 +4,9 @@ out vec4 FragColor;
 
 uniform vec3 lightPos;
 uniform bool blinn;
+uniform bool hasTextures;
+uniform sampler2D textureDiffuse1;
+uniform sampler2D textureNormal1;
 
 in VS_OUT {
     vec3 FragPos;
@@ -13,14 +16,26 @@ in VS_OUT {
 }
 fs_in;
 
-uniform sampler2D textureDiffuse1;
-uniform sampler2D textureNormal1;
+vec3 GetNormal(vec2 TexCoords) {
+    vec3 normal = vec3(TexCoords, 1.0);
+    if(hasTextures) {
+        normal = texture(textureNormal1, TexCoords).rgb;
+        return normalize(normal * 2.0 - 1.0);
+    }
+    return normal;
+}
+
+vec3 GetColor(vec2 TexCoords) {
+    if(hasTextures) {
+        return texture(textureDiffuse1, TexCoords).rgb;
+    }
+    return vec3(TexCoords, 1.0);
+}
 
 void main() {
-    vec3 normal = texture(textureNormal1, fs_in.TexCoords).rgb;
-    normal = normalize(normal * 2.0 - 1.0);
+    const vec3 normal = GetNormal(fs_in.TexCoords);
 
-    vec3 color = texture(textureDiffuse1, fs_in.TexCoords).rgb;
+    vec3 color = GetColor(fs_in.TexCoords);
     vec3 ambient = 0.05 * color;    // TODO: give option to change ambient from outside.
 
     vec3 lightDir = normalize(lightPos - fs_in.FragPos);

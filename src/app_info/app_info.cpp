@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "181da37cf976c4cb6e10785753cbada84516a83f-dirty"
-#define GIT_COMMIT_DATE "Fri May 27 08:48:44 2022"
-#define GIT_COMMIT_MESSAGE "I Fix something and add model rendering optimization"
+#define GIT_COMMIT_HASH "07366c73493a61c7d1d34fcd721263d41afdd81b-dirty"
+#define GIT_COMMIT_DATE "Sun May 29 11:56:33 2022"
+#define GIT_COMMIT_MESSAGE "move scene inside another class"
 
 namespace meov {
 
