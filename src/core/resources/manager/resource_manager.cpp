@@ -31,7 +31,7 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(fs::path path, bool reloa
     if(mPrograms.find(name) == mPrograms.end() || reload) {
         auto program = mLoader->LoadProgram(mResourcesRoot / path);
         if(!program || !program->IsValid()) {
-            LOGE << "Error while loading texture " << path.string();
+            LOGE << "Error while loading program " << path.string();
             return nullptr;
         }
         mPrograms[name] = std::move(program);

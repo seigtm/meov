@@ -160,7 +160,7 @@ glm::mat4 Graphics::Impl::ResultingTransform() const {
 }
 
 void Graphics::Impl::PushProgram(const shaders::Program &program) {
-    mProgramQueue.push_back(program);
+    if(program.IsValid()) mProgramQueue.push_back(program);
 }
 void Graphics::Impl::PopProgram() {
     if(!mProgramQueue.empty()) mProgramQueue.pop_back();

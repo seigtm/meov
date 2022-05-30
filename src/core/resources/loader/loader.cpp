@@ -94,13 +94,9 @@ std::shared_ptr<shaders::Shader> Loader::LoadShader(const fs::path& path,
     std::ifstream ifs{ path };
     const std::string sources{ { std::istreambuf_iterator<char>{ ifs } }, std::istreambuf_iterator<char>{} };
 
-    // NEW REALIZATION:
     auto shader{ std::make_shared<shaders::Shader>() };
     shader->Initialize(type, sources);
     return shader;
-
-    // OLD: (Shader has no c-tor which takes Type and std::string).
-    // return std::make_shared<shaders::Shader>(type, sources);
 }
 
 std::shared_ptr<shaders::Program> Loader::LoadProgram(const fs::path& path) {

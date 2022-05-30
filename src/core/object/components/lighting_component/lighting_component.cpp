@@ -21,11 +21,13 @@ void LightingComponent::Update(double delta) {
     if(!Valid())
         return;
 
-    if (!mEnabled)
+    if(!mEnabled)
         return;
 
     auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
     auto program{ mWeakGraphics.lock()->CurrentProgram() };
+    if(!program.IsValid())
+        return;
     program.Use();
     program.Get("lightPos")->Set(transform->GetPosition());
     program.Get("blinn")->Set(mUseBlinnPhongModel);
