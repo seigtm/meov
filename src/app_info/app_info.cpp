@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "f9301dfdc81c77996671c33a072f1dcac2917937-dirty"
-#define GIT_COMMIT_DATE "Mon May 30 13:05:21 2022"
-#define GIT_COMMIT_MESSAGE "Check that all skybox images have the same width, height and number of channels"
+#define GIT_COMMIT_HASH "6dd2a4e150e6e24b4380b55bac64a50a55e30858-dirty"
+#define GIT_COMMIT_DATE "Mon May 30 20:36:07 2022"
+#define GIT_COMMIT_MESSAGE "Merge branch Baranov_Skybox into Golovinsky_Lighting"
 
 namespace meov {
 

@@ -39,6 +39,8 @@ Core::ExecutionResult Core::Run() {
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
+    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+
     auto skybox{ mScene->AddObject("Skybox") };
     skybox->AddComponent<components::TransformComponent>();
     skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
@@ -53,12 +55,21 @@ Core::ExecutionResult Core::Run() {
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
     // Default model displayed when the application runs.
-    object->AddComponent<components::ModelComponent>("models\\clothes\\clothes.obj");
+    object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
+
+    auto dirLight{ mScene->AddObject("Directional light") };
+    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
 
     auto lighting{ mScene->AddObject("Lighting") };
-    lighting->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    lighting->AddComponent<components::LightingComponent>(mGraphics);
-    lighting->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
+    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
+    lighting->AddComponent<components::PointLightingComponent>();
+    lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+
+    auto spotLight{ mScene->AddObject("Spot light") };
+    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
     SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);

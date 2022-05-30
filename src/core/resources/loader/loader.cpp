@@ -59,9 +59,13 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
             previousHeight = height;
             previousChannels = channels;
         } else if(previousWidth != width || previousHeight != height || previousChannels != channels) {
-            const std::string errmsg{ "Can't load skybox because its images don't have the same size and number of channels." };
+            constexpr std::string_view errmsg{
+                "Can't load skybox because its images don't have"
+                " the same size and number of channels."
+            };
             LOGE << errmsg << " Path: " << path.c_str();
-            throw std::invalid_argument{ errmsg };
+            stbi_set_flip_vertically_on_load(true);
+            throw std::invalid_argument{ std::string{ errmsg } };
         }
         if(nullptr == bytes[i]) {
             LOGE << "Error while loading texture "
@@ -73,12 +77,12 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
         }
     }
     // Create texture with array<bytes> c-tor.
-    auto texture{ std::make_shared<meov::core::Texture>(bytes, width, height, channels) };  // FIXME: We hope that every cubemap image has the same width, height and channels.
+    auto texture{ std::make_shared<meov::core::Texture>(std::move(bytes), width, height, channels) };  // FIXME: We hope that every cubemap image has the same width, height and channels.
     // Clean-up in the end.
-    // for(auto b : bytes) {
-    // stbi_image_free(b);
-    // }
-    LOGI << "Skybox texture '" << path.c_str() << "' was loaded!";
+    for(auto&& b : bytes) {
+        stbi_image_free(b);
+    }
+    LOGD << "Skybox texture '" << path.c_str() << "' was loaded!";
     // Return flip back to normal.
     stbi_set_flip_vertically_on_load(true);
     // Return texture object.
