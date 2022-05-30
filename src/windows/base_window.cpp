@@ -3,17 +3,19 @@
 namespace meov::Window {
 
 Base::Base(std::string_view const title, ImVec2 const& size, bool isClosable, ImGuiWindowFlags flags)
-    : _title{ title }
-    , _size{ size }
-    , _isClosable{ isClosable }
-    , _flags{ flags } {}
+    : mTitle{ title }
+    , mSize{ size }
+    , mIsClosable{ isClosable }
+    , mFlags{ flags } {}
 
 void Base::Draw(bool visible) {
     if(!visible)
         return;
 
-    ImGui::SetNextWindowSize(_size, ImGuiCond_Once);  // Resize will be called once per session.
-    ImGui::Begin(_title.c_str(), &_isClosable, _flags);
+    ImGui::SetNextWindowSize(mSize, ImGuiCond_Once);  // Resize will be called once per session.
+    ImGui::Begin(mTitle.c_str(), &mIsClosable, mFlags);
+    mSize = ImGui::GetWindowSize();
+    mPos = ImGui::GetWindowPos();
     DrawImpl();
     ImGui::End();
 }
@@ -38,8 +40,15 @@ void Base::ToggleNoResize() {
     ToggleFlag(ImGuiWindowFlags_NoResize);
 }
 
+ImVec2 Base::Position() const {
+    return mPos;
+}
+ImVec2 Base::Size() const {
+    return mSize;
+}
+
 void Base::ToggleFlag(ImGuiWindowFlags flag) {
-    _flags ^= flag;
+    mFlags ^= flag;
 }
 
 }  // namespace meov::Window

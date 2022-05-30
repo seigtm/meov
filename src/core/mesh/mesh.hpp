@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "material.hpp"
 #include "common.hpp"
 
 namespace meov::core {
@@ -13,8 +14,7 @@ class Graphics;
 class Mesh {
 public:
     Mesh() = default;
-    Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices,
-         std::vector<std::shared_ptr<Texture>> &&textures);
+    Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, Material &&textures);
     ~Mesh();
 
     void Draw(Graphics &g) const;
@@ -24,13 +24,13 @@ public:
     size_t IndicesCount() const;
     size_t VerticesCount() const;
 
-    const std::vector<std::shared_ptr<Texture>> &Textures() const;
+    const Material &Material() const;
 
 private:
     GLuint VAO{}, VBO{}, EBO{};
     std::vector<Vertex> mVertices;
     std::vector<unsigned> mIndices;
-    std::vector<std::shared_ptr<Texture>> mTextures;
+    core::Material mMaterial;
 
     void Load();
 

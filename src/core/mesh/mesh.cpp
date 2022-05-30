@@ -8,10 +8,10 @@
 
 namespace meov::core {
 
-Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, std::vector<std::shared_ptr<Texture>> &&textures)
+Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned> &&indices, core::Material &&material)
     : mVertices{ std::move(vertices) }
     , mIndices{ std::move(indices) }
-    , mTextures{ std::move(textures) } {
+    , mMaterial{ std::move(material) } {
     Load();
 }
 
@@ -41,8 +41,8 @@ size_t Mesh::VerticesCount() const {
     return mVertices.size();
 }
 
-const std::vector<std::shared_ptr<Texture>> &Mesh::Textures() const {
-    return mTextures;
+const Material &Mesh::Material() const {
+    return mMaterial;
 }
 
 void Mesh::Load() {

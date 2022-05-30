@@ -6,8 +6,10 @@ Component::Component(std::string &&name)
     : mixin::Named{ std::move(name) } {}
 
 void Component::PreDraw(Graphics &) {}
+void Component::Draw(Graphics &) {}
 void Component::PostDraw(Graphics &) {}
 void Component::PreUpdate(double) {}
+void Component::Update(double) {}
 void Component::PostUpdate(double) {}
 
 void Component::Serialize() {}

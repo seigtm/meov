@@ -21,10 +21,10 @@ public:
     virtual ~Component() = default;
 
     virtual void PreDraw(Graphics &);
-    virtual void Draw(Graphics &) = 0;
+    virtual void Draw(Graphics &);
     virtual void PostDraw(Graphics &);
     virtual void PreUpdate(double);
-    virtual void Update(double) = 0;
+    virtual void Update(double);
     virtual void PostUpdate(double);
     virtual void Serialize();  // for ImGui
 

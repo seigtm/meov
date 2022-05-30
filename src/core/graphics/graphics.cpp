@@ -13,6 +13,23 @@ Graphics::Graphics()
     PushProgram(*RESOURCES->LoadProgram("shaders/default"));
 }
 
+void Graphics::SetViewMatrix(const glm::mat4 &view) {
+    if(mImpl) mImpl->SetViewMatrix(view);
+}
+void Graphics::SetProjection(const glm::mat4 &projection) {
+    if(mImpl) mImpl->SetProjection(projection);
+}
+
+const glm::mat4 &Graphics::GetViewMatrix() const {
+    if(mImpl) return mImpl->GetViewMatrix();
+    return {};
+}
+const glm::mat4 &Graphics::GetProjection() const {
+    if(mImpl) return mImpl->GetProjection();
+    return {};
+}
+
+
 void Graphics::PushColor(const glm::u8vec4 &color) {
     if(mImpl) mImpl->PushColor(color);
 }
@@ -87,11 +104,29 @@ void Graphics::DrawTexture(const std::shared_ptr<Texture> &tex, const glm::vec3 
 void Graphics::DrawMesh(const Mesh &mesh) {
     if(mImpl) mImpl->DrawMesh(mesh);
 }
+void Graphics::DrawModel(const Model &model) {
+    if(mImpl) mImpl->DrawModel(model);
+}
 
 Graphics::Impl::Impl() {
     PushColor(DefaultColor);
     PushTransform(DefaultTransform);
 }
+
+void Graphics::Impl::SetViewMatrix(const glm::mat4 &view) {
+    mView = view;
+}
+void Graphics::Impl::SetProjection(const glm::mat4 &projection) {
+    mProjection = projection;
+}
+
+const glm::mat4 &Graphics::Impl::GetViewMatrix() const {
+    return mView;
+}
+const glm::mat4 &Graphics::Impl::GetProjection() const {
+    return mProjection;
+}
+
 
 void Graphics::Impl::PushColor(const glm::u8vec4 &color) {
     mColorQueue.push_back(color);
@@ -107,12 +142,10 @@ glm::u8vec4 Graphics::Impl::CurrentColor() const {
 
 void Graphics::Impl::PushTransform(const glm::mat4 &transform) {
     mTransformQueue.push_back(transform);
-    mResultTransform *= transform;
 }
 void Graphics::Impl::PopTransform() {
     if(mTransformQueue.size() == 1)
         return;
-    mResultTransform *= glm::inverse(mTransformQueue.back());
     mTransformQueue.pop_back();
 }
 glm::mat4 Graphics::Impl::CurrentTransform() const {
@@ -121,11 +154,15 @@ glm::mat4 Graphics::Impl::CurrentTransform() const {
     return mTransformQueue.back();
 }
 glm::mat4 Graphics::Impl::ResultingTransform() const {
-    return mResultTransform;
+    return std::reduce(
+        mTransformQueue.begin(),
+        mTransformQueue.end(),
+        glm::mat4{ 1 },
+        std::multiplies<glm::mat4>());
 }
 
 void Graphics::Impl::PushProgram(const shaders::Program &program) {
-    mProgramQueue.push_back(program);
+    if(program.IsValid()) mProgramQueue.push_back(program);
 }
 void Graphics::Impl::PopProgram() {
     if(!mProgramQueue.empty()) mProgramQueue.pop_back();

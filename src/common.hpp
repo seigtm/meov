@@ -38,6 +38,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <numeric>
 
 namespace fs = std::filesystem;
 using namespace gl;

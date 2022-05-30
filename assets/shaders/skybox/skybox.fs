@@ -1,10 +1,17 @@
-#version 330 core
+#version 440 core
+
 out vec4 FragColor;
 
-in vec3 TexCoords;
+in VS_OUT {
+    vec3 FragPos;
+    vec4 Color;
+    vec3 TexCoords;
+    vec4 ViewPos;
+}
+fs_in;
 
-uniform samplerCube skybox;
+uniform samplerCube textureCubemap1;
 
 void main() {
-    FragColor = texture(skybox, TexCoords);
+    FragColor = texture(textureCubemap1, fs_in.TexCoords);
 }

@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include "model.hpp"
 #include "mesh.hpp"
 #include "vertex.hpp"
 #include "texture.hpp"
@@ -66,13 +67,15 @@ void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, con
     if(mProgramQueue.empty()) return;
 
     const auto &clr{ CurrentColor() };
+    Material mat;
+    mat[Texture::Type::Diffuse] = tex;
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 1.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 1.0f, 1.0f } },
           Vertex{ positions[2], clr, glm::vec2{ 1.0f, 0.0f } },
           Vertex{ positions[3], clr, glm::vec2{ 0.0f, 0.0f } } },
         { 0u, 1u, 2u, 0u, 3u, 2u },
-        { tex }
+        std::move(mat)
     };
 
     DrawMesh(mesh);
@@ -83,36 +86,53 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
 
     auto &program{ CurrentProgram() };
     program.Use();
+    program.Get("projection")->Set(GetProjection());
+    program.Get("view")->Set(GetViewMatrix());
+    program.Get("model")->Set(ResultingTransform());
+    DrawMeshRaw(mesh, program);
+    program.UnUse();
+}
+
+void OGLGraphicsImpl::DrawModel(const Model &model) {
+    if(mProgramQueue.empty() || model.GetMeshes().empty()) return;
+
+    auto &program{ CurrentProgram() };
+    program.Use();
+    program.Get("projection")->Set(GetProjection());
+    program.Get("view")->Set(GetViewMatrix());
     program.Get("model")->Set(ResultingTransform());
 
-    std::unordered_map<Texture::Type, unsigned> counters{
-        { Texture::Type::Diffuse, 1 },
-        { Texture::Type::Specular, 1 },
-        { Texture::Type::Normal, 1 },
-        { Texture::Type::Height, 1 },
-        { Texture::Type::Invalid, std::numeric_limits<unsigned>::max() }
+    for(auto &&mesh : model.GetMeshes())
+        if(mesh) DrawMeshRaw(*mesh, program);
+
+    program.UnUse();
+}
+
+void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
+    const std::array<Texture::Type, 4> types{
+        Texture::Type::Diffuse,
+        Texture::Type::Specular,
+        Texture::Type::Normal,
+        Texture::Type::Height,
     };
 
-    const auto &textures{ mesh.Textures() };
-    for(size_t i{}; i < textures.size(); ++i) {
-        auto &texture{ textures[i] };
-        if(!(texture && texture->Valid())) {
-            continue;
+    const auto &material{ mesh.Material() };
+    int counter{};
+    for(const auto type : types) {
+        if(auto texture{ material[type] }; texture) {
+            const std::string name{ texture->Activate(counter++) };
+            texture->Bind();
+            program.Get("material." + name)->Set(counter);
         }
-        const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
-
-        texture->Bind();
-        if(auto &&var{ program.Get(name) }; var != nullptr)
-            var->Set(static_cast<int>(i));
     }
+    program.Get("material.shininess")->Set(material.GetShininess());
 
     glBindVertexArray(mesh.GetID());
     if(mesh.HasIndices()) {
         glDrawElements(mRenderMode, mesh.IndicesCount(), GL_UNSIGNED_INT, 0);
     } else {
-        glDrawArrays(mRenderMode, mesh.GetID(), mesh.VerticesCount());
+        glDrawArrays(mRenderMode, 0, mesh.VerticesCount());
     }
-    program.UnUse();
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0);
 }

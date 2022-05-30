@@ -68,10 +68,10 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
     return std::make_shared<meov::core::Mesh>(
         std::move(vertices),
         std::move(indices),
-        LoadMaterialTextures(scene->mMaterials[mesh->mMaterialIndex]));
+        LoadMaterial(scene->mMaterials[mesh->mMaterialIndex]));
 }
 
-std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMaterial *mat) const {
+Material AssimpLoader::LoadMaterial(aiMaterial *mat) const {
     const std::array textureTypes{ aiTextureType_DIFFUSE,
                                    aiTextureType_SPECULAR,
                                    aiTextureType_AMBIENT,
@@ -89,30 +89,26 @@ std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMater
     const auto ExtractTexturesNamesByType{
         [&](aiTextureType type) {
             const auto count{ mat->GetTextureCount(type) };
-            std::set<std::string> names;
             for(unsigned current{}; current < count; ++current) {
                 aiString str;
                 mat->GetTexture(type, current, &str);
-                names.emplace((mLastLoadingDirectory / str.C_Str()).string());
-                LOGI << "Texture " << str.C_Str() << " loaded!";
+                return mLastLoadingDirectory / str.C_Str();
             }
-            return std::move(names);
+            return fs::path{};
         }
     };
 
-    std::vector<std::shared_ptr<Texture>> textures;
+    Material material;
 
     for(const auto type : textureTypes) {
-        const auto names{ ExtractTexturesNamesByType(type) };
-        std::transform(
-            names.begin(), names.end(),
-            std::back_inserter(textures),
-            [convertedType = typeConv.at(type)](const auto &name) {
-                return RESOURCES->LoadTexture(name, convertedType);
-            });
+        const auto name{ ExtractTexturesNamesByType(type) };
+        if(name.empty())
+            continue;
+        const auto converted{ typeConv.at(type) };
+        material[converted] = RESOURCES->LoadTexture(name, converted);
     }
 
-    return textures;
+    return material;
 }
 
 }  // namespace meov::core::resources

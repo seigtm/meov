@@ -45,16 +45,14 @@ void CameraComponent::Update(double delta) {
     UpdateView(*transform);
 
     /// FIXME: Remove hardcoded shit
+    /// !FIXME: WE NEED IT INSIDE THE SKYBOX SHADER!!!!
     ImGui::Begin("Scene");
     const auto [w, h]{ ImGui::GetWindowSize() };
     ImGui::End();
     UpdateProjection({ w, h });
 
-    auto program{ graphics->CurrentProgram() };
-    program.Use();
-    program.Get("projection")->Set(mProjection);
-    program.Get("view")->Set(mViewMatrix);
-    program.UnUse();
+    graphics->SetProjection(mProjection);
+    graphics->SetViewMatrix(mViewMatrix);
 }
 
 void CameraComponent::Serialize() {
@@ -129,7 +127,7 @@ void CameraComponent::UpdateProjection(const glm::vec2 screen) {
 
 void CameraComponent::OnMousePressed(
     managers::MouseManager::Button button, const glm::vec2 &position) {
-    if(button != managers::MouseManager::Button::Left)
+    if(button != mListenButton)
         return;
 
     mLastMouseCoords = position;
@@ -138,7 +136,7 @@ void CameraComponent::OnMousePressed(
 
 void CameraComponent::OnMouseReleased(
     managers::MouseManager::Button button, const glm::vec2 &position) {
-    if(button != managers::MouseManager::Button::Left)
+    if(button != mListenButton)
         return;
 
     mIsMouseGrabbed = false;

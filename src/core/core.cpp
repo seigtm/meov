@@ -10,6 +10,7 @@
 #include "move_component.hpp"
 #include "camera_component.hpp"
 #include "lighting_component.hpp"
+#include "skybox_component.hpp"
 #include "shader_component.hpp"
 
 #include "graphics.hpp"
@@ -31,13 +32,21 @@ void ImGuiWindows::Serialize() {
     mGitWin.Draw();
     mPropWin.Draw();
     mSceneTree.Draw();
+    mSceneWin.Draw();
 }
 
 Core::ExecutionResult Core::Run() {
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
-    // Default model displayed when the application runs.
+    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+
+    auto skybox{ mScene->AddObject("Skybox") };
+    skybox->AddComponent<components::TransformComponent>();
+    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
+
     auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
@@ -45,16 +54,25 @@ Core::ExecutionResult Core::Run() {
 
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
-    object->AddComponent<components::ModelComponent>("models\\clothes.obj");
-    object->AddComponent<components::ShaderComponent>("lolkek_shaders\\skybox\\skybox");
+    // Default model displayed when the application runs.
+    object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
+
+    auto dirLight{ mScene->AddObject("Directional light") };
+    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
 
     auto lighting{ mScene->AddObject("Lighting") };
-    lighting->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    lighting->AddComponent<components::LightingComponent>(mGraphics);
-    lighting->AddComponent<components::ModelComponent>("models/LavaLamp/11835_Lava_lamp_v2_l3.obj");
+    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
+    lighting->AddComponent<components::PointLightingComponent>();
+    lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+
+    auto spotLight{ mScene->AddObject("Spot light") };
+    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
-    // SHIT_SHIT_SHIT.mPropWin.Select(camera);
+    SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);
 
     mRunning = true;
     utils::LogUtils::Instance()->GetLogStorage()->Subscribe(SHIT_SHIT_SHIT.mLogWin);
@@ -100,21 +118,6 @@ void Core::Draw(Graphics& g) {
 
 void Core::Serialize() {
     SHIT_SHIT_SHIT.Serialize();
-
-    const auto im2glm = [](ImVec2&& vec) {
-        return glm::vec2{ vec.x, vec.y };
-    };
-
-    ImGui::Begin("Scene");
-    scenePos = im2glm(ImGui::GetWindowPos());
-    sceneSize = im2glm(ImGui::GetContentRegionAvail());
-
-    // Add rendered texture to ImGUI scene window.
-    uint32_t textureID = mFrameBuffer->GetFrameTexture();
-    ImGui::Image(reinterpret_cast<void*>(textureID),
-                 ImVec2{ sceneSize.x, sceneSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-    ImGui::End();
 }
 
 

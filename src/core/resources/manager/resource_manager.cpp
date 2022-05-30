@@ -23,14 +23,15 @@ Manager *Manager::Instance() {
     return &manager;
 }
 
-std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, bool reload) {
+std::shared_ptr<shaders::Program> Manager::LoadProgram(fs::path path, bool reload) {
+    path.make_preferred();
     if(path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };
     if(mPrograms.find(name) == mPrograms.end() || reload) {
         auto program = mLoader->LoadProgram(mResourcesRoot / path);
         if(!program || !program->IsValid()) {
-            LOGE << "Error while loading texture " << path.string();
+            LOGE << "Error while loading program " << path.string();
             return nullptr;
         }
         mPrograms[name] = std::move(program);
@@ -38,7 +39,8 @@ std::shared_ptr<shaders::Program> Manager::LoadProgram(const fs::path &path, boo
     return mPrograms[name];
 }
 
-std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Type type, bool reload) {
+std::shared_ptr<Texture> Manager::LoadTexture(fs::path path, Texture::Type type, bool reload) {
+    path.make_preferred();
     if(!mLoader || path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };
@@ -53,7 +55,24 @@ std::shared_ptr<Texture> Manager::LoadTexture(const fs::path &path, Texture::Typ
     return mTextures[name];
 }
 
-std::shared_ptr<Model> Manager::LoadModel(const fs::path &path, bool reload) {
+std::shared_ptr<Texture> Manager::LoadSkybox(fs::path path, bool reload) {
+    path.make_preferred();
+    if(!mLoader || path.empty()) return nullptr;
+
+    const auto name{ path.stem().string() };
+    if(mTextures.find(name) == mTextures.end() || reload) {
+        auto texture = mLoader->LoadSkybox(mResourcesRoot / path);
+        if(!texture) {
+            LOGE << "Error while loading skybox texture " << path.string();
+            return nullptr;
+        }
+        mTextures[name] = std::move(texture);
+    }
+    return mTextures[name];
+}
+
+std::shared_ptr<Model> Manager::LoadModel(fs::path path, bool reload) {
+    path.make_preferred();
     if(!mLoader || path.empty()) return nullptr;
 
     const auto name{ path.stem().string() };

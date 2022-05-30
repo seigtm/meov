@@ -36,12 +36,14 @@ void Object::Serialize() {
     if(!ImGui::CollapsingHeader(Name().c_str()))
         return;
 
+    ImGui::PushID(Name().c_str());
     ImGui::Indent();
     ForEachComponent([](components::Component::Shared &comp) {
         comp->Serialize();
         ImGui::Separator();
     });
     ImGui::Unindent();
+    ImGui::PopID();
     ImGui::Spacing();
 }
 
