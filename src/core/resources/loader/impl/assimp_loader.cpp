@@ -68,10 +68,10 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
     return std::make_shared<meov::core::Mesh>(
         std::move(vertices),
         std::move(indices),
-        LoadMaterialTextures(scene->mMaterials[mesh->mMaterialIndex]));
+        LoadMaterial(scene->mMaterials[mesh->mMaterialIndex]));
 }
 
-std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMaterial *mat) const {
+Material AssimpLoader::LoadMaterial(aiMaterial *mat) const {
     const std::array textureTypes{ aiTextureType_DIFFUSE,
                                    aiTextureType_SPECULAR,
                                    aiTextureType_AMBIENT,
@@ -100,19 +100,26 @@ std::vector<std::shared_ptr<Texture>> AssimpLoader::LoadMaterialTextures(aiMater
         }
     };
 
-    std::vector<std::shared_ptr<Texture>> textures;
+    Material materials;
+    std::vector<std::shared_ptr<Texture>> diffuses;
+    std::vector<std::shared_ptr<Texture>> speculars;
 
     for(const auto type : textureTypes) {
         const auto names{ ExtractTexturesNamesByType(type) };
-        std::transform(
-            names.begin(), names.end(),
-            std::back_inserter(textures),
-            [convertedType = typeConv.at(type)](const auto &name) {
-                return RESOURCES->LoadTexture(name, convertedType);
-            });
+        const auto loader = [convertedType = typeConv.at(type)](const auto &name) {
+            return RESOURCES->LoadTexture(name, convertedType);
+        };
+
+        if(type == aiTextureType_DIFFUSE)
+            std::transform(names.begin(), names.end(), std::back_inserter(diffuses), loader);
+        else if(type == aiTextureType_SPECULAR)
+            std::transform(names.begin(), names.end(), std::back_inserter(speculars), loader);
     }
 
-    return textures;
+    materials.mDiffuse = diffuses.empty() ? nullptr : diffuses[0];
+    materials.mSpecular = speculars.empty() ? nullptr : speculars[0];
+
+    return materials;
 }
 
 }  // namespace meov::core::resources

@@ -12,6 +12,7 @@
 #include "model.hpp"
 #include "resource_manager.hpp"
 #include "vertex.hpp"
+#include "material.hpp"
 
 // Logger.
 #include <plog/Log.h>
@@ -56,11 +57,11 @@ private:
     std::shared_ptr<meov::core::Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene) const;
 
     /*! \brief Material processing.
-        Loads all textures from given material - `mat`.
+        Loads given material - `mat`.
         \param[in] mat Assimp material object to get textures from.
-        \return Vector of shared pointers to the loaded textures from the material.
+        \return Material
     */
-    std::vector<std::shared_ptr<meov::core::Texture>> LoadMaterialTextures(aiMaterial *mat) const;
+    Material LoadMaterial(aiMaterial *mat) const;
 };
 
 }  // namespace meov::core::resources

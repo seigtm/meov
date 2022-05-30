@@ -36,4 +36,4 @@ std::make_shared<Model>(std::vector<std::shared_ptr<Mesh>>{std::make_shared<core
     { {  1.0f, -1.0f, -1.0f }, { whiteColor }, {} },
     { { -1.0f, -1.0f,  1.0f }, { whiteColor }, {} },
     { {  1.0f, -1.0f,  1.0f }, { whiteColor }, {} },
-}, std::vector<uint32_t>{},std::vector<std::shared_ptr<Texture>>{ mSkyboxTexture })})
+}, std::vector<uint32_t>{}, Material{ mSkyboxTexture, nullptr })})

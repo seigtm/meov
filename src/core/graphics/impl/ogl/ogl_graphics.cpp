@@ -116,18 +116,29 @@ void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
         { Texture::Type::Invalid, std::numeric_limits<unsigned>::max() }
     };
 
-    const auto &textures{ mesh.Textures() };
-    for(size_t i{}; i < textures.size(); ++i) {
-        auto &texture{ textures[i] };
-        if(!(texture && texture->Valid())) {
-            continue;
-        }
-        const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
-
-        texture->Bind();
-        if(auto &&var{ program.Get(name) }; var != nullptr)
-            var->Set(static_cast<int>(i));
+    const auto &material{ mesh.Material() };
+    if(auto diff{ material.mDiffuse }; diff && diff->Valid()) {
+        diff->Activate(0);
+        diff->Bind();
+        program.Get("material.diffuse")->Set(0);
     }
+    if(auto spec{ material.mSpecular }; spec && spec->Valid()) {
+        spec->Activate(1);
+        spec->Bind();
+        program.Get("material.specular")->Set(1);
+    }
+    program.Get("material.shininess")->Set(material.mShininess);
+    // for(size_t i{}; i < textures.size(); ++i) {
+    //     auto &texture{ textures[i] };
+    //     if(!(texture && texture->Valid())) {
+    //         continue;
+    //     }
+    //     const auto name{ texture->Activate(i) + std::to_string(counters[texture->GetType()]++) };
+
+    //     texture->Bind();
+    //     if(auto &&var{ program.Get(name) }; var != nullptr)
+    //         var->Set(static_cast<int>(i));
+    // }
 
     glBindVertexArray(mesh.GetID());
     if(mesh.HasIndices()) {
