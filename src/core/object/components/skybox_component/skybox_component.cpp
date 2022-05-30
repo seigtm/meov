@@ -43,9 +43,7 @@ void SkyboxComponent::Update(double) {
     if(auto holder{ mHolder.lock() }; holder) {
         if(auto modelComponent{ holder->GetComponent<components::ModelComponent>() };
            modelComponent && modelComponent->Valid()) {
-            modelComponent->Reset(
-#include "mesh.blyat"
-            );
+            modelComponent->Reset(RESOURCES->LoadModel(mPath));
         }
     }
     mDirtyFlag = false;
@@ -96,9 +94,7 @@ void SkyboxComponent::OnInvalidSerialize() {
         ImGui::Text(" -> Model component");
         ImGui::SameLine();
         if(ImGui::Button("Create component##ModelComponent")) {
-            holder->AddComponent<components::ModelComponent>(
-#include "mesh.blyat"
-            );
+            holder->AddComponent<components::ModelComponent>(RESOURCES->LoadModel(mPath));
         }
     }
     if(!hasShaderComponent) {

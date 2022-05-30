@@ -42,17 +42,33 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
         "front.jpg",
         "back.jpg"
     };
+    // Disabling vertical flip to get textures right.
+    stbi_set_flip_vertically_on_load(false);
     // Array of bytes.
     std::array<unsigned char*, 6> bytes;
     // Load every face.
+    int previousWidth{};
+    int previousHeight{};
+    int previousChannels{};
     for(unsigned i{}; i < bytes.size(); ++i) {
         const auto filename{ path / faces.at(i) };
         bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
+        // Check that all images have the same width, height and number of channels.
+        if(i == 0) {
+            previousWidth = width;
+            previousHeight = height;
+            previousChannels = channels;
+        } else if(previousWidth != width || previousHeight != height || previousChannels != channels) {
+            const std::string errmsg{ "Can't load skybox because its images don't have the same size and number of channels." };
+            LOGE << errmsg << " Path: " << path.c_str();
+            throw std::invalid_argument{ errmsg };
+        }
         if(nullptr == bytes[i]) {
             LOGE << "Error while loading texture "
                  << "'" << faces.at(i) << "'"
                  << " from '" << path.string() << "'";
             LOGE << "    " << stbi_failure_reason();
+            stbi_set_flip_vertically_on_load(true);
             return nullptr;  // FIXME: Don't return just now. You should clean the memory from previous loaded images.
         }
     }
@@ -62,8 +78,10 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     // for(auto b : bytes) {
     // stbi_image_free(b);
     // }
-    // Return texture object.
     LOGI << "Skybox texture '" << path.c_str() << "' was loaded!";
+    // Return flip back to normal.
+    stbi_set_flip_vertically_on_load(true);
+    // Return texture object.
     return texture;
 }
 
