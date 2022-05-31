@@ -8,10 +8,18 @@ TransformComponent::TransformComponent()
     : Component{ "Transform component" } {}
 
 
-void TransformComponent::Draw(Graphics &) {
+void TransformComponent::PreDraw(Graphics &g) {
+    if(!mWasPushed) {
+        PushTransform(g);
+        mWasPushed = true;
+    }
 }
 
-void TransformComponent::Update(double) {
+void TransformComponent::PostDraw(Graphics &g) {
+    if(mWasPushed) {
+        PopTransform(g);
+        mWasPushed = false;
+    }
 }
 
 void TransformComponent::Serialize() {

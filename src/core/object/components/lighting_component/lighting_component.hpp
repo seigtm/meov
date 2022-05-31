@@ -16,7 +16,7 @@ namespace meov::core::components {
 
 class LightingComponent : public Component {
 protected:
-    LightingComponent(std::string &&name);
+    explicit LightingComponent(std::string &&name);
     ~LightingComponent() override = default;
 
     void Serialize() override;
@@ -37,7 +37,7 @@ protected:
 
 class DirectionalLightingComponent final : public LightingComponent {
 public:
-    DirectionalLightingComponent(glm::vec3 &&dir);
+    explicit DirectionalLightingComponent(glm::vec3 &&dir);
     ~DirectionalLightingComponent() override;
 
     void PreDraw(Graphics &) override;

@@ -8,6 +8,7 @@ Material::Material()
         { Texture::Type::Specular, nullptr },
         { Texture::Type::Height, nullptr },
         { Texture::Type::Normal, nullptr },
+        { Texture::Type::Ambient, nullptr },
         { Texture::Type::Cubemap, nullptr },
         { Texture::Type::Invalid, nullptr },
     } {}

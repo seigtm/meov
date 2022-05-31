@@ -61,7 +61,7 @@ Core::ExecutionResult Core::Run() {
     dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
     dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
 
-    auto lighting{ mScene->AddObject("Lighting") };
+    auto lighting{ mScene->AddObject("Point light") };
     lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
     lighting->AddComponent<components::PointLightingComponent>();
     lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
@@ -128,6 +128,13 @@ void Core::HandleEvents() {
         managers::KeyboardManager::HandleEvent(event);
         managers::MouseManager::HandleEvent(event);
         switch(event.type) {
+            case SDL_KEYDOWN: {
+                if(event.key.keysym.sym == SDLK_F5) {
+                    const auto path{ mGraphics->CurrentProgram().GetPath() };
+                    mGraphics->PopProgram();
+                    mGraphics->PushProgram(*RESOURCES->LoadProgram(path, true));
+                }
+            } break;
             case SDL_WINDOWEVENT_RESIZED: {
             } break;
             case SDL_QUIT: {

@@ -1,17 +1,21 @@
 #pragma once
 
+#include "resource.hpp"
+
 namespace meov::core {
 
-class Texture {
+class Texture : public resources::Resource {
 public:
     enum class Type {
         Diffuse,
         Specular,
-        Normal,
         Height,
+        Normal,
+        Ambient,
         Cubemap,
         Invalid,
     };
+    static std::string Type2String(Type type);
 
     Texture();
     // Basic texture c-tor.

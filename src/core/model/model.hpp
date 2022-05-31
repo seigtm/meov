@@ -8,12 +8,11 @@
 #include "mesh.hpp"
 #include "texture.hpp"
 #include "graphics.hpp"
-
-#include "transformable.hpp"
+#include "resource.hpp"
 
 namespace meov::core {
 
-class Model : public mixin::Transformable {
+class Model : public resources::Resource {
 public:
     explicit Model(std::vector<std::shared_ptr<core::Mesh>> &&meshes);
 

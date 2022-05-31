@@ -41,13 +41,7 @@ public:
 
 private:
     fs::path mLastLoadingDirectory;
-
-    /*! \brief Recursive nodes processing.
-        \param[in] node Parent node to process.
-        \param[in] scene aiScene object.
-        \return Vector of shared pointers to the scene's meshes.
-    */
-    std::vector<std::shared_ptr<meov::core::Mesh>> ProcessNode(aiNode *node, const aiScene *scene) const;
+    std::unordered_map<unsigned, Material> mCachedMaterials;
 
     /*! \brief Mesh processing.
         \param[in] mesh Mesh to process.
@@ -56,12 +50,7 @@ private:
     */
     std::shared_ptr<meov::core::Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene) const;
 
-    /*! \brief Material processing.
-        Loads given material - `mat`.
-        \param[in] mat Assimp material object to get textures from.
-        \return Material
-    */
-    Material LoadMaterial(aiMaterial *mat) const;
+    void PreLoadMaterials(aiMaterial **materials, size_t count);
 };
 
 }  // namespace meov::core::resources

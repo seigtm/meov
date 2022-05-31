@@ -4,11 +4,25 @@
 
 namespace meov::core {
 
+std::string Texture::Type2String(Type type) {
+    switch(type) {
+        case Type::Diffuse: return "diffuse";
+        case Type::Specular: return "specular";
+        case Type::Height: return "height";
+        case Type::Normal: return "normal";
+        case Type::Ambient: return "ambient";
+        case Type::Cubemap: return "cubemap";
+        case Type::Invalid: return "invalid";
+        default: break;
+    }
+    return "invalid";
+}
+
 Texture::Texture()
-    : mType{ Type::Invalid } {}
+    : resources::Resource{ "UNNAMED" }, mType{ Type::Invalid } {}
 
 Texture::Texture(const unsigned char *bytes, int width, int height, int channels, Type type)
-    : mType{ type } {
+    : resources::Resource{ "UNNAMED" }, mType{ type } {
     glGenTextures(1, &mId);
     Bind();
 
@@ -31,12 +45,11 @@ Texture::Texture(const unsigned char *bytes, int width, int height, int channels
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, bytes);
     glGenerateMipmap(GL_TEXTURE_2D);
-    LOGD << "Texture was loaded";
     mValid = true;
 }
 
 Texture::Texture(std::array<unsigned char *, 6> bytes, int width, int height, int channels)
-    : mType{ Type::Cubemap } {
+    : resources::Resource{ "UNNAMED" }, mType{ Type::Cubemap } {
     glGenTextures(1, &mId);
     glBindTexture(GL_TEXTURE_CUBE_MAP, mId);
 
@@ -76,20 +89,7 @@ void Texture::Bind() {
 
 std::string Texture::Activate(const int id) {
     glActiveTexture(GL_TEXTURE0 + id);
-    switch(GetType()) {
-        case Texture::Type::Diffuse:
-            return "diffuse";
-        case Texture::Type::Specular:
-            return "specular";
-        case Texture::Type::Normal:
-            return "normal";
-        case Texture::Type::Height:
-            return "height";
-        case Texture::Type::Cubemap:
-            return "cubemap";
-        default: break;
-    }
-    return "invalid texture";
+    return Type2String(GetType());
 }
 
 bool Texture::Valid() const {

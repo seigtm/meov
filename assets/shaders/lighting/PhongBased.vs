@@ -17,7 +17,7 @@ uniform mat4 model = mat4(1);
 
 void main() {
     VSOut.FragmentPosition = vec3(model * vec4(aPos, 1.0));
-    VSOut.Normal = mat3(transpose(inverse(model))) * aNormal.xyz;
+    VSOut.Normal = normalize(mat3(transpose(inverse(model))) * aNormal.xyz);
     VSOut.TextureCoordinates = aTexPos;
 
     gl_Position = projection * view * vec4(VSOut.FragmentPosition, 1.0);

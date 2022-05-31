@@ -20,8 +20,10 @@ public:
     bool Valid() const;
 
 private:
-    fs::path mPath;
     std::shared_ptr<Model> mModel;
+    std::string mSelectedTextureType;
+
+    void Serialize(const std::shared_ptr<Mesh> &mesh);
 };
 
 }  // namespace meov::core::components

@@ -78,9 +78,11 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
 void PrepareMaterial();
 
 void main() {
-    vec3 normal = normalize(VSOut.Normal);
-    vec3 viewDirection = normalize(viewPosition - VSOut.FragmentPosition);
     PrepareMaterial();
+    // vec3 normal = VSOut.Normal;
+    vec3 normal = normalize(calculatedNormals.xyz);
+    // vec3 normal = normalize(calculatedNormals.xyz + VSOut.Normal);
+    vec3 viewDirection = normalize(viewPosition - VSOut.FragmentPosition);
 
     vec3 result = CalculateDirectionalLight(dirLight, normal, viewDirection);
     // if(activePoints > 0) {

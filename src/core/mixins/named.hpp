@@ -6,7 +6,7 @@ namespace meov::core::mixin {
 
 class Named {
 public:
-    explicit Named(std::string &&name);
+    explicit Named(std::string &&name = "NONAME");
 
     const std::string &Name() const;
     void Rename(std::string &&name);

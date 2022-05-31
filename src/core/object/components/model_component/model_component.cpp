@@ -9,7 +9,6 @@ namespace meov::core::components {
 
 ModelComponent::ModelComponent(const fs::path &model)
     : Component{ "Model component" }
-    , mPath{ model }
     , mModel{ RESOURCES->LoadModel(model) } {}
 
 ModelComponent::ModelComponent(const std::shared_ptr<core::Model> &model)
@@ -41,19 +40,65 @@ void ModelComponent::Serialize() {
     constexpr std::string_view Extensions{ ".obj,.gltf,.fbx,.stl" };
     ImGui::Indent();
 
-    ImGui::Text("Path: %s", mPath.string().c_str());
+    ImGui::Text("Name: %s", mModel->Name().c_str());
+    ImGui::Text("Path: %s", mModel->GetPath().string().c_str());
     ImGui::SameLine();
     if(ImGui::Button("Change")) {
         dialog->OpenModal(DialogName.data(), "Choose model", Extensions.data(), ".");
     }
     if(dialog->Display(DialogName.data())) {
         if(dialog->IsOk()) {
-            mPath = dialog->GetFilePathName().erase(0, fs::current_path().string().size() + 1);
-            mModel = RESOURCES->LoadModel(mPath);
+            const auto path{ dialog->GetFilePathName().erase(0, fs::current_path().string().size() + 1) };
+            mModel = RESOURCES->LoadModel(path);
         }
         dialog->Close();
     }
+
+    if(ImGui::TreeNode("Meshes")) {
+        for(const auto &mesh : mModel->GetMeshes()) {
+            Serialize(mesh);
+        }
+        ImGui::TreePop();
+    }
+
     ImGui::Unindent();
+}
+
+void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
+    if(mesh == nullptr)
+        return;
+
+
+    const std::string name{ mesh->Name() + " #" + std::to_string(mesh->GetID()) };
+    if(!ImGui::TreeNode(name.c_str()))
+        return;
+
+    static const std::array types{
+        Texture::Type::Diffuse,
+        Texture::Type::Specular,
+        Texture::Type::Height,
+        Texture::Type::Normal,
+        Texture::Type::Ambient,
+        Texture::Type::Cubemap,
+    };
+
+    const auto &material{ mesh->Material() };
+    for(const auto &type : types) {
+        const auto texture{ material[type] };
+        if(texture == nullptr) continue;
+        if(ImGui::TreeNode(Texture::Type2String(type).c_str())) {
+            if(texture->Valid()) {
+                constexpr float size{ 256.f };
+                const auto id{ texture->GetID() };
+                ImGui::Image(reinterpret_cast<ImTextureID>(id), ImVec2{ size, size });
+            }
+            ImGui::Text("Name: %s", texture->Name().c_str());
+            ImGui::Text("Path: %s", texture->GetPath().string().c_str());
+            ImGui::TreePop();
+        }
+    }
+
+    ImGui::TreePop();
 }
 
 bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {

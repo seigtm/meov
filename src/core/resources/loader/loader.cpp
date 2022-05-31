@@ -20,6 +20,7 @@ std::shared_ptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture
     }
 
     auto texture{ std::make_shared<meov::core::Texture>(bytes, width, height, channels, type) };
+    texture->SetPath(path);
 
     stbi_image_free(bytes);
 
@@ -32,9 +33,8 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
         return nullptr;
     }
 
-    int width, height, channels;
     // Vector of correctly named faces files.
-    const std::vector<std::string> faces{
+    static const std::array faces{
         "right.jpg",
         "left.jpg",
         "top.jpg",
@@ -50,6 +50,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     int previousWidth{};
     int previousHeight{};
     int previousChannels{};
+    int width, height, channels;
     for(unsigned i{}; i < bytes.size(); ++i) {
         const auto filename{ path / faces.at(i) };
         bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
@@ -66,8 +67,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
             LOGE << errmsg << " Path: " << path.c_str();
             stbi_set_flip_vertically_on_load(true);
             throw std::invalid_argument{ std::string{ errmsg } };
-        }
-        if(nullptr == bytes[i]) {
+        } else if(nullptr == bytes[i]) {
             LOGE << "Error while loading texture "
                  << "'" << faces.at(i) << "'"
                  << " from '" << path.string() << "'";
@@ -78,6 +78,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     }
     // Create texture with array<bytes> c-tor.
     auto texture{ std::make_shared<meov::core::Texture>(std::move(bytes), width, height, channels) };  // FIXME: We hope that every cubemap image has the same width, height and channels.
+    texture->SetPath(path);
     // Clean-up in the end.
     for(auto&& b : bytes) {
         stbi_image_free(b);
@@ -111,8 +112,9 @@ std::shared_ptr<shaders::Program> Loader::LoadProgram(const fs::path& path) {
     if(!fs::exists(root))
         return nullptr;
 
-    auto program{ std::make_shared<shaders::Program>() };
-    program->Initialize(name.string());
+    auto program{ std::make_shared<shaders::Program>(name.string()) };
+    program->SetPath(path);
+    program->Initialize();
     for(const auto& entry : fs::directory_iterator(root)) {
         const fs::path entryPath{ entry };
         program->Attach(

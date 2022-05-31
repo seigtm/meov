@@ -50,6 +50,7 @@ std::shared_ptr<Texture> Manager::LoadTexture(fs::path path, Texture::Type type,
             LOGE << "Error while loading texture " << path.string();
             return nullptr;
         }
+        texture->Rename(std::string{ name });
         mTextures[name] = std::move(texture);
     }
     return mTextures[name];
@@ -66,6 +67,7 @@ std::shared_ptr<Texture> Manager::LoadSkybox(fs::path path, bool reload) {
             LOGE << "Error while loading skybox texture " << path.string();
             return nullptr;
         }
+        texture->Rename(std::string{ name });
         mTextures[name] = std::move(texture);
     }
     return mTextures[name];
@@ -77,11 +79,14 @@ std::shared_ptr<Model> Manager::LoadModel(fs::path path, bool reload) {
 
     const auto name{ path.stem().string() };
     if(mModels.find(name) == mModels.end() || reload) {
-        auto model = mLoader->LoadModel(mResourcesRoot / path);
+        const auto fullpath{ mResourcesRoot / path };
+        auto model = mLoader->LoadModel(fullpath);
         if(!model) {
             LOGE << "Error while loading mesh " << path.string();
             return nullptr;
         }
+        model->SetPath(fullpath);
+        model->Rename(std::string{ name });
         mModels[name] = std::move(model);
     }
     return mModels[name];

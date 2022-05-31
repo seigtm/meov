@@ -17,8 +17,11 @@ const std::string &Program::Impl::GetName() const {
     return mName;
 }
 
-void Program::Initialize(const std::string &name) {
-    mImpl = factories::ImplFactory::Instance()->MakeProgramImpl(name);
+Program::Program(const std::string &name)
+    : resources::Resource{ std::string{ name } } {}
+
+void Program::Initialize() {
+    mImpl = factories::ImplFactory::Instance()->MakeProgramImpl(Name());
 }
 void Program::Destroy() {
     mImpl.reset();

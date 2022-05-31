@@ -60,7 +60,7 @@ void Graphics::PopProgram() {
 }
 shaders::Program Graphics::CurrentProgram() const {
     if(mImpl) return mImpl->CurrentProgram();
-    return {};
+    return shaders::Program{ "INVALID" };
 }
 
 void Graphics::DrawDot(const glm::vec3 &position, const float radius) {
@@ -169,7 +169,7 @@ void Graphics::Impl::PopProgram() {
 }
 shaders::Program Graphics::Impl::CurrentProgram() const {
     if(mProgramQueue.empty())
-        return {};
+        return shaders::Program{ "INVALID" };
     return mProgramQueue.back();
 }
 

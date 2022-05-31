@@ -3,10 +3,9 @@
 namespace meov::core {
 
 Model::Model(std::vector<std::shared_ptr<core::Mesh>>&& meshes)
-    : mMeshes{ std::move(meshes) } {}
+    : resources::Resource{ "UNNAMED" }, mMeshes{ std::move(meshes) } {}
 
 void Model::Draw(core::Graphics& g) const {
-    auto wrapper{ MakePushPopWrapper(g) };
     g.DrawModel(*this);
 }
 

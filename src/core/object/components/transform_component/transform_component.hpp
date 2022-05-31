@@ -12,9 +12,12 @@ public:
     TransformComponent();
     ~TransformComponent() override = default;
 
-    void Draw(Graphics &) override;
-    void Update(double) override;
+    void PreDraw(Graphics &) override;
+    void PostDraw(Graphics &) override;
     void Serialize() override;
+
+private:
+    bool mWasPushed{ false };
 };
 
 }  // namespace meov::core::components

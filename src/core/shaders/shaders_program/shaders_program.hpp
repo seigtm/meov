@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <resource.hpp>
 
 #include "shader.hpp"
 #include "glm/glm.hpp"
@@ -10,7 +11,7 @@ namespace meov::core::shaders {
 
 class Setter;
 
-class Program {
+class Program : public resources::Resource {
 public:
     class Impl {
     public:
@@ -35,7 +36,9 @@ public:
         std::unordered_map<ShaderType, std::shared_ptr<Shader>> mShaders;
     };
 
-    void Initialize(const std::string &name);
+    explicit Program(const std::string &name);
+
+    void Initialize();
     void Destroy();
 
     bool Attach(const std::shared_ptr<Shader> &shader);

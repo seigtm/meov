@@ -16,8 +16,8 @@ constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer
 
 constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "6dd2a4e150e6e24b4380b55bac64a50a55e30858-dirty" };
-constexpr std::string_view GitCommitDate{ "Mon May 30 20:36:07 2022" };
-constexpr std::string_view GitCommitMessage{ "Merge branch Baranov_Skybox into Golovinsky_Lighting" };
+constexpr std::string_view GitCommitHash{ "58f3cc0612aeb2a464dc1272770640fb708221de-dirty" };
+constexpr std::string_view GitCommitDate{ "Mon May 30 23:06:09 2022" };
+constexpr std::string_view GitCommitMessage{ "Merge pull request #15 from seigtm/Baranov_Skybox" };
 
 } // namespace meov::definitions

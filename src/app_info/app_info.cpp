@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "6dd2a4e150e6e24b4380b55bac64a50a55e30858-dirty"
-#define GIT_COMMIT_DATE "Mon May 30 20:36:07 2022"
-#define GIT_COMMIT_MESSAGE "Merge branch Baranov_Skybox into Golovinsky_Lighting"
+#define GIT_COMMIT_HASH "58f3cc0612aeb2a464dc1272770640fb708221de-dirty"
+#define GIT_COMMIT_DATE "Mon May 30 23:06:09 2022"
+#define GIT_COMMIT_MESSAGE "Merge pull request #15 from seigtm/Baranov_Skybox"
 
 namespace meov {
 

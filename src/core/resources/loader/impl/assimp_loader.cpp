@@ -1,36 +1,51 @@
 #include "assimp_loader.hpp"
 
+namespace {
+
+meov::core::Texture::Type assimpTextureTypeToMEOV(aiTextureType type) {
+    using Type = meov::core::Texture::Type;
+    switch(type) {
+        case aiTextureType_DIFFUSE: return Type::Diffuse;
+        case aiTextureType_SPECULAR: return Type::Specular;
+        case aiTextureType_HEIGHT: return Type::Height;
+        case aiTextureType_NORMALS: return Type::Normal;
+        case aiTextureType_AMBIENT: return Type::Ambient;
+        default:
+            break;
+    };
+    return Type::Invalid;
+}
+
+}  // anonymous namespace
+
+
 namespace meov::core::resources {
 
 std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path.string(), aiProcess_Triangulate); // | aiProcess_FlipUVs);
+    const aiScene *scene{ importer.ReadFile(path.string(), aiProcess_Triangulate) };
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << importer.GetErrorString();
         return nullptr;
     }
-    if(!scene->mNumMeshes) {
+    if(!scene->HasMeshes()) {
         LOGI << "No meshes in model. Breaking load process.";
         return nullptr;
     }
     mLastLoadingDirectory = path.parent_path();
-    return std::make_shared<Model>(ProcessNode(scene->mRootNode, scene));
-}
+    if(scene->HasMaterials()) {
+        PreLoadMaterials(scene->mMaterials, scene->mNumMaterials);
+    }
 
-std::vector<std::shared_ptr<meov::core::Mesh>> AssimpLoader::ProcessNode(aiNode *node, const aiScene *scene) const {
     std::vector<std::shared_ptr<Mesh>> meshes;
-    meshes.reserve(node->mNumMeshes);
-    for(size_t currentMeshIndex{}; currentMeshIndex < node->mNumMeshes; ++currentMeshIndex) {
-        aiMesh *mesh = scene->mMeshes[node->mMeshes[currentMeshIndex]];
-        meshes.emplace_back(ProcessMesh(mesh, scene));
-        LOGI << "Mesh processed!";
+    for(size_t i{}; i < scene->mNumMeshes; ++i) {
+        auto *asmesh{ scene->mMeshes[i] };
+        if(auto mesh{ ProcessMesh(asmesh, scene) }; mesh) {
+            mesh->Rename(std::string{ asmesh->mName.C_Str() });
+            meshes.emplace_back(std::move(mesh));
+        }
     }
-
-    for(size_t currentChildIndex{}; currentChildIndex < node->mNumChildren; currentChildIndex++) {
-        const auto processedMeshes{ ProcessNode(node->mChildren[currentChildIndex], scene) };
-        meshes.insert(meshes.end(), processedMeshes.begin(), processedMeshes.end());
-    }
-    return meshes;
+    return std::make_shared<Model>(std::move(meshes));
 }
 
 std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) const {
@@ -64,51 +79,36 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
         for(unsigned j{}; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
+
     // Process materials.
-    return std::make_shared<meov::core::Mesh>(
-        std::move(vertices),
-        std::move(indices),
-        LoadMaterial(scene->mMaterials[mesh->mMaterialIndex]));
+    Material material{ mCachedMaterials.at(mesh->mMaterialIndex) };
+    return std::make_shared<Mesh>(std::move(vertices), std::move(indices), std::move(material));
 }
 
-Material AssimpLoader::LoadMaterial(aiMaterial *mat) const {
-    const std::array textureTypes{ aiTextureType_DIFFUSE,
-                                   aiTextureType_SPECULAR,
-                                   aiTextureType_AMBIENT,
-                                   aiTextureType_HEIGHT,
-                                   aiTextureType_NORMALS };
-
-    const std::unordered_map<aiTextureType, Texture::Type> typeConv{
-        { aiTextureType_DIFFUSE, Texture::Type::Diffuse },
-        { aiTextureType_SPECULAR, Texture::Type::Specular },
-        { aiTextureType_HEIGHT, Texture::Type::Height },
-        { aiTextureType_NORMALS, Texture::Type::Normal },
-        { aiTextureType_AMBIENT, Texture::Type::Invalid }
+void AssimpLoader::PreLoadMaterials(aiMaterial **materials, size_t count) {
+    static const std::array textureTypes{
+        aiTextureType_DIFFUSE,
+        aiTextureType_SPECULAR,
+        aiTextureType_AMBIENT,
+        aiTextureType_HEIGHT,
+        aiTextureType_NORMALS
     };
 
-    const auto ExtractTexturesNamesByType{
-        [&](aiTextureType type) {
-            const auto count{ mat->GetTextureCount(type) };
-            for(unsigned current{}; current < count; ++current) {
-                aiString str;
-                mat->GetTexture(type, current, &str);
-                return mLastLoadingDirectory / str.C_Str();
+    for(size_t i{}; i < count; ++i) {
+        const aiMaterial *material{ materials[i] };
+        Material cache;
+        for(const auto &type : textureTypes) {
+            const auto textures{ material->GetTextureCount(type) };
+            for(size_t index{}; index < textures; ++index) {
+                if(aiString name{}; material->GetTexture(type, index, &name) == aiReturn_SUCCESS) {
+                    const auto realType{ assimpTextureTypeToMEOV(type) };
+                    const std::string id{ name.data, name.length };
+                    cache[realType] = RESOURCES->LoadTexture(mLastLoadingDirectory / id, realType);
+                }
             }
-            return fs::path{};
         }
-    };
-
-    Material material;
-
-    for(const auto type : textureTypes) {
-        const auto name{ ExtractTexturesNamesByType(type) };
-        if(name.empty())
-            continue;
-        const auto converted{ typeConv.at(type) };
-        material[converted] = RESOURCES->LoadTexture(name, converted);
+        mCachedMaterials[i] = std::move(cache);
     }
-
-    return material;
 }
 
 }  // namespace meov::core::resources
