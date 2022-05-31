@@ -130,9 +130,15 @@ void Core::HandleEvents() {
         switch(event.type) {
             case SDL_KEYDOWN: {
                 if(event.key.keysym.sym == SDLK_F5) {
-                    const auto path{ mGraphics->CurrentProgram().GetPath() };
-                    mGraphics->PopProgram();
-                    mGraphics->PushProgram(*RESOURCES->LoadProgram(path, true));
+                    std::deque<fs::path> textures;
+                    while(!mGraphics->CurrentProgram().IsValid()) {
+                        textures.push_front(mGraphics->CurrentProgram().GetPath());
+                        mGraphics->PopProgram();
+                    }
+                    for(auto&& path : textures) {
+                        mGraphics->PushProgram(*RESOURCES->LoadProgram(std::move(path), true));
+                    }
+                    LOGI << "Textures was reloaded";
                 }
             } break;
             case SDL_WINDOWEVENT_RESIZED: {

@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "58f3cc0612aeb2a464dc1272770640fb708221de-dirty"
-#define GIT_COMMIT_DATE "Mon May 30 23:06:09 2022"
-#define GIT_COMMIT_MESSAGE "Merge pull request #15 from seigtm/Baranov_Skybox"
+#define GIT_COMMIT_HASH "3e4fecfc6280a68a70f9544171fe4fbf48a18416-dirty"
+#define GIT_COMMIT_DATE "Tue May 31 08:56:15 2022"
+#define GIT_COMMIT_MESSAGE "IDK I just make one shit then another and now here's so much changes :cry:"
 
 namespace meov {
 
