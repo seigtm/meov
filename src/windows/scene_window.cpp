@@ -37,9 +37,7 @@ void Scene::OnMousePressed(button button, const glm::vec2 &position) {
     SDL_SetRelativeMouseMode(HasIntersection(position) ? SDL_TRUE : SDL_FALSE);
 }
 void Scene::OnMouseReleased(button button, const glm::vec2 &position) {
-    if(button != mListenButton)
-        return;
-    SDL_SetRelativeMouseMode(HasIntersection(position) ? SDL_FALSE : SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
 bool Scene::HasIntersection(const glm::vec2 &pos) const {

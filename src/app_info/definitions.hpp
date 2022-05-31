@@ -7,7 +7,7 @@ namespace meov::definitions {
 constexpr bool UsingOpenGL{ true };
 constexpr bool UsingVulcan{ false };
 
-constexpr std::string_view Version{ "v0.1.11" };
+constexpr std::string_view Version{ "v0.2.0" };
 constexpr unsigned ShaderVersionMajor{ 4 };
 constexpr unsigned ShaderVersionMinor{ 5 };
 constexpr unsigned ShaderVersionPatch{ 0 };
@@ -16,8 +16,8 @@ constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer
 
 constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "3e4fecfc6280a68a70f9544171fe4fbf48a18416-dirty" };
-constexpr std::string_view GitCommitDate{ "Tue May 31 08:56:15 2022" };
-constexpr std::string_view GitCommitMessage{ "IDK I just make one shit then another and now here's so much changes :cry:" };
+constexpr std::string_view GitCommitHash{ "b85bab7b374b8ce579b0d635cf93218136299799-dirty" };
+constexpr std::string_view GitCommitDate{ "Tue May 31 09:35:36 2022" };
+constexpr std::string_view GitCommitMessage{ "add shaders hot reload (But as shit)" };
 
 } // namespace meov::definitions

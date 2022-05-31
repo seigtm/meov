@@ -1,6 +1,6 @@
 #include "app_info.hpp"
 
-#define VERSION "v0.1.11"
+#define VERSION "v0.2.0"
 #define SHADER_VERSION_MAJOR 4
 #define SHADER_VERSION_MINOR 5
 #define SHADER_VERSION_PATCH 0
@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "3e4fecfc6280a68a70f9544171fe4fbf48a18416-dirty"
-#define GIT_COMMIT_DATE "Tue May 31 08:56:15 2022"
-#define GIT_COMMIT_MESSAGE "IDK I just make one shit then another and now here's so much changes :cry:"
+#define GIT_COMMIT_HASH "b85bab7b374b8ce579b0d635cf93218136299799-dirty"
+#define GIT_COMMIT_DATE "Tue May 31 09:35:36 2022"
+#define GIT_COMMIT_MESSAGE "add shaders hot reload (But as shit)"
 
 namespace meov {
 
