@@ -1,6 +1,6 @@
 #include "time_utils.hpp"
 
-namespace meov::utilities::time {
+namespace meov::utils::time {
 
 void Clock::Update() {
     mEnd = std::move(mBegin);
@@ -56,4 +56,4 @@ std::unordered_multimap<std::string, ch::nanoseconds> Stopwatch::Laps() const {
     return mLaps;
 }
 
-}  // namespace meov::utilities::time
+}  // namespace meov::utils::time

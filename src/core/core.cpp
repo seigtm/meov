@@ -159,7 +159,7 @@ void Core::OnFail(const std::string_view&) {
 
 Core::Core(std::vector<std::string>&& argv)
     : mInitTasks{
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "STB Image",
             [] {
                 stbi_set_flip_vertically_on_load(true);
@@ -168,7 +168,7 @@ Core::Core(std::vector<std::string>&& argv)
             [] {
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "Logger",
             [] {
                 utils::LogUtils::Instance()->Initialize();
@@ -178,7 +178,7 @@ Core::Core(std::vector<std::string>&& argv)
             [] {
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "SDL",
             [] {
                 if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
@@ -199,7 +199,7 @@ Core::Core(std::vector<std::string>&& argv)
                 SDL_Quit();
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 win = SDL_CreateWindow(
@@ -226,7 +226,7 @@ Core::Core(std::vector<std::string>&& argv)
                 win = nullptr;
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "OpenGL",
             [] {
                 glbinding::Binding::initialize(
@@ -247,7 +247,7 @@ Core::Core(std::vector<std::string>&& argv)
             [] {
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "ImGui",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 IMGUI_CHECKVERSION();
@@ -271,7 +271,7 @@ Core::Core(std::vector<std::string>&& argv)
                 ImGui::DestroyContext();
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "Core active components",
             [this] {
                 this->mGraphics = std::make_shared<Graphics>();

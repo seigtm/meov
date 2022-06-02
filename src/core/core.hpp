@@ -32,7 +32,7 @@ public:
     void Serialize();
 };
 
-class Core final : public utilities::Initializer::Listener {
+class Core final : public utils::Initializer::Listener {
 public:
     explicit Core(std::vector<std::string> &&argv);
 
@@ -48,13 +48,13 @@ private:
     ImGuiWindows mWindows;
 
     bool mRunning{ false };
-    utilities::time::Clock mClock;
+    utils::time::Clock mClock;
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;
     glm::mat4 mProjection{ 1 };
 
-    std::vector<utilities::Initializer::Shared> mInitTasks;
+    std::vector<utils::Initializer::Shared> mInitTasks;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
@@ -69,7 +69,7 @@ private:
     void Serialize();
     void HandleEvents();
 
-    // utilities::Initializer::Listener
+    // utils::Initializer::Listener
     void OnFail(const std::string_view &taskName) override;
 };
 

@@ -14,10 +14,10 @@ constexpr unsigned ShaderVersionPatch{ 0 };
 constexpr std::string_view ShaderVersion{ "#version 450 core" };
 constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer" };
 
-constexpr std::string_view LogLevel{ "Debug" };
+constexpr std::string_view LogLevel{ "Release" };
 
-constexpr std::string_view GitCommitHash{ "a3396db93f31646f108d2c3cac93d64345c91777-dirty" };
-constexpr std::string_view GitCommitDate{ "Tue May 31 09:36:33 2022" };
-constexpr std::string_view GitCommitMessage{ "Fix fucking mouse grabbing & update version" };
+constexpr std::string_view GitCommitHash{ "a275db5512872281b1dfa84079be8fd9114650bd-dirty" };
+constexpr std::string_view GitCommitDate{ "Thu Jun 2 20:01:54 2022" };
+constexpr std::string_view GitCommitMessage{ "Fixed version and renamed SHIT_SHIT_SHIT to mWindows." };
 
 } // namespace meov::definitions

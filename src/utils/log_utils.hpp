@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utilities.hpp"
+#include "utils.hpp"
 #include "log_storage.hpp"
 
 namespace meov::utils {

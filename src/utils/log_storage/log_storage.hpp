@@ -2,7 +2,7 @@
 
 #include "common.hpp"
 
-#include "utilities.hpp"
+#include "utils.hpp"
 
 namespace meov::utils::Log {
 

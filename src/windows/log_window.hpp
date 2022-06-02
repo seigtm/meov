@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.hpp"
-#include "utilities.hpp"
+#include "utils.hpp"
 #include "log_utils.hpp"
 #include "windows/base_window.hpp"
 

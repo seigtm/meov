@@ -7,11 +7,11 @@
 #define SHADER_VERSION "#version 450 core"
 #define PROGRAM_NAME "MEOV | Minimalistic Easy Object Viewer"
 
-#define LOG_LEVEL "Debug"
+#define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "a3396db93f31646f108d2c3cac93d64345c91777-dirty"
-#define GIT_COMMIT_DATE "Tue May 31 09:36:33 2022"
-#define GIT_COMMIT_MESSAGE "Fix fucking mouse grabbing & update version"
+#define GIT_COMMIT_HASH "a275db5512872281b1dfa84079be8fd9114650bd-dirty"
+#define GIT_COMMIT_DATE "Thu Jun 2 20:01:54 2022"
+#define GIT_COMMIT_MESSAGE "Fixed version and renamed SHIT_SHIT_SHIT to mWindows."
 
 namespace meov {
 
