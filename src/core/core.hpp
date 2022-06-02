@@ -45,7 +45,7 @@ public:
     SDL_GLContext mWinContext{ nullptr };
 
 private:
-    ImGuiWindows SHIT_SHIT_SHIT;
+    ImGuiWindows mWindows;
 
     bool mRunning{ false };
     utilities::time::Clock mClock;

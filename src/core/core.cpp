@@ -71,11 +71,11 @@ Core::ExecutionResult Core::Run() {
     spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
     spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
-    SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
-    SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);
+    mWindows.mSceneTree.Select(mScene);
+    mWindows.mSceneWin.Select(mFrameBuffer);
 
     mRunning = true;
-    utils::LogUtils::Instance()->GetLogStorage()->Subscribe(SHIT_SHIT_SHIT.mLogWin);
+    utils::LogUtils::Instance()->GetLogStorage()->Subscribe(mWindows.mLogWin);
     while(mRunning) {
         mClock.Update();
 
@@ -107,7 +107,7 @@ void Core::RenderFrame() {
 
 void Core::Update(double delta) {
     mScene->Update(delta);
-    SHIT_SHIT_SHIT.mPropWin.Select(mScene->GetSelectedObjects());
+    mWindows.mPropWin.Select(mScene->GetSelectedObjects());
 }
 
 void Core::Draw(Graphics& g) {
@@ -117,7 +117,7 @@ void Core::Draw(Graphics& g) {
 }
 
 void Core::Serialize() {
-    SHIT_SHIT_SHIT.Serialize();
+    mWindows.Serialize();
 }
 
 
