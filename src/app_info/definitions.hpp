@@ -16,8 +16,8 @@ constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer
 
 constexpr std::string_view LogLevel{ "Release" };
 
-constexpr std::string_view GitCommitHash{ "a275db5512872281b1dfa84079be8fd9114650bd-dirty" };
-constexpr std::string_view GitCommitDate{ "Thu Jun 2 20:01:54 2022" };
-constexpr std::string_view GitCommitMessage{ "Fixed version and renamed SHIT_SHIT_SHIT to mWindows." };
+constexpr std::string_view GitCommitHash{ "dff7ade459716665b3f4a46db942e2ae7286584d-dirty" };
+constexpr std::string_view GitCommitDate{ "Thu Jun 2 20:21:16 2022" };
+constexpr std::string_view GitCommitMessage{ "Massive renaming, again (forgot Transformable.cpp)." };
 
 } // namespace meov::definitions

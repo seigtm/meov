@@ -42,7 +42,6 @@ void ModelComponent::Serialize() {
 
     ImGui::Text("Name: %s", mModel->Name().c_str());
     ImGui::Text("Path: %s", mModel->GetPath().string().c_str());
-    ImGui::SameLine();
     if(ImGui::Button("Change")) {
         dialog->OpenModal(DialogName.data(), "Choose model", Extensions.data(), ".");
     }

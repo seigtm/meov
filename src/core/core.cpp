@@ -55,7 +55,7 @@ Core::ExecutionResult Core::Run() {
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
     // Default model displayed when the application runs.
-    object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
+    object->AddComponent<components::ModelComponent>("models/backpack/backpack.obj");
 
     auto dirLight{ mScene->AddObject("Directional light") };
     dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });

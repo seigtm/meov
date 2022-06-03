@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "a275db5512872281b1dfa84079be8fd9114650bd-dirty"
-#define GIT_COMMIT_DATE "Thu Jun 2 20:01:54 2022"
-#define GIT_COMMIT_MESSAGE "Fixed version and renamed SHIT_SHIT_SHIT to mWindows."
+#define GIT_COMMIT_HASH "dff7ade459716665b3f4a46db942e2ae7286584d-dirty"
+#define GIT_COMMIT_DATE "Thu Jun 2 20:21:16 2022"
+#define GIT_COMMIT_MESSAGE "Massive renaming, again (forgot Transformable.cpp)."
 
 namespace meov {
 

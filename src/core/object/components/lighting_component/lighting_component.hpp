@@ -28,9 +28,9 @@ protected:
     bool mEnabled{ true };
     bool mSerializerOpened{ false };
 
-    glm::vec3 mAmbient{ .05f, 0.5f, 0.5f };
-    glm::vec3 mDiffuse{ .8f, .8f, .8f };
-    glm::vec3 mSpecular{ 1.f, 1.f, 1.f };
+    glm::vec3 mAmbient{ 1.0f, 1.0f, 1.0f };
+    glm::vec3 mDiffuse{ 1.0f, 1.0f, 1.0f };
+    glm::vec3 mSpecular{ 1.0f, 1.0f, 1.0f };
 
     bool HasTransformComponent() const;
 };
@@ -68,8 +68,8 @@ private:
     int mId{};
     std::string mTextureName;
     float mConstant{ 1.0f };
-    float mLinear{ 0.09f };
-    float mQuadratic{ 0.032f };
+    float mLinear{ 1.0f };
+    float mQuadratic{ 1.0f };
 };
 
 class SpotLightingComponent final : public LightingComponent {
@@ -89,8 +89,8 @@ private:
     float mOuterCutOff;
 
     float mConstant{ 1.0f };
-    float mLinear{ 0.09f };
-    float mQuadratic{ 0.032f };
+    float mLinear{ 1.0f };
+    float mQuadratic{ 1.0f };
 };
 
 }  // namespace meov::core::components
