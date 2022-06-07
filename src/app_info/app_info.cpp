@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "dff7ade459716665b3f4a46db942e2ae7286584d-dirty"
-#define GIT_COMMIT_DATE "Thu Jun 2 20:21:16 2022"
-#define GIT_COMMIT_MESSAGE "Massive renaming, again (forgot Transformable.cpp)."
+#define GIT_COMMIT_HASH "6c520de24d2e112620f849cb1bb416882a9addb3-dirty"
+#define GIT_COMMIT_DATE "Sat Jun 4 11:48:24 2022"
+#define GIT_COMMIT_MESSAGE "Removed one model and added other one."
 
 namespace meov {
 

@@ -59,7 +59,7 @@ Core::ExecutionResult Core::Run() {
 
     auto dirLight{ mScene->AddObject("Directional light") };
     dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -100.f, -100.f, -100.f });
 
     auto lighting{ mScene->AddObject("Point light") };
     lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
@@ -68,7 +68,7 @@ Core::ExecutionResult Core::Run() {
 
     auto spotLight{ mScene->AddObject("Spot light") };
     spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ 1.f, 1.f, 2.f });
     spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     mWindows.mSceneTree.Select(mScene);
