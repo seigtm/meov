@@ -58,8 +58,8 @@ Core::ExecutionResult Core::Run() {
     object->AddComponent<components::ModelComponent>("models/backpack/backpack.obj");
 
     auto dirLight{ mScene->AddObject("Directional light") };
-    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -100.f, -100.f, -100.f });
+    dirLight->AddComponent<components::TransformComponent>()->Move({ -100, -100, -100 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ 1.f, 1.f, 1.f });
 
     auto lighting{ mScene->AddObject("Point light") };
     lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });

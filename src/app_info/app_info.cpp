@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Release"
 
-#define GIT_COMMIT_HASH "6c520de24d2e112620f849cb1bb416882a9addb3-dirty"
-#define GIT_COMMIT_DATE "Sat Jun 4 11:48:24 2022"
-#define GIT_COMMIT_MESSAGE "Removed one model and added other one."
+#define GIT_COMMIT_HASH "e35e6ea36b02bbe7820423d87f0274a5cb4084ef-dirty"
+#define GIT_COMMIT_DATE "Tue Jun 7 19:43:19 2022"
+#define GIT_COMMIT_MESSAGE "Updated models and changed some default values."
 
 namespace meov {
 
