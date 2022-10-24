@@ -9,39 +9,34 @@ Object::Object(std::string &&name)
 }
 
 void Object::PreDraw(Graphics &g) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [&g](const std::shared_ptr<Object> &child) { child->PreDraw(g); });
+    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->PreDraw(g); });
     ForEachComponent([&g](components::Component::Shared &comp) { comp->PreDraw(g); });
 }
 
 void Object::Draw(Graphics &g) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [&g](const std::shared_ptr<Object> &child) { child->Draw(g); });
+    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->Draw(g); });
     ForEachComponent([&g](components::Component::Shared &comp) { comp->Draw(g); });
 }
 
 void Object::PostDraw(Graphics &g) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [&g](const std::shared_ptr<Object> &child) { child->PostDraw(g); });
+    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->PostDraw(g); });
     ForEachComponent([&g](components::Component::Shared &comp) { comp->PostDraw(g); });
 }
 
 void Object::PreUpdate(double delta) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [delta](const std::shared_ptr<Object> &child) { child->PreUpdate(delta); });
-    ForEachComponent([&delta](components::Component::Shared &comp) { comp->PreUpdate(delta); });
+    CheckDeadGuys();
+    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->PreUpdate(delta); });
+    ForEachComponent([delta](components::Component::Shared &comp) { comp->PreUpdate(delta); });
 }
 
 void Object::Update(double delta) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [delta](const std::shared_ptr<Object> &child) { child->Update(delta); });
-    ForEachComponent([&delta](components::Component::Shared &comp) { comp->Update(delta); });
+    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->Update(delta); });
+    ForEachComponent([delta](components::Component::Shared &comp) { comp->Update(delta); });
 }
 
 void Object::PostUpdate(double delta) {
-    std::for_each(mChildren.rbegin(), mChildren.rend(),
-        [delta](const std::shared_ptr<Object> &child) { child->PostUpdate(delta); });
-    ForEachComponent([&delta](components::Component::Shared &comp) { comp->PostUpdate(delta); });
+    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->PostUpdate(delta); });
+    ForEachComponent([delta](components::Component::Shared &comp) { comp->PostUpdate(delta); });
 }
 
 void Object::Serialize() {
@@ -54,6 +49,7 @@ void Object::Serialize() {
         comp->Serialize();
         ImGui::Separator();
     });
+    ImGui::Button("Add component");
     ImGui::Unindent();
     ImGui::PopID();
     ImGui::Spacing();
@@ -69,8 +65,15 @@ void Object::Disable() {
     mEnabled = false;
 }
 
-void Object::setParent(std::weak_ptr<Object> &&parent) {
-    mParent = std::move(parent);
+void Object::IWannaDead() {
+    mIWannaDead = true;
+}
+bool Object::WannaDead() const {
+    return mIWannaDead;
+}
+
+void Object::setParent(Object *parent) {
+    mParent = parent;
 }
 
 std::shared_ptr<Object> Object::addChild(std::shared_ptr<Object> &&child) {
@@ -78,7 +81,7 @@ std::shared_ptr<Object> Object::addChild(std::shared_ptr<Object> &&child) {
         return nullptr;
     if (find(child->Name()) != nullptr)
         return nullptr;
-    child->setParent(std::enable_shared_from_this<Object>::weak_from_this());
+    child->setParent(this);
     return mChildren.emplace_back(std::move(child));
 }
 
@@ -110,6 +113,10 @@ std::vector<std::shared_ptr<Object>> Object::children() const {
     return mChildren;
 }
 
+size_t Object::childrenCount() const {
+    return mChildren.size();
+}
+
 std::shared_ptr<Object> Object::find(const std::string &name, bool recursive) const {
     if (name.empty())
         return nullptr;
@@ -123,6 +130,13 @@ std::shared_ptr<Object> Object::find(const std::string &name, bool recursive) co
             return found;
     }
     return nullptr;
+}
+
+void Object::CheckDeadGuys() {
+    auto removed = std::remove_if(mChildren.begin(), mChildren.end(),
+        [](const auto &child){ return child->WannaDead(); });
+    if (removed != mChildren.end())
+        mChildren.erase(removed, mChildren.end());
 }
 
 }  // namespace meov::core

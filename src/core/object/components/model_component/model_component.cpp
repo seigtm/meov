@@ -90,7 +90,7 @@ void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
             if(texture->Valid()) {
                 constexpr float size{ 256.f };
                 const auto id{ texture->GetID() };
-                ImGui::Image(reinterpret_cast<ImTextureID>(id), ImVec2{ size, size });
+                ImGui::Image(reinterpret_cast<void *>(id), ImVec2{ size, size });
             }
             ImGui::Text("Name: %s", texture->Name().c_str());
             ImGui::Text("Path: %s", texture->GetPath().string().c_str());
@@ -109,8 +109,7 @@ bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
 }
 
 bool ModelComponent::Valid() const {
-    const auto holder{ mHolder.lock() };
-    return holder && mModel;
+    return mHolder.lock() && mModel;
 }
 
 }  // namespace meov::core::components

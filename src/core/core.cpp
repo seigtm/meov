@@ -58,41 +58,38 @@ void Core::initialize() {
     mWindowManager = std::make_shared<Window::Manager>();
     mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
 
-    for (auto skybox : mScene->AddObject("Skybox")) {
-        skybox->AddComponent<components::TransformComponent>();
-        skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
-        skybox->AddComponent<components::SkyboxComponent>("models/skybox");
-        skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
-    }
+    auto skybox{ mScene->AddObject("Skybox") };
+    skybox->AddComponent<components::TransformComponent>();
+    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
 
-    for (auto camera : mScene->AddObject("Camera")) {
-        camera->AddComponent<components::TransformComponent>();
-        camera->AddComponent<components::MoveComponent>();
-        camera->AddComponent<components::CameraComponent>(mGraphics);
-    }
+    auto camera{ mScene->AddObject("Camera") };
+    camera->AddComponent<components::TransformComponent>();
+    camera->AddComponent<components::MoveComponent>();
+    camera->AddComponent<components::CameraComponent>(mGraphics);
 
     // Default model displayed when the application runs.
-    auto objects{ mScene->AddObject("Objects").back() };
-    auto object{ objects->addChild(std::make_shared<Object>("Test object")) };
+    auto objects{ mScene->AddObject("Objects") };
+    auto object{ mScene->AddObject("Test object", objects) };
     object->AddComponent<components::TransformComponent>();
     object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
 
-    for (auto dirLight : mScene->AddObject("Directional light")) {
-        dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-        dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-    }
+    auto lights{ mScene->AddObject("Lights") };
 
-    for (auto lighting : mScene->AddObject("Point light")) {
-        lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
-        // lighting->AddComponent<components::PointLightingComponent>();
-        lighting->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
-    }
+    auto dirLight{ mScene->AddObject("Directional light", lights) };
+    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
 
-    for (auto spotLight : mScene->AddObject("Spot light")) {
-        spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-        // spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-        spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
-    }
+    auto lighting{ mScene->AddObject("Point light", lights) };
+    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
+    lighting->AddComponent<components::PointLightingComponent>();
+    lighting->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
+
+    auto spotLight{ mScene->AddObject("Spot light", lights) };
+    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
 
     if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
         sceneView->Select(mFrameBuffer);
@@ -101,7 +98,6 @@ void Core::initialize() {
 
     if (auto logView{ mWindowManager->getAs<Window::Log>("log") }; logView)
         utils::LogUtils::Instance()->GetLogStorage()->Subscribe(logView);
-
 
 }
 

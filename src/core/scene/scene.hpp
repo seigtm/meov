@@ -16,7 +16,9 @@ public:
     void Draw(Graphics &graphics);
     void Update(double delta);
 
-    std::vector<std::shared_ptr<Object>> AddObject(const std::string_view name);
+    std::shared_ptr<Object> AddObject(
+        const std::string_view name, const std::shared_ptr<Object> &target = nullptr);
+    std::vector<std::shared_ptr<Object>> AddObjectsUnderSelected(const std::string_view name);
 
     std::vector<std::weak_ptr<Object>> GetSelectedObjects() const;
     std::vector<std::shared_ptr<Object>> GetObjects() const;

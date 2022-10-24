@@ -52,7 +52,7 @@ T *Holder::AddComponent(Args &&...args) {
     }
 
     T *component{ new T{ std::forward<Args>(args)... } };
-    component->SetHolder(weak_from_this());
+    component->SetHolder(std::enable_shared_from_this<Holder>::weak_from_this());
     mComponents.emplace(
         GetTypeName<T>(),
         components::Component::Shared{ component });

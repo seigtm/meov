@@ -14,8 +14,7 @@ namespace meov::core {
 class Object
     : public mixin::Named,
       public mixin::Selectable,
-      public components::Holder,
-      public std::enable_shared_from_this<Object> {
+      public components::Holder {
 public:
     explicit Object(std::string &&name);
 
@@ -31,24 +30,34 @@ public:
     void Enable();
     void Disable();
 
-    void setParent(std::weak_ptr<Object> &&parent);
+    void IWannaDead();
+    bool WannaDead() const;
+
+    void setParent(Object *parent);
 
     std::shared_ptr<Object> addChild(std::shared_ptr<Object> &&child);
     void removeChild(const std::shared_ptr<Object> &child);
     void removeChild(const std::string &child);
 
     std::vector<std::shared_ptr<Object>> children() const;
+    size_t childrenCount() const;
 
     std::shared_ptr<Object> find(const std::string &name, bool recursive = false) const;
 
     template<class Method>
     std::vector<std::weak_ptr<Object>> findIf(Method &&method, bool recursive = false) const;
 
+    template<class Method>
+    void forEachChildren(Method &&method);
+
 private:
-    std::weak_ptr<Object> mParent;
+    Object *mParent;
     std::vector<std::shared_ptr<Object>> mChildren;
+    bool mIWannaDead{ false };
 
     bool mEnabled{ true };
+
+    void CheckDeadGuys();
 };
 
 template<class Method>
@@ -65,6 +74,11 @@ std::vector<std::weak_ptr<Object>> Object::findIf(Method &&method, bool recursiv
             result.insert(result.end(), stack.begin(), stack.end());
     }
     return result;
+}
+
+template<class Method>
+void Object::forEachChildren(Method &&method) {
+    std::for_each(mChildren.rbegin(), mChildren.rend(), method);
 }
 
 }  // namespace meov::core

@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "eda50dc469f7d7656494cfab25fc7c0b8daa17df-dirty"
-#define GIT_COMMIT_DATE "Mon Oct 24 10:52:38 2022"
-#define GIT_COMMIT_MESSAGE "Move SHIT_SHIT_SHIT back to the ass"
+#define GIT_COMMIT_HASH "542aee2bea509de7e185fc60b24a542c2cd44874-dirty"
+#define GIT_COMMIT_DATE "Mon Oct 24 12:40:42 2022"
+#define GIT_COMMIT_MESSAGE "add tree-like object hierarchy"
 
 namespace meov {
 

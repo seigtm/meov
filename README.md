@@ -1,8 +1,19 @@
+<div align="center">
+
 # **_MEOV_**
 
-**‼️ Note**: this project is currently under development.
-
 **Minimalistic Easy Object Viewer**: lightweight and easy-to-use 3D object viewer.
+
+![GitHub](https://img.shields.io/github/license/seigtm/meov)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/seigtm/meov)
+![GitHub Repo stars](https://img.shields.io/github/stars/seigtm/meov)
+![GitHub top language](https://img.shields.io/github/languages/top/seigtm/meov)
+![GitHub contributors](https://img.shields.io/github/contributors/seigtm/meov)
+
+</div>
+
+
+**‼️ Note**: this project is currently under development.
 
 ## **Diagrams:**
 
