@@ -1,6 +1,8 @@
 #pragma once
 
-#include "common.hpp"
+#include <string>
+#include <string_view>
+#include <imgui.h>
 
 namespace meov::Window {
 

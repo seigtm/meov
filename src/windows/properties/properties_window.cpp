@@ -1,4 +1,4 @@
-#include "windows/properties_window.hpp"
+#include "windows/properties/properties_window.hpp"
 
 #include "object.hpp"
 #include "common.hpp"

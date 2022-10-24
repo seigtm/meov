@@ -1,6 +1,6 @@
 #pragma once
 
-#include "windows/base_window.hpp"
+#include "windows/base/base_window.hpp"
 #include "event_manager.hpp"
 
 namespace meov::core {

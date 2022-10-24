@@ -24,23 +24,38 @@
 #include "initializer_factory.hpp"
 #include "initializer.hpp"
 
+#include "windows/gui_manager/gui_manager.hpp"
+#include "windows/scene/scene_tree.hpp"
+#include "windows/scene/scene_window.hpp"
+#include "windows/log/log_window.hpp"
+#include "windows/properties/properties_window.hpp"
+
 namespace meov::core {
 
-ImGuiWindows::ImGuiWindows()
-    : mLogWin{ std::make_shared<Window::Log>("Logger", ImVec2{ 1280, 850 }) } {}
-
-void ImGuiWindows::Serialize() {
-    mLogWin->Draw();
-    mGitWin.Draw();
-    mPropWin.Draw();
-    mSceneTree.Draw();
-    mSceneWin.Draw();
-}
-
 Core::ExecutionResult Core::Run() {
+    initialize();
+
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
+    mRunning = true;
+    while(mRunning) {
+        mClock.Update();
+
+        StartFrame();
+        Update(mClock.Delta());
+        Draw(*mGraphics);
+        Serialize();
+        RenderFrame();
+
+        HandleEvents();
+    }
+
+    return Core::SUCCESS;
+}
+
+void Core::initialize() {
+    mWindowManager = std::make_shared<Window::Manager>();
     mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
 
     auto skybox{ mScene->AddObject("Skybox") };
@@ -73,24 +88,15 @@ Core::ExecutionResult Core::Run() {
     // spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
     spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
 
-    SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
-    SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);
+    if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
+        sceneView->Select(mFrameBuffer);
+    if (auto sceneTreeView{ mWindowManager->getAs<Window::SceneTree>("scene_tree") }; sceneTreeView)
+        sceneTreeView->Select(mScene);
 
-    mRunning = true;
-    utils::LogUtils::Instance()->GetLogStorage()->Subscribe(SHIT_SHIT_SHIT.mLogWin);
-    while(mRunning) {
-        mClock.Update();
+    if (auto logView{ mWindowManager->getAs<Window::Log>("log") }; logView)
+        utils::LogUtils::Instance()->GetLogStorage()->Subscribe(logView);
 
-        StartFrame();
-        Update(mClock.Delta());
-        Draw(*mGraphics);
-        Serialize();
-        RenderFrame();
 
-        HandleEvents();
-    }
-
-    return Core::SUCCESS;
 }
 
 void Core::StartFrame() {
@@ -109,7 +115,8 @@ void Core::RenderFrame() {
 
 void Core::Update(double delta) {
     mScene->Update(delta);
-    SHIT_SHIT_SHIT.mPropWin.Select(mScene->GetSelectedObjects());
+    if (auto propertiesView{ mWindowManager->getAs<Window::Properties>("properties") }; propertiesView)
+        propertiesView->Select(mScene->GetSelectedObjects());
 }
 
 void Core::Draw(Graphics& g) {
@@ -119,7 +126,7 @@ void Core::Draw(Graphics& g) {
 }
 
 void Core::Serialize() {
-    SHIT_SHIT_SHIT.Serialize();
+    mWindowManager->Draw();
 }
 
 

@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "5268c1d9c00f70d7487ed8cb3e7123c915c067d1-dirty"
-#define GIT_COMMIT_DATE "Mon Oct 24 09:08:09 2022"
-#define GIT_COMMIT_MESSAGE "update gitignore"
+#define GIT_COMMIT_HASH "6c3e58dc9aa9f4c0fff475919dc789d361e7da81-dirty"
+#define GIT_COMMIT_DATE "Mon Oct 24 10:12:43 2022"
+#define GIT_COMMIT_MESSAGE "Initializer destructurization"
 
 namespace meov {
 

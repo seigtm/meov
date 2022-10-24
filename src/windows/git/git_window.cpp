@@ -1,4 +1,4 @@
-#include "windows/git_window.hpp"
+#include "windows/git/git_window.hpp"
 #include "app_info.hpp"
 #include "common.hpp"
 

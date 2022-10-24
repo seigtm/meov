@@ -1,4 +1,4 @@
-#include "windows/log_window.hpp"
+#include "windows/log/log_window.hpp"
 
 namespace meov::Window {
 
