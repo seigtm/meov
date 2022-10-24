@@ -8,6 +8,7 @@ out VertexShaderOutput {
     vec3 FragmentPosition;
     vec3 Normal;
     vec2 TextureCoordinates;
+    float Alpha;
 }
 VSOut;
 
@@ -19,6 +20,7 @@ void main() {
     VSOut.FragmentPosition = vec3(model * vec4(aPos, 1.0));
     VSOut.Normal = normalize(mat3(transpose(inverse(model))) * aNormal.xyz);
     VSOut.TextureCoordinates = aTexPos;
+    VSOut.Alpha = aNormal.w;
 
     gl_Position = projection * view * vec4(VSOut.FragmentPosition, 1.0);
 }

@@ -52,9 +52,9 @@ Core::ExecutionResult Core::Run() {
     camera->AddComponent<components::MoveComponent>();
     camera->AddComponent<components::CameraComponent>(mGraphics);
 
+    // Default model displayed when the application runs.
     auto object{ mScene->AddObject("Test object") };
     object->AddComponent<components::TransformComponent>();
-    // Default model displayed when the application runs.
     object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
 
     auto dirLight{ mScene->AddObject("Directional light") };
@@ -63,13 +63,13 @@ Core::ExecutionResult Core::Run() {
 
     auto lighting{ mScene->AddObject("Point light") };
     lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
-    lighting->AddComponent<components::PointLightingComponent>();
-    lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+    // lighting->AddComponent<components::PointLightingComponent>();
+    lighting->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
 
     auto spotLight{ mScene->AddObject("Spot light") };
     spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-    spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+    // spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
 
     SHIT_SHIT_SHIT.mSceneTree.Select(mScene);
     SHIT_SHIT_SHIT.mSceneWin.Select(mFrameBuffer);

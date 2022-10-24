@@ -67,7 +67,7 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
         // Get texture coordinates (aTexPos).
         glm::vec2 texturePosition{ 0, 0 };
         // If mesh has texture coords.
-        if(mesh->mTextureCoords[0]) {
+        if(mesh->HasTextureCoords(0)) {
             texturePosition.x = mesh->mTextureCoords[0][i].x;
             texturePosition.y = mesh->mTextureCoords[0][i].y;
         }

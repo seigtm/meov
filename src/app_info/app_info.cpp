@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "b85bab7b374b8ce579b0d635cf93218136299799-dirty"
-#define GIT_COMMIT_DATE "Tue May 31 09:35:36 2022"
-#define GIT_COMMIT_MESSAGE "add shaders hot reload (But as shit)"
+#define GIT_COMMIT_HASH "a3396db93f31646f108d2c3cac93d64345c91777-dirty"
+#define GIT_COMMIT_DATE "Tue May 31 10:36:33 2022"
+#define GIT_COMMIT_MESSAGE "Fix fucking mouse grabbing & update version"
 
 namespace meov {
 
