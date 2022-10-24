@@ -21,6 +21,7 @@ Manager::Manager()
 {}
 
 void Manager::Draw() {
+	ImGui::ShowDemoWindow();
 	for (auto &&[name, window] : mWindows) {
 		window->Draw();
 	}

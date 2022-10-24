@@ -4,6 +4,12 @@
 #include "object.hpp"
 #include "scene.hpp"
 
+namespace {
+
+void drawObjects(const std::vector<std::shared_ptr<meov::core::Object>> &objects);
+
+} // anonymous namespace
+
 namespace meov::Window {
 
 SceneTree::SceneTree() noexcept
@@ -18,21 +24,35 @@ void SceneTree::DrawImpl() {
     auto scene{ mWrappedScene.lock() };
     if(scene == nullptr)
         return;
+    if (!ImGui::CollapsingHeader("root"))
+        return;
 
     const ImVec4 selectColor{ 234 / 255.f, 179 / 255.f, 123 / 255.f, 255.f };
 
-    auto &objects{ scene->GetObjects() };
-    for(auto &&obj : objects) {
-        bool selected{ obj->IsSelected() };
-        if(selected) ImGui::PushStyleColor(ImGuiCol_Button, selectColor);
-        if(ImGui::Button(obj->Name().c_str())) {
-            if(selected)
-                obj->Deselect();
-            else
-                obj->Select();
-        }
-        if(selected) ImGui::PopStyleColor();
-    }
+    drawObjects(scene->GetObjects());
 }
 
 }  // namespace meov::Window
+
+namespace {
+
+void drawObjects(const std::vector<std::shared_ptr<meov::core::Object>> &objects) {
+    if (objects.empty())
+        return;
+
+    hierarchy
+    for (auto &&object : objects) {
+        bool selected{ object->IsSelected() };
+        const auto name{ object->Name() };
+        ImGui::Checkbox(("##" + name).c_str(), &selected);
+        object->SetSelect(selected);
+        ImGui::SameLine();
+        if (ImGui::TreeNode(name.c_str())) {
+            drawObjects(object->children());
+            ImGui::TreePop();
+        }
+    }
+}
+
+} // anonymous namespace
+
