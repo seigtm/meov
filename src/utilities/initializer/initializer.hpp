@@ -1,6 +1,9 @@
 #pragma once
 
+#include "initializer_listener.hpp"
+
 #include <functional>
+#include <memory>
 #include <string>
 #include <set>
 
@@ -11,17 +14,11 @@ public:
 	using Shared = std::shared_ptr<Initializer>;
 	using Task = std::function<bool()>;
 
-	class Listener {
-	public:
-		virtual ~Listener() = default;
-		virtual void OnFail(const std::string_view &taskName) = 0;
-	};
-
-	Initializer(Listener *parent, std::string &&name, Task &&onInit, Task &&onDestroy);
+	Initializer(InitializerListener *parent, std::string &&name, Task &&onInit, Task &&onDestroy);
 	~Initializer();
 
 private:
-	Listener *mParent;
+	InitializerListener *mParent;
 	std::string mName;
 	Task mDestroyTask;
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "initializer.hpp"
+#include "initializer_listener.hpp"
 #include "time_utils.hpp"
 
 #include "windows/git_window.hpp"
@@ -12,6 +12,11 @@
 #include "windows/properties_window.hpp"
 #include "windows/scene_tree.hpp"
 #include "windows/scene_window.hpp"
+
+namespace meov::utilities {
+class Initializer;
+} // namespace meov::utilities
+
 
 namespace meov::core {
 
@@ -32,12 +37,14 @@ public:
     void Serialize();
 };
 
-class Core final : public utilities::Initializer::Listener {
+class Core final : public utilities::InitializerListener {
 public:
     explicit Core(std::vector<std::string> &&argv);
 
-    enum ExecutionResult { SUCCESS,
-                           FAIL = -1 };
+    enum ExecutionResult{
+        SUCCESS,
+        FAIL = -1
+    };
 
     ExecutionResult Run();
 
@@ -54,7 +61,7 @@ private:
     std::shared_ptr<FrameBuffer> mFrameBuffer;
     glm::mat4 mProjection{ 1 };
 
-    std::vector<utilities::Initializer::Shared> mInitTasks;
+    std::vector<std::shared_ptr<utilities::Initializer>> mInitTasks;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
@@ -69,7 +76,7 @@ private:
     void Serialize();
     void HandleEvents();
 
-    // utilities::Initializer::Listener
+    // utilities::InitializerListener
     void OnFail(const std::string_view &taskName) override;
 };
 

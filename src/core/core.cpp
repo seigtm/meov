@@ -1,6 +1,5 @@
 #include "common.hpp"
 #include "app_info.hpp"
-#include "log_utils.hpp"
 
 #include "core.hpp"
 
@@ -21,6 +20,9 @@
 #include "scene.hpp"
 
 #include "event_manager.hpp"
+
+#include "initializer_factory.hpp"
+#include "initializer.hpp"
 
 namespace meov::core {
 
@@ -159,46 +161,9 @@ void Core::OnFail(const std::string_view&) {
 
 Core::Core(std::vector<std::string>&& argv)
     : mInitTasks{
-        std::make_shared<utilities::Initializer>(
-            this, "STB Image",
-            [] {
-                stbi_set_flip_vertically_on_load(true);
-                return true;
-            },
-            [] {
-                return true;
-            }),
-        std::make_shared<utilities::Initializer>(
-            this, "Logger",
-            [] {
-                utils::LogUtils::Instance()->Initialize();
-                LOGI << "Current directory: " << fs::current_path().string();
-                return true;
-            },
-            [] {
-                return true;
-            }),
-        std::make_shared<utilities::Initializer>(
-            this, "SDL",
-            [] {
-                if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
-                    LOGF << "Error: " << SDL_GetError();
-                    return false;
-                }
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, AppInfo::GLSLVersionMajor());
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, AppInfo::GLSLVersionMinor());
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-                // Create window with graphics context.
-                SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-                SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-                SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-                return true;
-            },
-            [] {
-                SDL_Quit();
-                return true;
-            }),
+        utilities::InitializerFactory::load("stb_image", this),
+        utilities::InitializerFactory::load("logger", this),
+        utilities::InitializerFactory::load("sdl", this),
         std::make_shared<utilities::Initializer>(
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
@@ -226,27 +191,7 @@ Core::Core(std::vector<std::string>&& argv)
                 win = nullptr;
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
-            this, "OpenGL",
-            [] {
-                glbinding::Binding::initialize(
-                    [](const char* name) {
-                        return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
-                    });
-                glEnable(GL_DEPTH_TEST);
-#if defined(_DEBUG)
-                LOGD << "Debug callbacks initialization";
-                glEnable(GL_DEBUG_OUTPUT);
-                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-                glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
-
-                SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
-#endif
-                return true;
-            },
-            [] {
-                return true;
-            }),
+        utilities::InitializerFactory::load("opengl", this),
         std::make_shared<utilities::Initializer>(
             this, "ImGui",
             [&win = this->mWindow, &ctx = this->mWinContext] {
