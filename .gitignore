@@ -40,3 +40,6 @@ build/
 
 # other
 **/*.log
+
+# vscode
+.vscode/settings.json
