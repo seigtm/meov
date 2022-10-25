@@ -12,4 +12,8 @@ bool Selectable::IsSelected() const {
     return mSelected;
 }
 
+void Selectable::SetSelect(bool selected) {
+    mSelected = selected;
+}
+
 }  // namespace meov::core::mixin

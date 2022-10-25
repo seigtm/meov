@@ -142,7 +142,6 @@ void CameraComponent::OnMouseReleased(
     mIsMouseGrabbed = false;
 }
 
-
 void CameraComponent::OnMouseMove(const glm::vec2 &position) {
     if(!mIsMouseGrabbed)
         return;

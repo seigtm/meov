@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"cmake.buildDirectory": "${workspaceFolder}/build/vscode/${buildType}",
+		"cmake.installPrefix": "${workspaceFolder}/bin",
+		"cmake.parallelJobs": 16,
+		"cmake.preferredGenerators": [ "Ninja" ],
+		"cmake.buildArgs": [ "-v" ],
+		"cmake.configureOnEdit": false,
+	}
+}

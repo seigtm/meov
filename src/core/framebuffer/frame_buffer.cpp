@@ -20,7 +20,23 @@ uint32_t FrameBuffer::GetFrameTexture() const {
     return 0;
 };
 
+int32_t FrameBuffer::Width() const {
+    if(mImpl) return mImpl->Width();
+    return 0;
+}
+int32_t FrameBuffer::Height() const {
+    if(mImpl) return mImpl->Height();
+    return 0;
+}
+
 FrameBuffer::Impl::Impl(int32_t width, int32_t height)
     : mWidth{ width }, mHeight{ height } {}
+
+int32_t FrameBuffer::Impl::Width() const {
+    return mWidth;
+}
+int32_t FrameBuffer::Impl::Height() const {
+    return mHeight;
+}
 
 }  // namespace meov::core

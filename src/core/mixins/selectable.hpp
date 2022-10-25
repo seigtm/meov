@@ -7,6 +7,7 @@ public:
     void Select();
     void Deselect();
     bool IsSelected() const;
+    void SetSelect(bool selected);
 
 private:
     bool mSelected{ false };

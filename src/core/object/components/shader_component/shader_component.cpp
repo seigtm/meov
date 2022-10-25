@@ -5,6 +5,8 @@
 #include "shaders_program.hpp"
 #include "graphics.hpp"
 
+#include "utils/scope_wrapper/scope_wrapper.hpp"
+
 namespace meov::core::components {
 
 ShaderComponent::ShaderComponent(const fs::path &shaders) noexcept
@@ -38,14 +40,20 @@ void ShaderComponent::PostDraw(Graphics &g) {
 void ShaderComponent::Update(double) {}
 
 void ShaderComponent::Serialize() {
-    if(!Valid()) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
+    const bool valid{ Valid() };
+    if(!valid) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
     if(!ImGui::CollapsingHeader(Name().c_str())) {
-        if(!Valid()) ImGui::PopStyleColor();
+        if(!valid) ImGui::PopStyleColor();
         return;
     }
-    if(!Valid()) ImGui::PopStyleColor();
 
-    ImGui::Indent();
+    utils::ScopeWrapper wrapper{ [] { ImGui::Indent(); }, [] { ImGui::Unindent(); } };
+
+    if(!valid) {
+        ImGui::PopStyleColor();
+        ImGui::Text("Error: %s", mProgram == nullptr ? "Program is null!" : "Program is invalid!");
+        return;
+    }
 
     if(ImGui::Checkbox("Enabled", &mEnabled)) {
         LOGD << "Shader component is" << (mEnabled ? "" : " not") << " active";
@@ -65,8 +73,6 @@ void ShaderComponent::Serialize() {
     ImGui::InputText("Current shader", &mTargetPath);
     ImGui::Text("Status: %s", mStatus.c_str());
     ImGui::Text("Current texture: %s", mPath.string().c_str());
-
-    ImGui::Unindent();
 }
 
 bool ShaderComponent::Valid() const {

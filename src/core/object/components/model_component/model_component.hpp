@@ -24,6 +24,7 @@ private:
     std::string mSelectedTextureType;
 
     void Serialize(const std::shared_ptr<Mesh> &mesh);
+    void ShowChangeModelDialog();
 };
 
 }  // namespace meov::core::components

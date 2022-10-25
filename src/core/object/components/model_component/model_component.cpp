@@ -5,6 +5,8 @@
 #include "ImGuiFileDialog.h"
 #include "resource_manager.hpp"
 
+#include "utils/scope_wrapper/scope_wrapper.hpp"
+
 namespace meov::core::components {
 
 ModelComponent::ModelComponent(const fs::path &model)
@@ -28,30 +30,23 @@ void ModelComponent::Update(double) {
 }
 
 void ModelComponent::Serialize() {
-    if(!Valid()) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
+    const auto valid{ Valid() };
+    if(!valid) ImGui::PushStyleColor(ImGuiCol_Header, { 0.6f, 0.1f, 0.3f, 1.0f });
     if(!ImGui::CollapsingHeader(Name().c_str())) {
-        if(!Valid()) ImGui::PopStyleColor();
+        if(!valid) ImGui::PopStyleColor();
         return;
     }
-    if(!Valid()) ImGui::PopStyleColor();
 
-    auto *dialog{ ImGuiFileDialog::Instance() };
-    constexpr std::string_view DialogName{ "ChooseFileDlgKey" };
-    constexpr std::string_view Extensions{ ".obj,.gltf,.fbx,.stl" };
-    ImGui::Indent();
+    utils::ScopeWrapper wrapper{ [] { ImGui::Indent(); }, [] { ImGui::Unindent(); } };
 
-    ImGui::Text("Name: %s", mModel->Name().c_str());
-    ImGui::Text("Path: %s", mModel->GetPath().string().c_str());
-    if(ImGui::Button("Change")) {
-        dialog->OpenModal(DialogName.data(), "Choose model", Extensions.data(), ".");
+    if(!valid) {
+        ImGui::PopStyleColor();
+        ImGui::Text("Error: %s", mModel == nullptr ? "Invalid model!" : "Invalid holder!");
+        ShowChangeModelDialog();
+        return;
     }
-    if(dialog->Display(DialogName.data())) {
-        if(dialog->IsOk()) {
-            const auto path{ dialog->GetFilePathName().erase(0, fs::current_path().string().size() + 1) };
-            mModel = RESOURCES->LoadModel(path);
-        }
-        dialog->Close();
-    }
+
+    ShowChangeModelDialog();
 
     if(ImGui::TreeNode("Meshes")) {
         for(const auto &mesh : mModel->GetMeshes()) {
@@ -59,8 +54,17 @@ void ModelComponent::Serialize() {
         }
         ImGui::TreePop();
     }
+}
 
-    ImGui::Unindent();
+bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
+    if(model == nullptr)
+        return false;
+    mModel = model;
+    return true;
+}
+
+bool ModelComponent::Valid() const {
+    return !mHolder.expired() && mModel;
 }
 
 void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
@@ -89,7 +93,7 @@ void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
             if(texture->Valid()) {
                 constexpr float size{ 256.f };
                 const auto id{ texture->GetID() };
-                ImGui::Image(reinterpret_cast<ImTextureID>(id), ImVec2{ size, size });
+                ImGui::Image(reinterpret_cast<void *>(id), ImVec2{ size, size });
             }
             ImGui::Text("Name: %s", texture->Name().c_str());
             ImGui::Text("Path: %s", texture->GetPath().string().c_str());
@@ -100,16 +104,26 @@ void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
     ImGui::TreePop();
 }
 
-bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
-    if(model == nullptr)
-        return false;
-    mModel = model;
-    return true;
-}
+void ModelComponent::ShowChangeModelDialog() {
+    auto *dialog{ ImGuiFileDialog::Instance() };
+    constexpr std::string_view DialogName{ "ChooseFileDlgKey" };
+    constexpr std::string_view Extensions{ ".obj,.gltf,.fbx,.stl" };
 
-bool ModelComponent::Valid() const {
-    const auto holder{ mHolder.lock() };
-    return holder && mModel;
+    if (mModel) {
+        ImGui::Text("Name: %s", mModel->Name().c_str());
+        ImGui::Text("Path: %s", mModel->GetPath().string().c_str());
+    }
+    if(ImGui::Button("Change")) {
+        dialog->OpenModal(DialogName.data(), "Choose model", Extensions.data(), ".");
+    }
+    if(dialog->Display(DialogName.data())) {
+        if(dialog->IsOk()) {
+            const auto path{ dialog->GetFilePathName().erase(0, fs::current_path().string().size() + 1) };
+            mModel = RESOURCES->LoadModel(path);
+        }
+        dialog->Close();
+    }
+
 }
 
 }  // namespace meov::core::components

@@ -52,6 +52,7 @@ in VertexShaderOutput {
     vec3 FragmentPosition;
     vec3 Normal;
     vec2 TextureCoordinates;
+    float Alpha;
 }
 VSOut;
 
@@ -79,9 +80,7 @@ void PrepareMaterial();
 
 void main() {
     PrepareMaterial();
-    // vec3 normal = VSOut.Normal;
     vec3 normal = normalize(calculatedNormals.xyz);
-    // vec3 normal = normalize(calculatedNormals.xyz + VSOut.Normal);
     vec3 viewDirection = normalize(viewPosition - VSOut.FragmentPosition);
 
     vec3 result = CalculateDirectionalLight(dirLight, normal, viewDirection);
@@ -92,7 +91,7 @@ void main() {
         result += CalculatePointLight(pointLights[i], normal, VSOut.FragmentPosition, viewDirection);
     // }
     result += CalculateSpotLight(spotLight, normal, VSOut.FragmentPosition, viewDirection);
-    FragmentColor = vec4(result, 1.0);
+    FragmentColor = vec4(result, VSOut.Alpha);
 }
 
 //================================== Functions ================================== //
@@ -111,8 +110,7 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 
     vec3 lightDirection = normalize(-light.direction);
     float diff = GetDiffuse(normal, lightDirection);     // Diffuse shading
-    vec3 reflectDir = reflect(-lightDirection, normal);  // Specular shading
-    float spec = GetSpecular(viewDir, reflectDir);
+    float spec = GetSpecular(viewDir, reflect(-lightDirection, normal));  // Specular shading
 
     vec2 texCoords = VSOut.TextureCoordinates;
     // Combine results:
@@ -128,8 +126,7 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewD
 
     vec3 lightDirection = normalize(light.position - fragPos);
     float diff = GetDiffuse(normal, lightDirection);
-    vec3 reflectDir = reflect(-lightDirection, normal);
-    float spec = GetSpecular(viewDir, reflectDir);
+    float spec = GetSpecular(viewDir, reflect(-lightDirection, normal));
     float dist = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
 
@@ -146,8 +143,7 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
 
     vec3 lightDirection = normalize(light.position - fragPos);
     float diff = GetDiffuse(normal, lightDirection);
-    vec3 reflectDir = reflect(-lightDirection, normal);
-    float spec = GetSpecular(viewDir, reflectDir);
+    float spec = GetSpecular(viewDir, reflect(-lightDirection, normal));
     float dist = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
 

@@ -7,54 +7,53 @@
 
 namespace meov::core {
 
+Scene::Scene()
+    : mRoot{ std::make_shared<Object>("root") }
+{}
+
 void Scene::Draw(Graphics &g) {
-    for(auto &&obj : mObjects) {
-        if(obj && obj->Enabled()) {
-            obj->PreDraw(g);
-            obj->Draw(g);
-            obj->PostDraw(g);
-        }
-    }
+    mRoot->PreDraw(g);
+    mRoot->Draw(g);
+    mRoot->PostDraw(g);
 }
 
 void Scene::Update(double delta) {
-    for(auto &&obj : mObjects) {
-        if(obj && obj->Enabled()) {
-            obj->PreUpdate(delta);
-            obj->Update(delta);
-            obj->PostUpdate(delta);
-        }
-    }
+    mRoot->PreUpdate(delta);
+    mRoot->Update(delta);
+    mRoot->PostUpdate(delta);
 }
 
-std::shared_ptr<Object> Scene::AddObject(const std::string_view name) {
+std::shared_ptr<Object> Scene::AddObject(const std::string_view name, const std::shared_ptr<Object> &target) {
+    std::string childName{ name.empty() ? "<no_name>" : name };
+    std::shared_ptr<Object> insertTarget{ target == nullptr ? mRoot : target };
+    while(insertTarget->find(childName) != nullptr)
+        childName += "_";
+    return insertTarget->addChild(std::make_shared<Object>(std::move(childName)));
+}
+
+std::vector<std::shared_ptr<Object>> Scene::AddObjectsUnderSelected(const std::string_view name) {
     if(name.empty())
-        return nullptr;
+        return {};
 
-    auto found{ std::find_if(
-        mObjects.begin(), mObjects.end(),
-        [name](const std::shared_ptr<Object> &object) { return object->Name() == name; }) };
-
-    if(found != mObjects.end())
-        return *found;
-
-    return mObjects.emplace_back(std::make_shared<Object>(std::string{ name }));
+    std::vector<std::shared_ptr<Object>> newObjects;
+    for (auto selected : GetSelectedObjects()) {
+        if (auto object{ selected.lock() }; object) {
+            newObjects.emplace_back(AddObject(name, object))->Select();
+        }
+    }
+    if (newObjects.empty())
+        newObjects.emplace_back(AddObject(name))->Select(); //< Add to the root
+    return newObjects;
 }
 
 std::vector<std::weak_ptr<Object>> Scene::GetSelectedObjects() const {
-    std::vector<std::weak_ptr<Object>> objects;
-
-    objects.reserve(mObjects.size());
-    for(auto object : mObjects) {
-        if(object->IsSelected())
-            objects.push_back(object);
-    }
-    objects.shrink_to_fit();
-
-    return objects;
+    return mRoot->findIf([] (const std::shared_ptr<Object> &child) {
+        return child->IsSelected();
+    }, true);
 }
-const std::vector<std::shared_ptr<Object>> &Scene::GetObjects() const {
-    return mObjects;
+
+std::vector<std::shared_ptr<Object>> Scene::GetObjects() const {
+    return mRoot->children();
 }
 
 }  // namespace meov::core

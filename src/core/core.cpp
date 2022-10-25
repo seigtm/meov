@@ -1,6 +1,5 @@
 #include "common.hpp"
 #include "app_info.hpp"
-#include "log_utils.hpp"
 
 #include "core.hpp"
 
@@ -22,60 +21,24 @@
 
 #include "event_manager.hpp"
 
+#include "initializer_factory.hpp"
+#include "initializer.hpp"
+
+#include "windows/gui_manager/gui_manager.hpp"
+#include "windows/scene/scene_tree.hpp"
+#include "windows/scene/scene_window.hpp"
+#include "windows/log/log_window.hpp"
+#include "windows/properties/properties_window.hpp"
+
 namespace meov::core {
 
-ImGuiWindows::ImGuiWindows()
-    : mLogWin{ std::make_shared<Window::Log>("Logger", ImVec2{ 1280, 850 }) } {}
-
-void ImGuiWindows::Serialize() {
-    mLogWin->Draw();
-    mGitWin.Draw();
-    mPropWin.Draw();
-    mSceneTree.Draw();
-    mSceneWin.Draw();
-}
-
 Core::ExecutionResult Core::Run() {
+    initialize();
+
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
 
-    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
-
-    auto skybox{ mScene->AddObject("Skybox") };
-    skybox->AddComponent<components::TransformComponent>();
-    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
-    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
-    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
-
-    auto camera{ mScene->AddObject("Camera") };
-    camera->AddComponent<components::TransformComponent>();
-    camera->AddComponent<components::MoveComponent>();
-    camera->AddComponent<components::CameraComponent>(mGraphics);
-
-    auto object{ mScene->AddObject("Test object") };
-    object->AddComponent<components::TransformComponent>();
-    // Default model displayed when the application runs.
-    object->AddComponent<components::ModelComponent>("models/backpack/backpack.obj");
-
-    auto dirLight{ mScene->AddObject("Directional light") };
-    dirLight->AddComponent<components::TransformComponent>()->Move({ -100, -100, -100 });
-    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ 1.f, 1.f, 1.f });
-
-    auto lighting{ mScene->AddObject("Point light") };
-    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
-    lighting->AddComponent<components::PointLightingComponent>();
-    lighting->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
-
-    auto spotLight{ mScene->AddObject("Spot light") };
-    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ 1.f, 1.f, 2.f });
-    spotLight->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
-
-    mWindows.mSceneTree.Select(mScene);
-    mWindows.mSceneWin.Select(mFrameBuffer);
-
     mRunning = true;
-    utils::LogUtils::Instance()->GetLogStorage()->Subscribe(mWindows.mLogWin);
     while(mRunning) {
         mClock.Update();
 
@@ -89,6 +52,53 @@ Core::ExecutionResult Core::Run() {
     }
 
     return Core::SUCCESS;
+}
+
+void Core::initialize() {
+    mWindowManager = std::make_shared<Window::Manager>();
+    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+
+    auto camera{ mScene->AddObject("Camera") };
+    camera->AddComponent<components::TransformComponent>();
+    camera->AddComponent<components::MoveComponent>();
+    camera->AddComponent<components::CameraComponent>(mGraphics);
+
+    // Default model displayed when the application runs.
+    auto objects{ mScene->AddObject("Objects") };
+    auto object{ mScene->AddObject("Test object", objects) };
+    object->AddComponent<components::TransformComponent>();
+    object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+
+    auto lights{ mScene->AddObject("Lights") };
+
+    auto dirLight{ mScene->AddObject("Directional light", lights) };
+    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+
+    auto lighting{ mScene->AddObject("Point light", lights) };
+    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
+    lighting->AddComponent<components::PointLightingComponent>();
+    lighting->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
+
+    auto spotLight{ mScene->AddObject("Spot light", lights) };
+    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
+
+    auto skybox{ mScene->AddObject("Skybox") };
+    skybox->AddComponent<components::TransformComponent>();
+    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
+
+    if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
+        sceneView->Select(mFrameBuffer);
+    if (auto sceneTreeView{ mWindowManager->getAs<Window::SceneTree>("scene_tree") }; sceneTreeView)
+        sceneTreeView->Select(mScene);
+
+    if (auto logView{ mWindowManager->getAs<Window::Log>("log") }; logView)
+        utils::LogUtils::Instance()->GetLogStorage()->Subscribe(logView);
+
 }
 
 void Core::StartFrame() {
@@ -107,7 +117,8 @@ void Core::RenderFrame() {
 
 void Core::Update(double delta) {
     mScene->Update(delta);
-    mWindows.mPropWin.Select(mScene->GetSelectedObjects());
+    if (auto propertiesView{ mWindowManager->getAs<Window::Properties>("properties") }; propertiesView)
+        propertiesView->Select(mScene->GetSelectedObjects());
 }
 
 void Core::Draw(Graphics& g) {
@@ -117,7 +128,7 @@ void Core::Draw(Graphics& g) {
 }
 
 void Core::Serialize() {
-    mWindows.Serialize();
+    mWindowManager->Draw();
 }
 
 
@@ -159,46 +170,9 @@ void Core::OnFail(const std::string_view&) {
 
 Core::Core(std::vector<std::string>&& argv)
     : mInitTasks{
-        std::make_shared<utils::Initializer>(
-            this, "STB Image",
-            [] {
-                stbi_set_flip_vertically_on_load(true);
-                return true;
-            },
-            [] {
-                return true;
-            }),
-        std::make_shared<utils::Initializer>(
-            this, "Logger",
-            [] {
-                utils::LogUtils::Instance()->Initialize();
-                LOGI << "Current directory: " << fs::current_path().string();
-                return true;
-            },
-            [] {
-                return true;
-            }),
-        std::make_shared<utils::Initializer>(
-            this, "SDL",
-            [] {
-                if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
-                    LOGF << "Error: " << SDL_GetError();
-                    return false;
-                }
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, AppInfo::GLSLVersionMajor());
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, AppInfo::GLSLVersionMinor());
-                SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-                // Create window with graphics context.
-                SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-                SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-                SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-                return true;
-            },
-            [] {
-                SDL_Quit();
-                return true;
-            }),
+        utils::InitializerFactory::load("stb_image", this),
+        utils::InitializerFactory::load("logger", this),
+        utils::InitializerFactory::load("sdl", this),
         std::make_shared<utils::Initializer>(
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
@@ -226,27 +200,7 @@ Core::Core(std::vector<std::string>&& argv)
                 win = nullptr;
                 return true;
             }),
-        std::make_shared<utils::Initializer>(
-            this, "OpenGL",
-            [] {
-                glbinding::Binding::initialize(
-                    [](const char* name) {
-                        return (glbinding::ProcAddress)SDL_GL_GetProcAddress(name);
-                    });
-                glEnable(GL_DEPTH_TEST);
-#if defined(_DEBUG)
-                LOGD << "Debug callbacks initialization";
-                glEnable(GL_DEBUG_OUTPUT);
-                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-                glDebugMessageCallback((GLDEBUGPROC)meov::utils::OpenGLLogCallback, nullptr);
-
-                SDL_LogSetOutputFunction(meov::utils::SDLLogCallback, nullptr);
-#endif
-                return true;
-            },
-            [] {
-                return true;
-            }),
+        utils::InitializerFactory::load("opengl", this),
         std::make_shared<utils::Initializer>(
             this, "ImGui",
             [&win = this->mWindow, &ctx = this->mWinContext] {

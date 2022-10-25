@@ -4,14 +4,16 @@
 #include <string>
 #include <memory>
 
-#include "initializer.hpp"
+#include "initializer_listener.hpp"
 #include "time_utils.hpp"
 
-#include "windows/git_window.hpp"
-#include "windows/log_window.hpp"
-#include "windows/properties_window.hpp"
-#include "windows/scene_tree.hpp"
-#include "windows/scene_window.hpp"
+namespace meov::utils {
+class Initializer;
+} // namespace meov::utils
+
+namespace meov::Window {
+class Manager;
+} // namespace meov::Window
 
 namespace meov::core {
 
@@ -20,24 +22,14 @@ class Object;
 class FrameBuffer;
 class Scene;
 
-class ImGuiWindows {
-public:
-    Window::Git mGitWin;
-    std::shared_ptr<Window::Log> mLogWin;
-    Window::Properties mPropWin;
-    Window::SceneTree mSceneTree;
-    Window::Scene mSceneWin;
-
-    ImGuiWindows();
-    void Serialize();
-};
-
-class Core final : public utils::Initializer::Listener {
+class Core final : public utils::InitializerListener {
 public:
     explicit Core(std::vector<std::string> &&argv);
 
-    enum ExecutionResult { SUCCESS,
-                           FAIL = -1 };
+    enum ExecutionResult{
+        SUCCESS,
+        FAIL = -1
+    };
 
     ExecutionResult Run();
 
@@ -45,22 +37,22 @@ public:
     SDL_GLContext mWinContext{ nullptr };
 
 private:
-    ImGuiWindows mWindows;
-
     bool mRunning{ false };
     utils::time::Clock mClock;
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;
+    std::shared_ptr<Window::Manager> mWindowManager;
     glm::mat4 mProjection{ 1 };
 
-    std::vector<utils::Initializer::Shared> mInitTasks;
+    std::vector<std::shared_ptr<utils::Initializer>> mInitTasks;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
     glm::vec2 sceneSize{};
     glm::vec2 scenePos{};
 
+    void initialize();
 
     void StartFrame();
     void RenderFrame();
@@ -69,7 +61,7 @@ private:
     void Serialize();
     void HandleEvents();
 
-    // utils::Initializer::Listener
+    // utils::InitializerListener
     void OnFail(const std::string_view &taskName) override;
 };
 

@@ -24,14 +24,60 @@ public:
     virtual void PreUpdate(double delta);
     virtual void Update(double delta);
     virtual void PostUpdate(double delta);
-    virtual void Serialize();  // for ImGui
 
     bool Enabled() const;
     void Enable();
     void Disable();
 
+    void IWannaDead();
+    bool WannaDead() const;
+
+    void setParent(Object *parent);
+
+    std::shared_ptr<Object> addChild(std::shared_ptr<Object> &&child);
+    void removeChild(const std::shared_ptr<Object> &child);
+    void removeChild(const std::string &child);
+
+    std::vector<std::shared_ptr<Object>> children() const;
+    size_t childrenCount() const;
+
+    std::shared_ptr<Object> find(const std::string &name, bool recursive = false) const;
+
+    template<class Method>
+    std::vector<std::weak_ptr<Object>> findIf(Method &&method, bool recursive = false) const;
+
+    template<class Method>
+    void forEachChildren(Method &&method);
+
 private:
+    Object *mParent;
+    std::vector<std::shared_ptr<Object>> mChildren;
+    bool mIWannaDead{ false };
+
     bool mEnabled{ true };
+
+    void CheckDeadGuys();
 };
+
+template<class Method>
+std::vector<std::weak_ptr<Object>> Object::findIf(Method &&method, bool recursive) const {
+    std::vector<std::weak_ptr<Object>> result;
+    for (const auto &child : mChildren) {
+        if (method(child))
+            result.push_back(child);
+
+        if (!recursive)
+            continue;
+
+        if (auto stack{ child->findIf(method, recursive) }; !stack.empty())
+            result.insert(result.end(), stack.begin(), stack.end());
+    }
+    return result;
+}
+
+template<class Method>
+void Object::forEachChildren(Method &&method) {
+    std::for_each(mChildren.rbegin(), mChildren.rend(), method);
+}
 
 }  // namespace meov::core

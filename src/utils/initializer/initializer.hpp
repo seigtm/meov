@@ -6,22 +6,18 @@
 
 namespace meov::utils {
 
+class InitializerListener;
+
 class Initializer final {
 public:
     using Shared = std::shared_ptr<Initializer>;
     using Task = std::function<bool()>;
 
-    class Listener {
-    public:
-        virtual ~Listener() = default;
-        virtual void OnFail(const std::string_view &taskName) = 0;
-    };
-
-    Initializer(Listener *parent, std::string &&name, Task &&onInit, Task &&onDestroy);
+    Initializer(InitializerListener *parent, std::string &&name, Task &&onInit, Task &&onDestroy) noexcept;
     ~Initializer();
 
 private:
-    Listener *mParent;
+    InitializerListener *mParent;
     std::string mName;
     Task mDestroyTask;
 

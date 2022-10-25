@@ -1,6 +1,6 @@
-# **_MEOV_**
+<div align="center">
 
-**‼️ Note**: this project is currently under development.
+# **_MEOV_**
 
 **Minimalistic Easy Object Viewer**: fast, lightweight, powerful and easy-to-use 3D object viewer.
 
@@ -127,6 +127,17 @@ The `Base` class is a basic window interface from which classes that implement a
 All widgets use `docking` technology, allowing them to attach to each other and to the main graphical window of the application in any order and location.
 
 ![](./pics/windows.png)
+
+![GitHub](https://img.shields.io/github/license/seigtm/meov)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/seigtm/meov)
+![GitHub Repo stars](https://img.shields.io/github/stars/seigtm/meov)
+![GitHub top language](https://img.shields.io/github/languages/top/seigtm/meov)
+![GitHub contributors](https://img.shields.io/github/contributors/seigtm/meov)
+
+</div>
+
+
+**‼️ Note**: this project is currently under development.
 
 ## **Diagrams:**
 

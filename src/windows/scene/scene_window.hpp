@@ -1,6 +1,6 @@
 #pragma once
 
-#include "windows/base_window.hpp"
+#include "windows/base/base_window.hpp"
 #include "event_manager.hpp"
 
 namespace meov::core {
@@ -24,7 +24,7 @@ public:
 
 protected:
     std::shared_ptr<core::FrameBuffer> mFrameBuffer{ nullptr };
-    button mListenButton{ button::Middle };
+    const button mListenButton{ button::Middle };
 
     void DrawImpl() override;
 
