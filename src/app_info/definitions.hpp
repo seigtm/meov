@@ -14,7 +14,7 @@ constexpr unsigned ShaderVersionPatch{ 0 };
 constexpr std::string_view ShaderVersion{ "#version 450 core" };
 constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer" };
 
-constexpr std::string_view LogLevel{ "Debug" };
+constexpr std::string_view LogLevel{ "Release" };
 
 constexpr std::string_view GitCommitHash{ "8061fef27a845253e49b43405d63c4ad1c46a096" };
 constexpr std::string_view GitCommitDate{ "Mon Oct 24 17:15:35 2022" };

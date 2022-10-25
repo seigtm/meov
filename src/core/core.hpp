@@ -37,10 +37,8 @@ public:
     SDL_GLContext mWinContext{ nullptr };
 
 private:
-    // ImGuiWindows SHIT_SHIT_SHIT;
-
     bool mRunning{ false };
-    utilities::time::Clock mClock;
+    utils::time::Clock mClock;
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;

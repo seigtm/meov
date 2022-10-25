@@ -149,7 +149,7 @@ void Core::HandleEvents() {
                     for(auto&& path : textures) {
                         mGraphics->PushProgram(*RESOURCES->LoadProgram(std::move(path), true));
                     }
-                    LOGI << "Textures was reloaded";
+                    LOGI << "Textures were reloaded";
                 }
             } break;
             case SDL_WINDOWEVENT_RESIZED: {
