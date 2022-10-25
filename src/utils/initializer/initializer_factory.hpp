@@ -7,7 +7,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace meov::utilities {
+namespace meov::utils {
 
 class Initializer;
 
@@ -21,4 +21,4 @@ private:
 	static std::unordered_map<std::string, Constructor> sStorage;
 };
 
-} // namespace meov::utilities
+} // namespace meov::utils

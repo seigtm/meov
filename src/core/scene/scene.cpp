@@ -12,15 +12,19 @@ Scene::Scene()
 {}
 
 void Scene::Draw(Graphics &g) {
-    mRoot->PreDraw(g);
-    mRoot->Draw(g);
-    mRoot->PostDraw(g);
+    mRoot->forEachChildren([&g] (auto &child) {
+        child->PreDraw(g);
+        child->Draw(g);
+        child->PostDraw(g);
+    });
 }
 
 void Scene::Update(double delta) {
-    mRoot->PreUpdate(delta);
-    mRoot->Update(delta);
-    mRoot->PostUpdate(delta);
+    mRoot->forEachChildren([delta] (auto &child) {
+        child->PreUpdate(delta);
+        child->Update(delta);
+        child->PostUpdate(delta);
+    });
 }
 
 std::shared_ptr<Object> Scene::AddObject(const std::string_view name, const std::shared_ptr<Object> &target) {

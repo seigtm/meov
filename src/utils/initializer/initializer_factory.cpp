@@ -5,7 +5,7 @@
 #include "initializer.hpp"
 #include "initializer_factory.hpp"
 
-namespace meov::utilities {
+namespace meov::utils {
 
 using namespace std::string_literals;
 
@@ -22,7 +22,7 @@ std::unordered_map<std::string, InitializerFactory::Constructor> InitializerFact
 		);
 	} },
 	{ "logger"s, [] (InitializerListener *listener) {
-		return std::make_shared<utilities::Initializer>(listener, "Logger",
+		return std::make_shared<utils::Initializer>(listener, "Logger",
 			[] {
 				utils::LogUtils::Instance()->Initialize();
 				LOGI << "Current directory: " << fs::current_path().string();
@@ -91,4 +91,4 @@ Initializer::Shared InitializerFactory::load(const std::string &name, Initialize
 	return nullptr;
 }
 
-} // namespace meov::utilities
+} // namespace meov::utils

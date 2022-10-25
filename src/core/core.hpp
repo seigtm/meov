@@ -7,9 +7,9 @@
 #include "initializer_listener.hpp"
 #include "time_utils.hpp"
 
-namespace meov::utilities {
+namespace meov::utils {
 class Initializer;
-} // namespace meov::utilities
+} // namespace meov::utils
 
 namespace meov::Window {
 class Manager;
@@ -22,7 +22,7 @@ class Object;
 class FrameBuffer;
 class Scene;
 
-class Core final : public utilities::InitializerListener {
+class Core final : public utils::InitializerListener {
 public:
     explicit Core(std::vector<std::string> &&argv);
 
@@ -45,7 +45,7 @@ private:
     std::shared_ptr<Window::Manager> mWindowManager;
     glm::mat4 mProjection{ 1 };
 
-    std::vector<std::shared_ptr<utilities::Initializer>> mInitTasks;
+    std::vector<std::shared_ptr<utils::Initializer>> mInitTasks;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
@@ -61,7 +61,7 @@ private:
     void Serialize();
     void HandleEvents();
 
-    // utilities::InitializerListener
+    // utils::InitializerListener
     void OnFail(const std::string_view &taskName) override;
 };
 

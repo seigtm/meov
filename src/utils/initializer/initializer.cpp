@@ -3,7 +3,7 @@
 #include "initializer.hpp"
 #include "initializer_listener.hpp"
 
-namespace meov::utilities {
+namespace meov::utils {
 
 Initializer::Initializer(InitializerListener *parent, std::string &&name, Task &&onInit, Task &&onDestroy) noexcept
     : mParent{ parent }
@@ -29,4 +29,4 @@ void Initializer::LogStatus(bool success, const std::string_view successMessage,
     }
 }
 
-}  // namespace meov::utilities
+}  // namespace meov::utils

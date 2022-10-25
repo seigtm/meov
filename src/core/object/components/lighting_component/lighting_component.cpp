@@ -7,6 +7,8 @@
 #include "transform_component.hpp"
 #include "model_component.hpp"
 
+#include "utils/scope_wrapper/scope_wrapper.hpp"
+
 namespace meov::core::components {
 
 LightingComponent::LightingComponent(std::string &&name)
@@ -21,6 +23,19 @@ void LightingComponent::Serialize() {
         if(!valid) ImGui::PopStyleColor();
         return;
     }
+
+    utils::ScopeWrapper wrapper{
+        [name = Name()] {
+            ImGui::Indent();
+            ImGui::PushID(name.c_str());
+        },
+        [] {
+            ImGui::PopID();
+            ImGui::Unindent();
+        }
+    };
+
+
     if(!valid) {
         ImGui::PopStyleColor();
         auto holder{ mHolder.lock() };
@@ -36,8 +51,6 @@ void LightingComponent::Serialize() {
         }
         return;
     }
-    ImGui::Indent();
-    ImGui::PushID(Name().c_str());
     ImGui::Checkbox("Enabled", &mEnabled);
     if(ImGui::TreeNode("Phong's variables:")) {
         ImGui::DragFloat3("Ambient", glm::value_ptr(mAmbient), 0.01f, 0.01f, 1.0f);
@@ -45,8 +58,6 @@ void LightingComponent::Serialize() {
         ImGui::DragFloat3("Specular", glm::value_ptr(mSpecular), 0.05f, 0.0f, 1.0f);
         ImGui::TreePop();
     }
-    ImGui::PopID();
-    ImGui::Unindent();
 }
 
 bool LightingComponent::Valid() const {

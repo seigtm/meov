@@ -58,12 +58,6 @@ void Core::initialize() {
     mWindowManager = std::make_shared<Window::Manager>();
     mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
 
-    auto skybox{ mScene->AddObject("Skybox") };
-    skybox->AddComponent<components::TransformComponent>();
-    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
-    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
-    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
-
     auto camera{ mScene->AddObject("Camera") };
     camera->AddComponent<components::TransformComponent>();
     camera->AddComponent<components::MoveComponent>();
@@ -73,7 +67,7 @@ void Core::initialize() {
     auto objects{ mScene->AddObject("Objects") };
     auto object{ mScene->AddObject("Test object", objects) };
     object->AddComponent<components::TransformComponent>();
-    object->AddComponent<components::ModelComponent>("models/clothes/clothes.obj");
+    object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
     auto lights{ mScene->AddObject("Lights") };
 
@@ -90,6 +84,12 @@ void Core::initialize() {
     spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
     spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
     spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
+
+    auto skybox{ mScene->AddObject("Skybox") };
+    skybox->AddComponent<components::TransformComponent>();
+    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
 
     if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
         sceneView->Select(mFrameBuffer);
@@ -170,10 +170,10 @@ void Core::OnFail(const std::string_view&) {
 
 Core::Core(std::vector<std::string>&& argv)
     : mInitTasks{
-        utilities::InitializerFactory::load("stb_image", this),
-        utilities::InitializerFactory::load("logger", this),
-        utilities::InitializerFactory::load("sdl", this),
-        std::make_shared<utilities::Initializer>(
+        utils::InitializerFactory::load("stb_image", this),
+        utils::InitializerFactory::load("logger", this),
+        utils::InitializerFactory::load("sdl", this),
+        std::make_shared<utils::Initializer>(
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 win = SDL_CreateWindow(
@@ -200,8 +200,8 @@ Core::Core(std::vector<std::string>&& argv)
                 win = nullptr;
                 return true;
             }),
-        utilities::InitializerFactory::load("opengl", this),
-        std::make_shared<utilities::Initializer>(
+        utils::InitializerFactory::load("opengl", this),
+        std::make_shared<utils::Initializer>(
             this, "ImGui",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 IMGUI_CHECKVERSION();
@@ -225,7 +225,7 @@ Core::Core(std::vector<std::string>&& argv)
                 ImGui::DestroyContext();
                 return true;
             }),
-        std::make_shared<utilities::Initializer>(
+        std::make_shared<utils::Initializer>(
             this, "Core active components",
             [this] {
                 this->mGraphics = std::make_shared<Graphics>();

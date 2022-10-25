@@ -4,7 +4,7 @@
 #include <string>
 #include <set>
 
-namespace meov::utilities {
+namespace meov::utils {
 
 class InitializerListener;
 
@@ -26,4 +26,4 @@ private:
                    const std::string_view failedMessage) const;
 };
 
-}  // namespace meov::utilities
+}  // namespace meov::utils

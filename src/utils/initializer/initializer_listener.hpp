@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-namespace meov::utilities {
+namespace meov::utils {
 
 class InitializerListener {
 public:
@@ -10,4 +10,4 @@ public:
 	virtual void OnFail(const std::string_view &taskName) = 0;
 };
 
-} // namespace meov::utilities
+} // namespace meov::utils
