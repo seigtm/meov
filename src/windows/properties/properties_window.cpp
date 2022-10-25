@@ -3,6 +3,7 @@
 #include "windows/properties/properties_window.hpp"
 
 #include "object.hpp"
+#include "component.hpp"
 
 namespace meov::Window {
 
@@ -19,8 +20,28 @@ void Properties::Reset() {
 
 void Properties::DrawImpl() {
     for(auto &&weakObj : mObjects) {
-        if(auto &&obj{ weakObj.lock() }; obj)
-            obj->Serialize();
+        if(auto &&obj{ weakObj.lock() }; obj) {
+            const auto &name{ obj->Name() };
+            if(!ImGui::CollapsingHeader(name.c_str()))
+                continue;
+
+            ImGui::PushID(name.c_str());
+            ImGui::Indent();
+            obj->ForEachComponent([](core::components::Component::Shared &comp) {
+                comp->Serialize();
+                ImGui::Separator();
+            });
+
+            if (ImGui::BeginCombo("Components", "transform")) {
+                ImGui::EndCombo();
+            }
+            if (ImGui::Button("Add component")) {
+                // core::components::Factory::Build(obj, "component");
+            }
+            ImGui::Unindent();
+            ImGui::PopID();
+            ImGui::Spacing();
+        }
     }
 }
 

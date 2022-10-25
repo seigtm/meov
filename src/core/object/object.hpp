@@ -24,7 +24,6 @@ public:
     virtual void PreUpdate(double delta);
     virtual void Update(double delta);
     virtual void PostUpdate(double delta);
-    virtual void Serialize();  // for ImGui
 
     bool Enabled() const;
     void Enable();

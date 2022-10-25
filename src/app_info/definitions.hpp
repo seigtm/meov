@@ -14,10 +14,10 @@ constexpr unsigned ShaderVersionPatch{ 0 };
 constexpr std::string_view ShaderVersion{ "#version 450 core" };
 constexpr std::string_view Program_name{ "MEOV | Minimalistic Easy Object Viewer" };
 
-constexpr std::string_view LogLevel{ "Release" };
+constexpr std::string_view LogLevel{ "Debug" };
 
-constexpr std::string_view GitCommitHash{ "8061fef27a845253e49b43405d63c4ad1c46a096" };
-constexpr std::string_view GitCommitDate{ "Mon Oct 24 17:15:35 2022" };
-constexpr std::string_view GitCommitMessage{ "Another stuff for adding object to the scene" };
+constexpr std::string_view GitCommitHash{ "0a2e0afbda0fbdf6d4d61a346aea3685539b0282-dirty" };
+constexpr std::string_view GitCommitDate{ "Tue Oct 25 08:48:22 2022" };
+constexpr std::string_view GitCommitMessage{ "Update TODO" };
 
 } // namespace meov::definitions

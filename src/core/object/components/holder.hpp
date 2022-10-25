@@ -20,6 +20,9 @@ public:
     template<class T, class... Args>
     T *AddComponent(Args &&...args);
 
+    template<class T>
+    T *AddComponent(Component::Shared &&component);
+
     void ForEachComponent(std::function<void(Component::Shared &)> &&method);
 
 private:
@@ -56,6 +59,20 @@ T *Holder::AddComponent(Args &&...args) {
     mComponents.emplace(
         GetTypeName<T>(),
         components::Component::Shared{ component });
+    return component;
+}
+
+template<class T>
+T *Holder::AddComponent(Component::Shared &&component) {
+    if (component == nullptr || nullptr == dynamic_cast<T *>(component.get())) // God sry for dynamic cast T_T
+        return nullptr;
+
+    if(auto comp{ GetComponent<T>() }; comp != nullptr) {
+        return comp;
+    }
+
+    component->SetHolder(std::enable_shared_from_this<Holder>::weak_from_this());
+    mComponents.emplace(GetTypeName<T>(), component);
     return component;
 }
 

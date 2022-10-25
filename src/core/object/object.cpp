@@ -9,50 +9,50 @@ Object::Object(std::string &&name)
 }
 
 void Object::PreDraw(Graphics &g) {
-    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->PreDraw(g); });
+    if (!Enabled())
+        return;
     ForEachComponent([&g](components::Component::Shared &comp) { comp->PreDraw(g); });
 }
 
 void Object::Draw(Graphics &g) {
-    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->Draw(g); });
+    if (!Enabled())
+        return;
+    forEachChildren([&g](const std::shared_ptr<Object> &child) {
+        child->PreDraw(g);
+        child->Draw(g);
+        child->PostDraw(g);
+    });
     ForEachComponent([&g](components::Component::Shared &comp) { comp->Draw(g); });
 }
 
 void Object::PostDraw(Graphics &g) {
-    forEachChildren([&g](const std::shared_ptr<Object> &child) { child->PostDraw(g); });
+    if (!Enabled())
+        return;
     ForEachComponent([&g](components::Component::Shared &comp) { comp->PostDraw(g); });
 }
 
 void Object::PreUpdate(double delta) {
     CheckDeadGuys();
-    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->PreUpdate(delta); });
+    if (!Enabled())
+        return;
     ForEachComponent([delta](components::Component::Shared &comp) { comp->PreUpdate(delta); });
 }
 
 void Object::Update(double delta) {
-    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->Update(delta); });
+    if (!Enabled())
+        return;
+    forEachChildren([delta](const std::shared_ptr<Object> &child) {
+        child->PreUpdate(delta);
+        child->Update(delta);
+        child->PostUpdate(delta);
+    });
     ForEachComponent([delta](components::Component::Shared &comp) { comp->Update(delta); });
 }
 
 void Object::PostUpdate(double delta) {
-    forEachChildren([delta](const std::shared_ptr<Object> &child) { child->PostUpdate(delta); });
-    ForEachComponent([delta](components::Component::Shared &comp) { comp->PostUpdate(delta); });
-}
-
-void Object::Serialize() {
-    if(!ImGui::CollapsingHeader(Name().c_str()))
+    if (!Enabled())
         return;
-
-    ImGui::PushID(Name().c_str());
-    ImGui::Indent();
-    ForEachComponent([](components::Component::Shared &comp) {
-        comp->Serialize();
-        ImGui::Separator();
-    });
-    ImGui::Button("Add component");
-    ImGui::Unindent();
-    ImGui::PopID();
-    ImGui::Spacing();
+    ForEachComponent([delta](components::Component::Shared &comp) { comp->PostUpdate(delta); });
 }
 
 bool Object::Enabled() const {

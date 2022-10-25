@@ -10,6 +10,7 @@
 
 - [ ] Make nice scene tree;
   - [ ] Adding & removing nodes dialog;
+  - [ ] Rename nodes;
   - [ ] Dragging nodes to change their position in the tree;
 - [ ] Make nice components editor;
   - [ ] Adding & removing components;
