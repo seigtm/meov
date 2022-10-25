@@ -18,6 +18,9 @@ public:
         virtual void UnBind(){};
         virtual uint32_t GetFrameTexture() const = 0;
 
+        int32_t Width() const;
+        int32_t Height() const;
+
     protected:
         int32_t mWidth{ -1 };
         int32_t mHeight{ -1 };
@@ -28,6 +31,9 @@ public:
     void Bind();
     void UnBind();
     uint32_t GetFrameTexture() const;
+
+    int32_t Width() const;
+    int32_t Height() const;
 
 protected:
     std::shared_ptr<Impl> mImpl;

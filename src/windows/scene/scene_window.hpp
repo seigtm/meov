@@ -24,7 +24,7 @@ public:
 
 protected:
     std::shared_ptr<core::FrameBuffer> mFrameBuffer{ nullptr };
-    button mListenButton{ button::Middle };
+    const button mListenButton{ button::Middle };
 
     void DrawImpl() override;
 

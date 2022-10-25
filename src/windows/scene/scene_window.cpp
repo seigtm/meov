@@ -22,13 +22,20 @@ Scene::~Scene() {
 
 void Scene::Select(std::shared_ptr<core::FrameBuffer> framebuffer) {
     mFrameBuffer = std::move(framebuffer);
+    if (mFrameBuffer) {
+        mSize.x = mFrameBuffer->Width();
+        mSize.y = mFrameBuffer->Height();
+    }
 }
 
 void Scene::DrawImpl() {
     if(mFrameBuffer == nullptr)
         return;
-    uint32_t textureID = mFrameBuffer->GetFrameTexture();
-    ImGui::Image(reinterpret_cast<void *>(textureID), mSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    const auto min{ ImGui::GetWindowContentRegionMin() };
+    const auto max{ ImGui::GetWindowContentRegionMax() };
+    const ImVec2 size{ max.x - min.x, max.y - min.y };
+    ImGui::Image(reinterpret_cast<void *>(mFrameBuffer->GetFrameTexture()),
+        size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 }
 
 void Scene::OnMousePressed(button button, const glm::vec2 &position) {
