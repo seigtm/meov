@@ -2,7 +2,7 @@
 
 ## Fixme:
 
-- [ ] The scene isn't render;
+- [*] The scene isn't render;
 - [ ] Disable scroll like mouse for scene;
 - [*] Fix ImGui scene. Fit the render image to the scene;
 
