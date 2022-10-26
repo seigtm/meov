@@ -9,7 +9,7 @@ namespace meov::core::components {
 
 class SkyboxComponent : public Component {
 public:
-    explicit SkyboxComponent(const fs::path &path);
+    SkyboxComponent(const fs::path &path = "models/skybox");
     ~SkyboxComponent() override = default;
 
     void PreDraw(Graphics &g) override;

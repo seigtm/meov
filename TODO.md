@@ -2,19 +2,21 @@
 
 ## Fixme:
 
-- [*] The scene isn't render;
 - [ ] Disable scroll like mouse for scene;
+- [ ] Fix lighting;
+- [*] The scene isn't render;
 - [*] Fix ImGui scene. Fit the render image to the scene;
 
 ## ImGui:
 
 - [ ] Make nice scene tree;
-  - [ ] Adding & removing nodes dialog;
   - [ ] Rename nodes;
   - [ ] Dragging nodes to change their position in the tree;
+  - [*] Adding & removing nodes dialog;
 - [ ] Make nice components editor;
-  - [ ] Adding & removing components;
+  - [ ] Removing components;
   - [ ] Enable/Disable components;
+  - [*] Adding components;
 - [ ] Change style;
 - [ ] Add Assets viewer;
 
