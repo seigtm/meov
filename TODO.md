@@ -2,6 +2,7 @@
 
 ## Fixme:
 
+- [ ] Move all 'Serialize' methods from the entities to the serializers;
 - [ ] Disable scroll like mouse for scene;
 - [ ] Fix lighting;
 - [*] The scene isn't render;
