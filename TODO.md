@@ -6,6 +6,26 @@
 - [ ] Disable scroll like mouse for scene;
 - [*] Fix ImGui scene. Fit the render image to the scene;
 
+## Graphics:
+
+- [ ] Model:
+  - [ ] Material;
+  - [ ] Mesh;
+  - [ ] Model;
+- [ ] Sprite:
+  - [ ] Image
+  - [ ] Texture
+- [ ] Light:
+  - [ ] Directional light;
+  - [ ] Spot light;
+  - [ ] Point light;
+- [ ] Text:
+  - [ ] Font;
+  - [ ] String;
+  - [ ] Text;
+- [ ] Blending;
+
+
 ## ImGui:
 
 - [ ] Make nice scene tree;
