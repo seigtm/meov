@@ -4,6 +4,8 @@
 
 **Minimalistic Easy Object Viewer**: fast, lightweight, powerful and easy-to-use 3D object viewer.
 
+</div>
+
 ## Reason
 
 Most of the services and programs for viewing 3D objects occupy a lot of space on the drive, piled with a lot of functionality, not required for a simple model viewer, are inconvenient or even paid.
