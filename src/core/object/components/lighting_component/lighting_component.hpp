@@ -37,7 +37,7 @@ protected:
 
 class DirectionalLightingComponent final : public LightingComponent {
 public:
-    explicit DirectionalLightingComponent(glm::vec3 &&dir);
+    explicit DirectionalLightingComponent(glm::vec3 &&dir = {});
     ~DirectionalLightingComponent() override;
 
     void PreDraw(Graphics &) override;
@@ -74,7 +74,7 @@ private:
 
 class SpotLightingComponent final : public LightingComponent {
 public:
-    explicit SpotLightingComponent(glm::vec3 &&dir);
+    explicit SpotLightingComponent(glm::vec3 &&dir = {});
     ~SpotLightingComponent() override;
 
     void PreDraw(Graphics &) override;

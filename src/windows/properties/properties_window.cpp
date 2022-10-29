@@ -4,11 +4,15 @@
 
 #include "object.hpp"
 #include "component.hpp"
+#include "factory.hpp"
 
 namespace meov::Window {
 
 Properties::Properties(ImVec2 const &size, bool isClosable)
-    : Base{ "Properties", size, isClosable } {}
+    : Base{ "Properties", size, isClosable }
+    , mComponents{ core::components::Factory::GetComponents() }
+    , mSelectedComponent{ mComponents.begin() } {
+}
 
 void Properties::Select(std::vector<std::weak_ptr<core::Object>> &&object) {
     mObjects = std::move(object);
@@ -32,17 +36,32 @@ void Properties::DrawImpl() {
                 ImGui::Separator();
             });
 
-            if (ImGui::BeginCombo("Components", "transform")) {
-                ImGui::EndCombo();
-            }
+            DrawComponentsDropBox();
+            ImGui::SameLine();
             if (ImGui::Button("Add component")) {
-                // core::components::Factory::Build(obj, "component");
+                core::components::Factory::Build(obj, *mSelectedComponent);
             }
             ImGui::Unindent();
             ImGui::PopID();
             ImGui::Spacing();
         }
     }
+}
+
+void Properties::DrawComponentsDropBox() {
+    if (!ImGui::BeginCombo("##Components", mSelectedComponent->c_str()))
+        return;
+    for (auto current{ mComponents.begin() }; current != mComponents.end(); ++current) {
+        const bool isSelected{ mSelectedComponent == current };
+        if (ImGui::Selectable(current->c_str(), isSelected))
+            mSelectedComponent = current;
+
+        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+        if (isSelected)
+            ImGui::SetItemDefaultFocus();
+    }
+
+    ImGui::EndCombo();
 }
 
 }  // namespace meov::Window

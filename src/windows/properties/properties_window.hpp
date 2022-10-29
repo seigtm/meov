@@ -18,8 +18,11 @@ public:
 
 private:
     std::vector<std::weak_ptr<core::Object>> mObjects;
+    const std::vector<std::string> mComponents;
+    std::vector<std::string>::const_iterator mSelectedComponent;
 
     void DrawImpl() override;
+    void DrawComponentsDropBox();
 };
 
 }  // namespace meov::Window

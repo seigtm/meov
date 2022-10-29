@@ -9,6 +9,9 @@
 
 namespace meov::core::components {
 
+ModelComponent::ModelComponent()
+    : Component{ "Model component" } {}
+
 ModelComponent::ModelComponent(const fs::path &model)
     : Component{ "Model component" }
     , mModel{ RESOURCES->LoadModel(model) } {}

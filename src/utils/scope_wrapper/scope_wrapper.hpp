@@ -9,6 +9,9 @@ public:
 		: mDestructorCallback{ std::move(dCallback) } {
 		cCallback();
 	}
+
+	explicit ScopeWrapper(DestructorCallback &&dCallback) : mDestructorCallback{ std::move(dCallback) } {}
+
 	~ScopeWrapper() {
 		mDestructorCallback();
 	}
