@@ -47,6 +47,7 @@ set_target_properties(${target} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${root}/assets
 )
 
+target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:DEBUG>)
 target_precompile_headers(${target} PUBLIC ${root}/src/precompiled.hpp)
 target_include_directories(${target}
     PUBLIC

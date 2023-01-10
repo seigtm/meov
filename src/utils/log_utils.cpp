@@ -80,7 +80,11 @@ void LogUtils::Initialize() {
 
     plog::Severity level{ AppInfo::IsDebugMode() ? plog::debug : plog::info };
 
-    auto &logger{ plog::init(plog::debug, &File) };
+    auto severity{ plog::info };
+    if constexpr (AppInfo::IsDebugMode()) {
+        severity = plog::debug;
+    }
+    auto &logger{ plog::init(severity, &File) };
     if constexpr (AppInfo::IsDebugMode()) {
         static plog::ColorConsoleAppender<DefaultFormatter> Console;
         logger.addAppender(&Console);
