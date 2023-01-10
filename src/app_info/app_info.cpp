@@ -9,9 +9,9 @@
 
 #define LOG_LEVEL "Debug"
 
-#define GIT_COMMIT_HASH "0a2e0afbda0fbdf6d4d61a346aea3685539b0282-dirty"
-#define GIT_COMMIT_DATE "Tue Oct 25 08:48:22 2022"
-#define GIT_COMMIT_MESSAGE "Update TODO"
+#define GIT_COMMIT_HASH "ddb8f5e2fe20c95d1d3cbfa6c992209dc0736979-dirty"
+#define GIT_COMMIT_DATE "Wed Oct 26 09:28:14 2022"
+#define GIT_COMMIT_MESSAGE "Add todo shit"
 
 namespace meov {
 

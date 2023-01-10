@@ -27,7 +27,7 @@ Movement on the scene is done using the `WASDQE` keys.
 
 To open your own model files you need to put them in the «`assets`» directory. Change the `model component` of the «`Test object`» and it will be ready to go!
 
-![Kurumi :3](./pics/kurumi.png)
+![Kurumi :3](./pics/screenshots/kurumi.png)
 
 ## Scope
 
@@ -84,37 +84,37 @@ All necessary libraries are linked `statically`.
 
 The basic components of the application are initialized and de-initialized using the class `Initializer`.
 
-![Core and Initializer classes](./pics/core.png)
+![Core and Initializer classes](./pics/schemes/core.png)
 
 The entity of the `scene` in the application source code is represented as configurable object `components`. For the design and creation of `components` the «Component» pattern is used. Configuration is possible by inheritance between the `Holder` and `Object` classes. `Holder` provides a mechanism for creating, removing, and accessing `components` that determine the behavior of an object.
 
-![Objects container in the Scene class](./pics/objects_on_scene.png)
+![Objects container in the Scene class](./pics/schemes/objects_on_scene.png)
 
 Each component implements the methods it needs and adds new features.
 
-![Components](./pics/component.png)
+![Components](./pics/schemes/component.png)
 
 To obtain resources, the `Loader` class and its specific implementation for Assimp (`AssimpLoader`) are used. The `Loader` object provides methods for loading resources to the program by the given path.
 
-![Resources](./pics/resource.png)
+![Resources](./pics/schemes/resource.png)
 
 The `Manager` class is a resource manager that is implemented using the singleton application design pattern.
 
-![Resource manager](./pics/manager.png)
+![Resource manager](./pics/schemes/manager.png)
 
 The project also has an event manager, divided into two static classes - a mouse manager (`MouseManager`) and a keyboard manager (`KeyboardManager`).
 
-![KeyboardManager](./pics/keyboard_manager.png)
+![KeyboardManager](./pics/schemes/keyboard_manager.png)
 
-![MouseManager](./pics/mouse_manager.png)
+![MouseManager](./pics/schemes/mouse_manager.png)
 
 The `FrameBuffer` class is a set of buffers used as a destination for rendering.
 
-![FrameBuffer](./pics/framebuffer.png)
+![FrameBuffer](./pics/schemes/framebuffer.png)
 
 The `Graphics` class encapsulates and implements graphical content, providing unified access to GPU resources.
 
-![Graphics](./pics/graphics.png)
+![Graphics](./pics/schemes/graphics.png)
 
 The `Base` class is a basic window interface from which classes that implement a specific interface are inherited.
 
@@ -128,7 +128,7 @@ The `Base` class is a basic window interface from which classes that implement a
 
 All widgets use `docking` technology, allowing them to attach to each other and to the main graphical window of the application in any order and location.
 
-![](./pics/windows.png)
+![](./pics/schemes/windows.png)
 
 ![GitHub](https://img.shields.io/github/license/seigtm/meov)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/seigtm/meov)
