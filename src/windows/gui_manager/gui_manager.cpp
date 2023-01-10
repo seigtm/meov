@@ -1,6 +1,5 @@
 #include "windows/gui_manager/gui_manager.hpp"
 
-#include "windows/git/git_window.hpp"
 #include "windows/log/log_window.hpp"
 #include "windows/properties/properties_window.hpp"
 #include "windows/scene/scene_tree.hpp"
@@ -12,7 +11,6 @@ using namespace std::string_literals;
 
 Manager::Manager()
 	: mWindows{
-		{ "git"s, std::make_shared<Window::Git>() },
 		{ "log"s, std::make_shared<Window::Log>("Logger", ImVec2{ 1280, 850 }) },
 		{ "properties"s, std::make_shared<Window::Properties>() },
 		{ "scene_tree"s, std::make_shared<Window::SceneTree>() },

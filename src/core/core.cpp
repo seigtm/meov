@@ -177,7 +177,7 @@ Core::Core(std::vector<std::string>&& argv)
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 win = SDL_CreateWindow(
-                    meov::AppInfo::Name().c_str(),
+                    meov::AppInfo::Name().data(),
                     SDL_WINDOWPOS_CENTERED,
                     SDL_WINDOWPOS_CENTERED,
                     1680, 960,
@@ -216,7 +216,7 @@ Core::Core(std::vector<std::string>&& argv)
 
                 // Setup Platform/Renderer backends.
                 if(!ImGui_ImplSDL2_InitForOpenGL(win, ctx)) return false;
-                if(!ImGui_ImplOpenGL3_Init(AppInfo::GLSLVersion().c_str())) return false;
+                if(!ImGui_ImplOpenGL3_Init(AppInfo::GLSLVersion().data())) return false;
                 return true;
             },
             [] {

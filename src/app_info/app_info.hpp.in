@@ -1,0 +1,36 @@
+#pragma once
+
+#include <string_view>
+
+namespace meov {
+
+struct AppInfo {
+    [[nodiscard]] static constexpr std::string_view Version() noexcept { return "v@CMAKE_PROJECT_VERSION@"; }
+
+    [[nodiscard]] static constexpr std::string_view GLSLVersion() noexcept {
+        return "@SHADER_VERSION@";
+    }
+
+    [[nodiscard]] static constexpr size_t GLSLVersionMajor() noexcept { return @SHADER_VERSION_MAJOR@; }
+    [[nodiscard]] static constexpr size_t GLSLVersionMinor() noexcept { return @SHADER_VERSION_MINOR@; }
+    [[nodiscard]] static constexpr size_t GLSLVersionPatch() noexcept { return @SHADER_VERSION_PATCH@; }
+
+    [[nodiscard]] static constexpr std::string_view Name() noexcept { return
+        "@PROGRAM_NAME@";
+    }
+
+    [[nodiscard]] static constexpr std::string_view LogLevel() noexcept { return "@LOG_LEVEL@"; }
+
+    [[nodiscard]] static constexpr bool IsDebugMode() noexcept {
+        #if defined(DEBUG)
+            return true;
+        #else
+            return false;
+        #endif
+    }
+    [[nodiscard]] static constexpr bool IsOpenGL() noexcept { return @USING_OPENGL@; }
+    [[nodiscard]] static constexpr bool IsVulkan() noexcept { return @USING_VULCAN@; }
+
+};
+
+}  // namespace meov

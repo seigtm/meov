@@ -1,5 +1,5 @@
 #include "common.hpp"
-#include "definitions.hpp"
+#include "app_info.hpp"
 
 #include "impl_factory.hpp"
 #include "ogl_impl_factory.hpp"
@@ -7,7 +7,7 @@
 
 namespace meov::core::factories {
 
-class VulcanImplFactory : public ImplFactory {
+class VulcanImplFactory final : public ImplFactory {
 public:
     std::shared_ptr<shaders::Shader::Impl> MakeShaderImpl(shaders::ShaderType, const std::string_view &) override { return nullptr; }
     std::shared_ptr<shaders::Program::Impl> MakeProgramImpl(const std::string &) override { return nullptr; }
@@ -24,11 +24,11 @@ public:
 };
 
 ImplFactory *ImplFactory::Instance() {
-    if constexpr(definitions::UsingOpenGL) {
+    if constexpr(AppInfo::IsOpenGL()) {
         static std::shared_ptr<ImplFactory> factory{ std::make_shared<OGLImplFactory>() };
         return factory.get();
     }
-    if constexpr(definitions::UsingVulcan) {
+    if constexpr(AppInfo::IsVulkan()) {
         static std::shared_ptr<ImplFactory> factory{ std::make_shared<VulcanImplFactory>() };
         return factory.get();
     }

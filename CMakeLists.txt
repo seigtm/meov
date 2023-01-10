@@ -11,13 +11,8 @@ set(cmake_dir ${root}/cmake)
 set(CMAKE_INSTALL_PREFIX ${root}/bin)
 set(install_dir ${CMAKE_INSTALL_PREFIX})
 
-include(${cmake_dir}/git_utils.cmake)
-grab_git_info(GIT_COMMIT_HASH GIT_COMMIT_DATE GIT_COMMIT_MESSAGE)
-message(STATUS "Git: ${GIT_COMMIT_MESSAGE} (${GIT_COMMIT_DATE}) [${GIT_COMMIT_HASH}]")
-
 include(${cmake_dir}/config_file_maker.cmake)
-make_config_file(${root}/src/app_info/app_info.cpp)
-make_config_file(${root}/src/app_info/definitions.hpp)
+make_config_file(${root}/src/app_info/app_info.hpp)
 
 # === Sources ===#
 file(GLOB_RECURSE sources ${root}/src/*.c ${root}/src/*.cpp)
@@ -45,8 +40,7 @@ add_subdirectory(dependencies)
 # === Executable ===#
 add_executable(${target} ${sources} ${headers})
 
-set_target_properties(${target}
-    PROPERTIES
+set_target_properties(${target} PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
@@ -78,7 +72,9 @@ target_link_libraries(${target}
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 # === Clone assets to the build ===#
-add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>)
+add_custom_command(TARGET ${target} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${target}>
+)
 
 # === Install ===#
 # TODO: Rethink install destination.
