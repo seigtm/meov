@@ -2,8 +2,61 @@
 
 #include "loader.hpp"
 #include "shaders_program.hpp"
+#include "scope_wrapper.hpp"
 
 namespace meov::core::resources {
+
+struct STBImage{
+    int width{};
+    int height{};
+    int channels{};
+    unsigned char *bytes{ nullptr };
+    bool wasLoaded{ false };
+
+    explicit STBImage(const std::string_view filename)
+        : bytes{ stbi_load(filename.data(), &width, &height, &channels, 0) }
+        , wasLoaded{ bytes != nullptr } { }
+    ~STBImage() {
+        if (wasLoaded) {
+            stbi_image_free(bytes);
+        }
+    }
+    bool operator==(const STBImage &other) const {
+        return width == other.width && height == other.height && channels == other.channels;
+    }
+
+    STBImage(const STBImage &other) = delete;
+    STBImage& operator=(const STBImage &other) = delete;
+
+    STBImage(STBImage &&other) noexcept
+        : width{ other.width }, height{ other.height }, channels{ other.channels }
+        , bytes{ other.bytes }, wasLoaded{ other.wasLoaded } {
+        other.width = 0;
+        other.height = 0;
+        other.channels = 0;
+        other.bytes = nullptr;
+        other.wasLoaded = false;
+    }
+    STBImage& operator=(STBImage &&other) noexcept {
+        if (this == &other) return *this;
+
+        if (wasLoaded) stbi_image_free(bytes);
+
+        width = other.width;
+        height = other.height;
+        channels = other.channels;
+        bytes = other.bytes;
+        wasLoaded = other.wasLoaded;
+
+        other.width = 0;
+        other.height = 0;
+        other.channels = 0;
+        other.bytes = nullptr;
+        other.wasLoaded = false;
+
+        return *this;
+    }
+};
 
 std::shared_ptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture::Type type) {
     if(path.empty()) {
@@ -45,55 +98,56 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
         "back.jpg"
     };
     // Disabling vertical flip to get textures right.
-    stbi_set_flip_vertically_on_load(false);
+
+    const utils::ScopeWrapper stbiFlipVerticallyWrapper([] {
+        stbi_set_flip_vertically_on_load(false);
+    }, [] {
+        stbi_set_flip_vertically_on_load(true);
+    });
+
     // Array of bytes.
-    std::array<unsigned char*, 6> bytes;
+    constexpr size_t ImagesCount{ 6 };
+    std::vector<STBImage> images;
+    images.reserve(ImagesCount);
     // Load every face.
-    int previousWidth{};
-    int previousHeight{};
-    int previousChannels{};
-    int width{};
-    int height{};
-    int channels{};
     const std::string pathForLog{ path.string() };
-    for(unsigned i{}; i < bytes.size(); ++i) {
+    for(unsigned i{}; i < ImagesCount; ++i) {
         const auto filename{ path / faces.at(i) };
-        bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
+        const auto &image{ images.emplace_back<const std::string_view>(filename.string()) };
         // Check that all images have the same width, height and number of channels.
-        if(i == 0) {
-            previousWidth = width;
-            previousHeight = height;
-            previousChannels = channels;
-        } else if(previousWidth != width || previousHeight != height || previousChannels != channels) {
+        if(!image.wasLoaded) {
+            LOGE << "Error while loading texture "
+                 << "'" << faces.at(i) << "'"
+                 << " from '" << path.string() << "'";
+            LOGE << "    " << stbi_failure_reason();
+            return nullptr;
+        }
+        if(images.size() > 1 && images.front() != image) {
             constexpr std::string_view errmsg{
                 "Can't load skybox because its images don't have"
                 " the same size and number of channels."
             };
             LOGE << errmsg.data() << " Path: " << pathForLog.c_str();
-            stbi_set_flip_vertically_on_load(true);
             throw std::invalid_argument{ std::string{ errmsg } };
-        } else if(nullptr == bytes[i]) {
-            LOGE << "Error while loading texture "
-                 << "'" << faces.at(i) << "'"
-                 << " from '" << path.string() << "'";
-            LOGE << "    " << stbi_failure_reason();
-            stbi_set_flip_vertically_on_load(true);
-            for(unsigned j{}; j < i; ++j) {
-                stbi_image_free(bytes[j]);
-            }
-            return nullptr;
         }
     }
     // Create texture with array<bytes> c-tor.
-    auto texture{ std::make_shared<meov::core::Texture>(std::move(bytes), width, height, channels) };  // FIXME: We hope that every cubemap image has the same width, height and channels.
-    texture->SetPath(path);
-    // Clean-up in the end.
-    for(auto&& b : bytes) {
-        stbi_image_free(b);
+    std::array<unsigned char *, ImagesCount> bytes{};
+    size_t id{};
+    for (auto &image : images) {
+        bytes.at(id++) = image.bytes;
     }
+    auto &image{ images.front() };
+
+    auto texture{
+        std::make_shared<meov::core::Texture>(std::move(bytes),
+            image.width, image.height, image.channels)
+    };  ///< FIXME: We hope that every cubemap image has the same width, height and channels.
+
+    texture->SetPath(path);
+
     LOGD << "Skybox texture '" << pathForLog.c_str() << "' was loaded!";
     // Return flip back to normal.
-    stbi_set_flip_vertically_on_load(true);
     // Return texture object.
     return texture;
 }
