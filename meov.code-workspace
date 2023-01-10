@@ -1,0 +1,43 @@
+{
+	"folders": [ { "path": "./" } ],
+	"settings": {
+		"cmake.buildDirectory": "${workspaceFolder}/build/vscode/${buildType}",
+		"cmake.installPrefix": "${workspaceFolder}/bin",
+		"cmake.parallelJobs": 16,
+		"cmake.preferredGenerators": [ "Ninja" ],
+		"cmake.buildArgs": [ "-v" ],
+		"cmake.configureOnEdit": false,
+    	"sonarlint.pathToCompileCommands": "${workspaceFolder}\\build\\vscode\\Debug\\compile_commands.json"
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "(VS 19) Launch Meov",
+				"type": "cppvsdbg",
+				"request": "launch",
+				"program": "${command:cmake.launchTargetPath}",
+				"args": [],
+				"stopAtEntry": false,
+				"cwd": "${workspaceFolder}/assets",
+			},
+			{
+				"name": "(CppDbg) Launch Meov",
+				"type": "cppdbg",
+				"request": "launch",
+				"program": "${command:cmake.launchTargetPath}",
+				"args": [],
+				"stopAtEntry": false,
+				"cwd": "${workspaceFolder}/assets",
+			}
+		],
+		"compounds": []
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-vscode.cmake-tools",
+			"SonarSource.sonarlint-vscode"
+		]
+	}
+}
