@@ -111,13 +111,12 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     images.reserve(ImagesCount);
     // Load every face.
     const std::string pathForLog{ path.string() };
-    for(unsigned i{}; i < ImagesCount; ++i) {
-        const auto filename{ path / faces.at(i) };
+    for(const auto &face : faces) {
+        const auto filename{ path / face };
         const auto &image{ images.emplace_back<const std::string_view>(filename.string()) };
-        // Check that all images have the same width, height and number of channels.
         if(!image.wasLoaded) {
             LOGE << "Error while loading texture "
-                 << "'" << faces.at(i) << "'"
+                 << "'" << face << "'"
                  << " from '" << path.string() << "'";
             LOGE << "    " << stbi_failure_reason();
             return nullptr;
@@ -147,8 +146,6 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     texture->SetPath(path);
 
     LOGD << "Skybox texture '" << pathForLog.c_str() << "' was loaded!";
-    // Return flip back to normal.
-    // Return texture object.
     return texture;
 }
 
