@@ -58,38 +58,7 @@ void Core::initialize() {
     mWindowManager = std::make_shared<Window::Manager>();
     mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
 
-    auto camera{ mScene->AddObject("Camera") };
-    camera->AddComponent<components::TransformComponent>();
-    camera->AddComponent<components::MoveComponent>();
-    camera->AddComponent<components::CameraComponent>(mGraphics);
-
-    // Default model displayed when the application runs.
-    auto objects{ mScene->AddObject("Objects") };
-    auto object{ mScene->AddObject("Test object", objects) };
-    object->AddComponent<components::TransformComponent>();
-    object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
-
-    auto lights{ mScene->AddObject("Lights") };
-
-    auto dirLight{ mScene->AddObject("Directional light", lights) };
-    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-
-    auto lighting{ mScene->AddObject("Point light", lights) };
-    lighting->AddComponent<components::TransformComponent>()->Move({ -10, 10, 10 });
-    lighting->AddComponent<components::PointLightingComponent>();
-    lighting->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
-
-    auto spotLight{ mScene->AddObject("Spot light", lights) };
-    spotLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
-    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
-
-    auto skybox{ mScene->AddObject("Skybox") };
-    skybox->AddComponent<components::TransformComponent>();
-    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
-    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
-    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
+    MakeTestScene(mScene, mGraphics);
 
     if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
         sceneView->Select(mFrameBuffer);
@@ -133,27 +102,31 @@ void Core::Serialize() {
 
 
 void Core::HandleEvents() {
+    static auto handleKeyDownEvent{ [this](SDL_Event &event){
+        if(event.key.keysym.sym == SDLK_F5) {
+            std::deque<fs::path> textures;
+            while(!mGraphics->CurrentProgram().IsValid()) {
+                textures.push_front(mGraphics->CurrentProgram().GetPath());
+                mGraphics->PopProgram();
+            }
+            for(auto&& path : textures) {
+                mGraphics->PushProgram(*RESOURCES->LoadProgram(std::move(path), true));
+            }
+            LOGI << "Textures were reloaded";
+        }
+    } };
+
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
         managers::KeyboardManager::HandleEvent(event);
         managers::MouseManager::HandleEvent(event);
         switch(event.type) {
-            case SDL_KEYDOWN: {
-                if(event.key.keysym.sym == SDLK_F5) {
-                    std::deque<fs::path> textures;
-                    while(!mGraphics->CurrentProgram().IsValid()) {
-                        textures.push_front(mGraphics->CurrentProgram().GetPath());
-                        mGraphics->PopProgram();
-                    }
-                    for(auto&& path : textures) {
-                        mGraphics->PushProgram(*RESOURCES->LoadProgram(std::move(path), true));
-                    }
-                    LOGI << "Textures were reloaded";
-                }
+            [[likely]] case SDL_KEYDOWN: {
+                handleKeyDownEvent(event);
             } break;
-            case SDL_WINDOWEVENT_RESIZED: {
-            } break;
+            // case SDL_WINDOWEVENT_RESIZED: {
+            // } break;
             case SDL_QUIT: {
                 mRunning = false;
             } break;
@@ -166,6 +139,47 @@ void Core::HandleEvents() {
 
 void Core::OnFail(const std::string_view&) {
     exit(-1);
+}
+
+void Core::MakeTestScene(std::shared_ptr<Scene> scene, std::shared_ptr<Graphics> graphics) {
+    auto camera{ scene->AddObject("Camera") };
+    camera->AddComponent<components::TransformComponent>()->Move({ .0f, 2.f, 6.f });
+    camera->AddComponent<components::MoveComponent>();
+    camera->AddComponent<components::CameraComponent>(graphics);
+
+    // Default model displayed when the application runs.
+    auto objects{ scene->AddObject("Objects") };
+    auto object{ scene->AddObject("Test object", objects) };
+    object->AddComponent<components::TransformComponent>();
+    object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+
+    auto lights{ scene->AddObject("Lights") };
+
+    auto dirLight{ scene->AddObject("Directional light", lights) };
+    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+
+    auto pointLight{ scene->AddObject("Point light", lights) };
+    if (auto transform{ pointLight->AddComponent<components::TransformComponent>() }; transform) {
+        transform->Move({ 1, 1, 1 });
+        transform->Scale({ .5f, .5f, .5f });
+    }
+    pointLight->AddComponent<components::PointLightingComponent>();
+    pointLight->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
+
+    auto spotLight{ scene->AddObject("Spot light", lights) };
+    if (auto transform{ spotLight->AddComponent<components::TransformComponent>() }; transform) {
+        transform->Move({ -1, 1, 1 });
+        transform->Scale({ .5f, .5f, .5f });
+    }
+    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ 1.f, -1.f, -1.f });
+    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
+
+    auto skybox{ scene->AddObject("Skybox") };
+    skybox->AddComponent<components::TransformComponent>();
+    skybox->AddComponent<components::ModelComponent>("models/skybox/skybox.obj");
+    skybox->AddComponent<components::SkyboxComponent>("models/skybox");
+    skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
 }
 
 Core::Core(std::vector<std::string>&& argv)

@@ -63,6 +63,8 @@ private:
 
     // utils::InitializerListener
     void OnFail(const std::string_view &taskName) override;
+
+    static void MakeTestScene(std::shared_ptr<Scene> scene, std::shared_ptr<Graphics> graphics);
 };
 
 }  // namespace meov::core

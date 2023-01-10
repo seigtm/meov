@@ -11,7 +11,9 @@ std::shared_ptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture
         return nullptr;
     }
 
-    int width, height, channels;
+    int width{};
+    int height{};
+    int channels{};
     auto bytes{ stbi_load(path.string().c_str(), &width, &height, &channels, 0) };
     if(nullptr == bytes) {
         LOGE << "Error while loading texture from '" << path.string() << "'";
@@ -34,7 +36,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     }
 
     // Vector of correctly named faces files.
-    static const std::array faces{
+    static constexpr std::array faces{
         "right.jpg",
         "left.jpg",
         "top.jpg",
@@ -50,7 +52,10 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     int previousWidth{};
     int previousHeight{};
     int previousChannels{};
-    int width, height, channels;
+    int width{};
+    int height{};
+    int channels{};
+    const std::string pathForLog{ path.string() };
     for(unsigned i{}; i < bytes.size(); ++i) {
         const auto filename{ path / faces.at(i) };
         bytes[i] = stbi_load(filename.string().c_str(), &width, &height, &channels, 0);
@@ -64,7 +69,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
                 "Can't load skybox because its images don't have"
                 " the same size and number of channels."
             };
-            LOGE << errmsg << " Path: " << path.c_str();
+            LOGE << errmsg.data() << " Path: " << pathForLog.c_str();
             stbi_set_flip_vertically_on_load(true);
             throw std::invalid_argument{ std::string{ errmsg } };
         } else if(nullptr == bytes[i]) {
@@ -73,7 +78,10 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
                  << " from '" << path.string() << "'";
             LOGE << "    " << stbi_failure_reason();
             stbi_set_flip_vertically_on_load(true);
-            return nullptr;  // FIXME: Don't return just now. You should clean the memory from previous loaded images.
+            for(unsigned j{}; j < i; ++j) {
+                stbi_image_free(bytes[j]);
+            }
+            return nullptr;
         }
     }
     // Create texture with array<bytes> c-tor.
@@ -83,7 +91,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     for(auto&& b : bytes) {
         stbi_image_free(b);
     }
-    LOGD << "Skybox texture '" << path.c_str() << "' was loaded!";
+    LOGD << "Skybox texture '" << pathForLog.c_str() << "' was loaded!";
     // Return flip back to normal.
     stbi_set_flip_vertically_on_load(true);
     // Return texture object.

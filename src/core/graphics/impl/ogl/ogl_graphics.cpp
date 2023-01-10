@@ -84,7 +84,7 @@ void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, con
 void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
     if(mProgramQueue.empty()) return;
 
-    auto &program{ CurrentProgram() };
+    auto program{ CurrentProgram() };
     program.Use();
     program.Get("projection")->Set(GetProjection());
     program.Get("view")->Set(GetViewMatrix());
@@ -96,7 +96,7 @@ void OGLGraphicsImpl::DrawMesh(const Mesh &mesh) {
 void OGLGraphicsImpl::DrawModel(const Model &model) {
     if(mProgramQueue.empty() || model.GetMeshes().empty()) return;
 
-    auto &program{ CurrentProgram() };
+    auto program{ CurrentProgram() };
     program.Use();
     program.Get("projection")->Set(GetProjection());
     program.Get("view")->Set(GetViewMatrix());

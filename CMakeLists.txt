@@ -1,7 +1,7 @@
 # === Common ===#
 cmake_minimum_required(VERSION 3.15)
 
-project(meov LANGUAGES CXX VERSION 0.2.0)
+project(meov LANGUAGES CXX VERSION 0.2.5)
 
 set(target ${CMAKE_PROJECT_NAME})
 set(root ${CMAKE_SOURCE_DIR})
@@ -41,7 +41,7 @@ add_subdirectory(dependencies)
 add_executable(${target} ${sources} ${headers})
 
 set_target_properties(${target} PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     RUNTIME_OUTPUT_DIRECTORY ${root}/assets
