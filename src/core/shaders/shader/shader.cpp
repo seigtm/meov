@@ -1,7 +1,7 @@
-#include "common.hpp"
+#include <common>
 
-#include "shader.hpp"
-#include "impl_factory.hpp"
+#include "core/shaders/shader/shader.hpp"
+#include "core/factories/impl_factory.hpp"
 
 namespace meov::core::shaders {
 

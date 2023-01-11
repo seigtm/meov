@@ -1,9 +1,9 @@
-#include "camera_component.hpp"
+#include "core/object/components/camera_component/camera_component.hpp"
 
-#include "holder.hpp"
-#include "graphics.hpp"
-#include "shaders_program.hpp"
-#include "transform_component.hpp"
+#include "core/object/components/holder.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
+#include "core/object/components/transform_component/transform_component.hpp"
 
 namespace {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "named.hpp"
+#include "core/mixins/named.hpp"
 #include <filesystem>
 
 namespace fs = std::filesystem;

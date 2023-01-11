@@ -1,18 +1,18 @@
-#include "skybox_component.hpp"
+#include "core/object/components/skybox_component/skybox_component.hpp"
 
-#include "common.hpp"
+#include <common>
 
 #include <vector>
 
-#include "graphics.hpp"
-#include "holder.hpp"
-#include "mesh.hpp"
-#include "graphics.hpp"
-#include "resource_manager.hpp"
-#include "vertex.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/object/components/holder.hpp"
+#include "core/mesh/mesh.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/resources/manager/resource_manager.hpp"
+#include "core/mesh/vertex.hpp"
 
-#include "model_component.hpp"
-#include "shader_component.hpp"
+#include "core/object/components/model_component/model_component.hpp"
+#include "core/object/components/shader_component/shader_component.hpp"
 
 const glm::u8vec4 whiteColor{ 1.0f, 1.0f, 1.0f, 1.0f };
 

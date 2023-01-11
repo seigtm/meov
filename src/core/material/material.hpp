@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
-#include "texture.hpp"
+#include "core/texture/texture.hpp"
 
 namespace meov::core {
 

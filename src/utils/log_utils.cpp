@@ -1,6 +1,6 @@
-#include "common.hpp"
-#include "app_info.hpp"
-#include "log_utils.hpp"
+#include <common>
+#include <app_info/app_info.hpp>
+#include "utils/log_utils.hpp"
 
 #include <plog/Init.h>
 #include <plog/Appenders/ColorConsoleAppender.h>
@@ -26,7 +26,7 @@ putil::nstring DefaultFormatter::header() {
     putil::nostringstream out;
     constexpr size_t offset{ 1 };
     size_t max_width{ 80 };
-    if(static_cast<long>(AppInfo::Name().size()) % 2 != 0) ++max_width;
+    if(static_cast<long>(AppInfo::Title().size()) % 2 != 0) ++max_width;
     constexpr putil::nchar offset_filler{ PLOG_NSTR(' ') };
 
     auto put{ [&](putil::nstring &&left, putil::nstring &&right) {
@@ -34,12 +34,12 @@ putil::nstring DefaultFormatter::header() {
             << offset_filler + std::move(left) << std::right << std::move(right) << "\n";
     } };
 
-    const putil::nstring title{ str2nstr(AppInfo::Name()) + PLOG_NSTR(" log") };
+    const putil::nstring title{ str2nstr(AppInfo::Title()) + PLOG_NSTR(" log") };
     out << std::setfill(PLOG_NSTR('=')) << std::setw((max_width - (title.size())) / 2) << std::right
         << offset_filler << title << offset_filler << std::setw((max_width - (title.size())) / 2) << PLOG_NSTR("\n");
 
     // clang-format off
-    put(PLOG_NSTR("Name:"),         str2nstr(AppInfo::Name()));
+    put(PLOG_NSTR("Name:"),         str2nstr(AppInfo::Title()));
     put(PLOG_NSTR("Version:"),      str2nstr(AppInfo::Version()));
     put(PLOG_NSTR("Log level:"),    str2nstr(AppInfo::LogLevel()));
     put(PLOG_NSTR("GLSL Version:"), str2nstr(AppInfo::GLSLVersion()));

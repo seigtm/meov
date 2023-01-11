@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "texture.hpp"
+#include "core/texture/texture.hpp"
 
 namespace meov::core {
 

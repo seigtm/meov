@@ -5,10 +5,10 @@
 #include <vector>
 
 // MEOV.
-#include "mesh.hpp"
-#include "texture.hpp"
-#include "graphics.hpp"
-#include "resource.hpp"
+#include "core/mesh/mesh.hpp"
+#include "core/texture/texture.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/resources/manager/resource.hpp"
 
 namespace meov::core {
 

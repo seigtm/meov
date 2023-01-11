@@ -1,8 +1,15 @@
-#define SDL_MAIN_HANDLED
+#include <common>
+#include <core/core.hpp>
+#include <app_info/app_info.hpp>
 
-#include "common.hpp"
-#include "core.hpp"
+#if defined(MEOV_WITH_EDITOR)
+#include <editor/editor.hpp>
+#endif
 
-int main(int argc, char *argv[]) {
-    return meov::core::Core{ std::vector<std::string>{ argv, argv + argc } }.Run();
+int main() {
+    if constexpr (meov::AppInfo::WithEditor()) {
+        return meov::editor::make<meov::core::Core>().run();
+    }
+
+    return meov::core::Core{}.Run();
 }

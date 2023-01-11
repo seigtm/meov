@@ -8,11 +8,11 @@
 #include <string>
 
 // MEOV.
-#include "loader.hpp"
-#include "model.hpp"
-#include "resource_manager.hpp"
-#include "vertex.hpp"
-#include "material.hpp"
+#include "core/resources/loader/loader.hpp"
+#include "core/model/model.hpp"
+#include "core/resources/manager/resource_manager.hpp"
+#include "core/mesh/vertex.hpp"
+#include "core/material/material.hpp"
 
 // Logger.
 #include <plog/Log.h>

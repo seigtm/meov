@@ -6,8 +6,8 @@
 #include <vector>
 
 // MEOV.
-#include "shader.hpp"
-#include "texture.hpp"
+#include "core/shaders/shader/shader.hpp"
+#include "core/texture/texture.hpp"
 
 namespace fs = std::filesystem;
 

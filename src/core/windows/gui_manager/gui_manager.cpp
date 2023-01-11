@@ -1,9 +1,9 @@
-#include "windows/gui_manager/gui_manager.hpp"
+#include "core/windows/gui_manager/gui_manager.hpp"
 
-#include "windows/log/log_window.hpp"
-#include "windows/properties/properties_window.hpp"
-#include "windows/scene/scene_tree.hpp"
-#include "windows/scene/scene_window.hpp"
+#include "core/windows/log/log_window.hpp"
+#include "core/windows/properties/properties_window.hpp"
+#include "core/windows/scene/scene_tree.hpp"
+#include "core/windows/scene/scene_window.hpp"
 
 namespace meov::Window {
 

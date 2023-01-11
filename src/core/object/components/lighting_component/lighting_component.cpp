@@ -1,11 +1,11 @@
-#include "common.hpp"
+#include <common>
 
-#include "lighting_component.hpp"
-#include "holder.hpp"
-#include "graphics.hpp"
+#include "core/object/components/lighting_component/lighting_component.hpp"
+#include "core/object/components/holder.hpp"
+#include "core/graphics/graphics.hpp"
 
-#include "transform_component.hpp"
-#include "model_component.hpp"
+#include "core/object/components/transform_component/transform_component.hpp"
+#include "core/object/components/model_component/model_component.hpp"
 
 #include "utils/scope_wrapper/scope_wrapper.hpp"
 

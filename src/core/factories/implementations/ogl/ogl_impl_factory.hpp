@@ -1,6 +1,6 @@
 #pragma once
 
-#include "impl_factory.hpp"
+#include "core/factories/impl_factory.hpp"
 
 namespace meov::core::factories {
 

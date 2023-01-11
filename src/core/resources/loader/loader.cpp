@@ -1,8 +1,8 @@
-#include "common.hpp"
+#include <common>
 
-#include "loader.hpp"
-#include "shaders_program.hpp"
-#include "scope_wrapper.hpp"
+#include "core/resources/loader/loader.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
+#include <utils/scope_wrapper/scope_wrapper.hpp>
 
 namespace meov::core::resources {
 

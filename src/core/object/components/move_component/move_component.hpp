@@ -2,7 +2,7 @@
 
 #include <glm/vec3.hpp>
 
-#include "component.hpp"
+#include "core/object/components/component.hpp"
 
 namespace meov::core::components {
 

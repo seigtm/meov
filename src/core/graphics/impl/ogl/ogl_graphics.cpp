@@ -1,10 +1,10 @@
-#include "common.hpp"
+#include <common>
 
-#include "model.hpp"
-#include "mesh.hpp"
-#include "vertex.hpp"
-#include "texture.hpp"
-#include "ogl_graphics.hpp"
+#include "core/model/model.hpp"
+#include "core/mesh/mesh.hpp"
+#include "core/mesh/vertex.hpp"
+#include "core/texture/texture.hpp"
+#include "core/graphics/impl/ogl/ogl_graphics.hpp"
 
 namespace meov::core::gl {
 

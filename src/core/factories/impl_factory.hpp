@@ -1,8 +1,8 @@
 #pragma once
 
-#include "shaders_program.hpp"
-#include "graphics.hpp"
-#include "frame_buffer.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/framebuffer/frame_buffer.hpp"
 
 namespace meov::core::factories {
 

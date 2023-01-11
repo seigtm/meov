@@ -7,7 +7,13 @@
 		"cmake.preferredGenerators": [ "Ninja" ],
 		"cmake.buildArgs": [ "-v" ],
 		"cmake.configureOnEdit": false,
-    	"sonarlint.pathToCompileCommands": "${workspaceFolder}\\build\\vscode\\Debug\\compile_commands.json"
+		"sonarlint.pathToCompileCommands": "${workspaceFolder}\\build\\vscode\\Debug\\compile_commands.json",
+
+		"editor.unicodeHighlight.ambiguousCharacters": false,
+		"editor.renderWhitespace": "all",
+		"editor.wordWrapColumn": 120,
+		"editor.formatOnSave": true,
+		"editor.formatOnSaveMode": "modifications",
 	},
 	"launch": {
 		"version": "0.2.0",

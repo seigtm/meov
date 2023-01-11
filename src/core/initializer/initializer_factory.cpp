@@ -1,9 +1,9 @@
-#include "common.hpp"
-#include "app_info.hpp"
-#include "log_utils.hpp"
+#include <common>
+#include <app_info/app_info.hpp>
+#include <utils/log_utils.hpp>
 
-#include "initializer.hpp"
-#include "initializer_factory.hpp"
+#include "core/initializer/initializer.hpp"
+#include "core/initializer/initializer_factory.hpp"
 
 namespace meov::utils {
 

@@ -1,10 +1,10 @@
-#include "common.hpp"
+#include <common>
 
-#include "resource_manager.hpp"
+#include "core/resources/manager/resource_manager.hpp"
 
-#include "assimp_loader.hpp"
-#include "texture.hpp"
-#include "mesh.hpp"
+#include "core/resources/loader/impl/assimp_loader.hpp"
+#include "core/texture/texture.hpp"
+#include "core/mesh/mesh.hpp"
 
 namespace meov::core::resources {
 

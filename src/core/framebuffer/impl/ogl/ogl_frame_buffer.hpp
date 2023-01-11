@@ -1,6 +1,6 @@
 #pragma once
 
-#include "frame_buffer.hpp"
+#include "core/framebuffer/frame_buffer.hpp"
 
 namespace meov::core::gl {
 

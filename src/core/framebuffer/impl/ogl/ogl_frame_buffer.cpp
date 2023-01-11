@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "ogl_frame_buffer.hpp"
+#include "core/framebuffer/impl/ogl/ogl_frame_buffer.hpp"
 
 namespace meov::core::gl {
 

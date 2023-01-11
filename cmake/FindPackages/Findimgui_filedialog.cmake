@@ -5,6 +5,8 @@ set(_sources
 )
 
 add_library(deps_imgui_filedialog OBJECT ${_sources})
+add_library(deps::imgui_filedialog  ALIAS deps_imgui_filedialog)
+
 target_include_directories(deps_imgui_filedialog
     PUBLIC
         ${deps_dir}/imgui

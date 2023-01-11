@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "named.hpp"
+#include "core/mixins/named.hpp"
 
 namespace meov::core {
 

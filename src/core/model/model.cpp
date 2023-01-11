@@ -1,4 +1,4 @@
-#include "model.hpp"
+#include "core/model/model.hpp"
 
 namespace meov::core {
 

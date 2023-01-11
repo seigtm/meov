@@ -1,9 +1,9 @@
 #pragma once
 
-#include "common.hpp"
-#include "utils.hpp"
-#include "log_utils.hpp"
-#include "windows/base/base_window.hpp"
+#include <common>
+#include <utils/utils.hpp>
+#include <utils/log_utils.hpp>
+#include "core/windows/base/base_window.hpp"
 
 namespace meov::Window {
 

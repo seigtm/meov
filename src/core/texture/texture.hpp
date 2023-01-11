@@ -1,6 +1,6 @@
 #pragma once
 
-#include "resource.hpp"
+#include "core/resources/manager/resource.hpp"
 
 namespace meov::core {
 

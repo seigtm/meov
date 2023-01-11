@@ -1,4 +1,4 @@
-#include "assimp_loader.hpp"
+#include "core/resources/loader/impl/assimp_loader.hpp"
 
 namespace {
 

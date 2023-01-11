@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.hpp"
+#include <common>
 
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
 namespace meov::utils::Log {
 

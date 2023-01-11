@@ -1,9 +1,9 @@
-#include "common.hpp"
-#include "shader_component.hpp"
+#include <common>
+#include "core/object/components/shader_component/shader_component.hpp"
 
-#include "resource_manager.hpp"
-#include "shaders_program.hpp"
-#include "graphics.hpp"
+#include "core/resources/manager/resource_manager.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
+#include "core/graphics/graphics.hpp"
 
 #include "utils/scope_wrapper/scope_wrapper.hpp"
 

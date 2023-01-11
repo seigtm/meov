@@ -1,11 +1,11 @@
-#include "common.hpp"
+#include <common>
 
-#include "ogl_shader.hpp"
-#include "ogl_shaders_program.hpp"
-#include "ogl_graphics.hpp"
-#include "ogl_frame_buffer.hpp"
+#include "core/shaders/shader/impl/ogl/ogl_shader.hpp"
+#include "core/shaders/shaders_program/impl/ogl/ogl_shaders_program.hpp"
+#include "core/graphics/impl/ogl/ogl_graphics.hpp"
+#include "core/framebuffer/impl/ogl/ogl_frame_buffer.hpp"
 
-#include "ogl_impl_factory.hpp"
+#include "core/factories/implementations/ogl/ogl_impl_factory.hpp"
 
 
 namespace meov::core::factories {

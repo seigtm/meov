@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-#include "component.hpp"
+#include "core/object/components/component.hpp"
 
 namespace meov::core::components {
 

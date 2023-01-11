@@ -1,9 +1,9 @@
-#include "common.hpp"
+#include <common>
 
-#include "scene.hpp"
+#include "core/scene/scene.hpp"
 
-#include "graphics.hpp"
-#include "object.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/object/object.hpp"
 
 namespace meov::core {
 

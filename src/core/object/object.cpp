@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "object.hpp"
+#include "core/object/object.hpp"
 
 namespace meov::core {
 

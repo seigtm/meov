@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics.hpp"
+#include "core/graphics/graphics.hpp"
 
 namespace meov::core::gl {
 

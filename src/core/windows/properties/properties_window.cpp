@@ -1,9 +1,9 @@
-#include "common.hpp"
+#include <common>
 
-#include "windows/properties/properties_window.hpp"
+#include "core/windows/properties/properties_window.hpp"
 
-#include "object.hpp"
-#include "component.hpp"
+#include "core/object/object.hpp"
+#include "core/object/components/component.hpp"
 
 namespace meov::Window {
 

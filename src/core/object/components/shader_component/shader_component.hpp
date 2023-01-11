@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.hpp"
+#include "core/object/components/component.hpp"
 
 #include <filesystem>
 

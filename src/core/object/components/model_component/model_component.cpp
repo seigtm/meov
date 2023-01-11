@@ -1,9 +1,9 @@
-#include "common.hpp"
-#include "holder.hpp"
-#include "transform_component.hpp"
-#include "model_component.hpp"
+#include <common>
+#include "core/object/components/holder.hpp"
+#include "core/object/components/transform_component/transform_component.hpp"
+#include "core/object/components/model_component/model_component.hpp"
 #include "ImGuiFileDialog.h"
-#include "resource_manager.hpp"
+#include "core/resources/manager/resource_manager.hpp"
 
 #include "utils/scope_wrapper/scope_wrapper.hpp"
 

@@ -1,6 +1,6 @@
-#include "transformable.hpp"
+#include "core/mixins/transformable.hpp"
 
-#include "graphics.hpp"
+#include "core/graphics/graphics.hpp"
 
 namespace meov::core::mixin {
 

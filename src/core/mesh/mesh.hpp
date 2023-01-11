@@ -1,10 +1,10 @@
 #pragma once
 
 #include <map>
+#include <common>
 
-#include "material.hpp"
-#include "common.hpp"
-#include "named.hpp"
+#include "core/material/material.hpp"
+#include "core/mixins/named.hpp"
 
 namespace meov::core {
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "component.hpp"
+#include "core/object/components/component.hpp"
 
-#include "common.hpp"
-#include "texture.hpp"
+#include <common>
+#include "core/texture/texture.hpp"
 
 namespace meov::core::components {
 

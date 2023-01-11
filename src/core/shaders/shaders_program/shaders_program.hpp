@@ -2,9 +2,9 @@
 
 #include <unordered_map>
 #include <memory>
-#include <resource.hpp>
+#include <core/resources/manager/resource.hpp>
 
-#include "shader.hpp"
+#include "core/shaders/shader/shader.hpp"
 #include "glm/glm.hpp"
 
 namespace meov::core::shaders {

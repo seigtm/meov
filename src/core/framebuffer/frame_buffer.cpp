@@ -1,6 +1,6 @@
-#include "frame_buffer.hpp"
+#include "core/framebuffer/frame_buffer.hpp"
 
-#include "impl_factory.hpp"
+#include "core/factories/impl_factory.hpp"
 
 namespace meov::core {
 

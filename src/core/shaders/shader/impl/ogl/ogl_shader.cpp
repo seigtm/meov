@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "ogl_shader.hpp"
+#include "core/shaders/shader/impl/ogl/ogl_shader.hpp"
 
 namespace meov::core::shaders::gl {
 

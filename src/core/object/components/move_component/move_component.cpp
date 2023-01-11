@@ -1,11 +1,11 @@
-#include "move_component.hpp"
+#include "core/object/components/move_component/move_component.hpp"
 
-#include "common.hpp"
+#include <common>
 
-#include "holder.hpp"
-#include "transform_component.hpp"
+#include "core/object/components/holder.hpp"
+#include "core/object/components/transform_component/transform_component.hpp"
 
-#include "event_manager.hpp"
+#include "core/event_manager/event_manager.hpp"
 
 namespace meov::core::components {
 

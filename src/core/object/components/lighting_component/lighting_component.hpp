@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.hpp"
+#include "core/object/components/component.hpp"
 
 namespace meov::core {
 class Graphics;
@@ -28,8 +28,8 @@ protected:
     bool mEnabled{ true };
     bool mSerializerOpened{ false };
 
-    glm::vec3 mAmbient{ 1.0f, 1.0f, 1.0f };
-    glm::vec3 mDiffuse{ 1.0f, 1.0f, 1.0f };
+    glm::vec3 mAmbient{ 0.2f, 0.2f, 0.2f };
+    glm::vec3 mDiffuse{ 0.5f, 0.5f, 0.5f };
     glm::vec3 mSpecular{ 1.0f, 1.0f, 1.0f };
 
     bool HasTransformComponent() const;

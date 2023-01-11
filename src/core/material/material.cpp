@@ -1,4 +1,4 @@
-#include "material.hpp"
+#include "core/material/material.hpp"
 
 namespace meov::core {
 

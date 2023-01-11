@@ -5,8 +5,8 @@
 #include <string>
 #include <filesystem>
 
-#include "loader.hpp"
-#include "shaders_program.hpp"
+#include "core/resources/loader/loader.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
 
 namespace meov::core::resources {
 

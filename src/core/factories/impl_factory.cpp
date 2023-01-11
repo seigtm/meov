@@ -1,8 +1,8 @@
-#include "common.hpp"
-#include "app_info.hpp"
+#include <common>
+#include <app_info/app_info.hpp>
 
-#include "impl_factory.hpp"
-#include "ogl_impl_factory.hpp"
+#include "core/factories/impl_factory.hpp"
+#include "core/factories/implementations/ogl/ogl_impl_factory.hpp"
 
 
 namespace meov::core::factories {

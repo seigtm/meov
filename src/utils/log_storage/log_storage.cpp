@@ -1,6 +1,6 @@
-#include "common.hpp"
-#include "log_storage.hpp"
-#include "log_utils.hpp"
+#include <common>
+#include "utils/log_storage/log_storage.hpp"
+#include <utils/log_utils.hpp>
 
 namespace meov::utils::Log {
 

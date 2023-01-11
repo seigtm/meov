@@ -8,29 +8,29 @@ struct AppInfo {
     [[nodiscard]] static constexpr std::string_view Version() noexcept { return "v@CMAKE_PROJECT_VERSION@"; }
 
     [[nodiscard]] static constexpr std::string_view GLSLVersion() noexcept {
-        return "@SHADER_VERSION@";
+        return "@MEOV_SHADER_VERSION@";
     }
 
-    [[nodiscard]] static constexpr size_t GLSLVersionMajor() noexcept { return @SHADER_VERSION_MAJOR@; }
-    [[nodiscard]] static constexpr size_t GLSLVersionMinor() noexcept { return @SHADER_VERSION_MINOR@; }
-    [[nodiscard]] static constexpr size_t GLSLVersionPatch() noexcept { return @SHADER_VERSION_PATCH@; }
+    [[nodiscard]] static constexpr size_t GLSLVersionMajor() noexcept { return @MEOV_SHADER_VERSION_MAJOR@; }
+    [[nodiscard]] static constexpr size_t GLSLVersionMinor() noexcept { return @MEOV_SHADER_VERSION_MINOR@; }
+    [[nodiscard]] static constexpr size_t GLSLVersionPatch() noexcept { return @MEOV_SHADER_VERSION_PATCH@; }
 
-    [[nodiscard]] static constexpr std::string_view Name() noexcept { return
-        "@PROGRAM_NAME@";
+    [[nodiscard]] static constexpr std::string_view Title() noexcept {
+        return "@MEOV_APP_TITLE@";
     }
 
-    [[nodiscard]] static constexpr std::string_view LogLevel() noexcept { return "@LOG_LEVEL@"; }
+    [[nodiscard]] static constexpr std::string_view LogLevel() noexcept { return "@MEOV_LOG_LEVEL@"; }
 
     [[nodiscard]] static constexpr bool IsDebugMode() noexcept {
-        #if defined(DEBUG)
+        #if defined(MEOV_DEBUG)
             return true;
         #else
             return false;
         #endif
     }
-    [[nodiscard]] static constexpr bool IsOpenGL() noexcept { return @USING_OPENGL@; }
-    [[nodiscard]] static constexpr bool IsVulkan() noexcept { return @USING_VULCAN@; }
-
+    [[nodiscard]] static constexpr bool IsOpenGL() noexcept { return @var_using_opengl@; }
+    [[nodiscard]] static constexpr bool IsVulkan() noexcept { return @var_using_vulkan@; }
+    [[nodiscard]] static constexpr bool WithEditor() noexcept { return @var_build_with_editor@; }
 };
 
 }  // namespace meov

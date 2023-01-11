@@ -4,8 +4,8 @@
 #include <string>
 #include <memory>
 
-#include "initializer_listener.hpp"
-#include "time_utils.hpp"
+#include "core/initializer/initializer_listener.hpp"
+#include <utils/time/time_utils.hpp>
 
 namespace meov::utils {
 class Initializer;
@@ -24,7 +24,7 @@ class Scene;
 
 class Core final : public utils::InitializerListener {
 public:
-    explicit Core(std::vector<std::string> &&argv);
+    Core();
 
     enum ExecutionResult{
         SUCCESS,
@@ -33,10 +33,10 @@ public:
 
     ExecutionResult Run();
 
+private:
     SDL_Window *mWindow{ nullptr };
     SDL_GLContext mWinContext{ nullptr };
 
-private:
     bool mRunning{ false };
     utils::time::Clock mClock;
     std::shared_ptr<Scene> mScene;

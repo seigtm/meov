@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "camera.hpp"
+#include "core/camera/camera.hpp"
 
 namespace meov::core {
 

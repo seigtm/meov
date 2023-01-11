@@ -1,7 +1,7 @@
 #pragma once
 
-#include "windows/base/base_window.hpp"
-#include "event_manager.hpp"
+#include "core/windows/base/base_window.hpp"
+#include "core/event_manager/event_manager.hpp"
 
 namespace meov::core {
 class FrameBuffer;

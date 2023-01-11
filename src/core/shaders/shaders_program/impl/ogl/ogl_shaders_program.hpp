@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "shaders_program.hpp"
+#include "core/shaders/shaders_program/shaders_program.hpp"
 
 namespace meov::core::shaders::gl {
 

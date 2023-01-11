@@ -1,34 +1,34 @@
-#include "common.hpp"
-#include "app_info.hpp"
+#include <common>
+#include <app_info/app_info.hpp>
 
-#include "core.hpp"
+#include "core/core.hpp"
 
-#include "object.hpp"
-#include "transform_component.hpp"
-#include "model_component.hpp"
-#include "move_component.hpp"
-#include "camera_component.hpp"
-#include "lighting_component.hpp"
-#include "skybox_component.hpp"
-#include "shader_component.hpp"
+#include "core/object/object.hpp"
+#include "core/object/components/transform_component/transform_component.hpp"
+#include "core/object/components/model_component/model_component.hpp"
+#include "core/object/components/move_component/move_component.hpp"
+#include "core/object/components/camera_component/camera_component.hpp"
+#include "core/object/components/lighting_component/lighting_component.hpp"
+#include "core/object/components/skybox_component/skybox_component.hpp"
+#include "core/object/components/shader_component/shader_component.hpp"
 
-#include "graphics.hpp"
-#include "frame_buffer.hpp"
-#include "resource_manager.hpp"
-#include "camera.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/framebuffer/frame_buffer.hpp"
+#include "core/resources/manager/resource_manager.hpp"
+#include "core/camera/camera.hpp"
 
-#include "scene.hpp"
+#include "core/scene/scene.hpp"
 
-#include "event_manager.hpp"
+#include "core/event_manager/event_manager.hpp"
 
-#include "initializer_factory.hpp"
-#include "initializer.hpp"
+#include "core/initializer/initializer_factory.hpp"
+#include "core/initializer/initializer.hpp"
 
-#include "windows/gui_manager/gui_manager.hpp"
-#include "windows/scene/scene_tree.hpp"
-#include "windows/scene/scene_window.hpp"
-#include "windows/log/log_window.hpp"
-#include "windows/properties/properties_window.hpp"
+#include "core/windows/gui_manager/gui_manager.hpp"
+#include "core/windows/scene/scene_tree.hpp"
+#include "core/windows/scene/scene_window.hpp"
+#include "core/windows/log/log_window.hpp"
+#include "core/windows/properties/properties_window.hpp"
 
 namespace meov::core {
 
@@ -182,7 +182,7 @@ void Core::MakeTestScene(std::shared_ptr<Scene> scene, std::shared_ptr<Graphics>
     skybox->AddComponent<components::ShaderComponent>("shaders/skybox/skybox");
 }
 
-Core::Core(std::vector<std::string>&& argv)
+Core::Core()
     : mInitTasks{
         utils::InitializerFactory::load("stb_image", this),
         utils::InitializerFactory::load("logger", this),
@@ -191,7 +191,7 @@ Core::Core(std::vector<std::string>&& argv)
             this, "SDL Window",
             [&win = this->mWindow, &ctx = this->mWinContext] {
                 win = SDL_CreateWindow(
-                    meov::AppInfo::Name().data(),
+                    meov::AppInfo::Title().data(),
                     SDL_WINDOWPOS_CENTERED,
                     SDL_WINDOWPOS_CENTERED,
                     1680, 960,

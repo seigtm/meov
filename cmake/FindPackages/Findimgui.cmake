@@ -17,6 +17,7 @@ set(_sources
 )
 
 add_library(deps_imgui OBJECT ${_sources})
+add_library(deps::imgui ALIAS deps_imgui)
 
 target_include_directories(deps_imgui
     PUBLIC

@@ -1,6 +1,6 @@
-#include "common.hpp"
+#include <common>
 
-#include "vertex.hpp"
+#include "core/mesh/vertex.hpp"
 
 namespace meov::core {
 

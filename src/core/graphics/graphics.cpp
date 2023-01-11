@@ -1,9 +1,9 @@
-#include "common.hpp"
+#include <common>
 
-#include "graphics.hpp"
-#include "impl_factory.hpp"
+#include "core/graphics/graphics.hpp"
+#include "core/factories/impl_factory.hpp"
 
-#include "resource_manager.hpp"
+#include "core/resources/manager/resource_manager.hpp"
 
 namespace meov::core {
 

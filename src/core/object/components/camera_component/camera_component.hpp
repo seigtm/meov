@@ -2,8 +2,8 @@
 
 #include <glm/glm.hpp>
 
-#include "component.hpp"
-#include "event_manager.hpp"
+#include "core/object/components/component.hpp"
+#include "core/event_manager/event_manager.hpp"
 
 namespace meov::core {
 class Graphics;

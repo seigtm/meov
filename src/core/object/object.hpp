@@ -4,10 +4,10 @@
 #include <string>
 #include <memory>
 
-#include "named.hpp"
-#include "selectable.hpp"
-#include "component.hpp"
-#include "holder.hpp"
+#include "core/mixins/named.hpp"
+#include "core/mixins/selectable.hpp"
+#include "core/object/components/component.hpp"
+#include "core/object/components/holder.hpp"
 
 namespace meov::core {
 

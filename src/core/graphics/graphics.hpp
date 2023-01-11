@@ -4,8 +4,8 @@
 #include <deque>
 #include <initializer_list>
 
-#include "common.hpp"
-#include "shaders_program.hpp"
+#include <common>
+#include "core/shaders/shaders_program/shaders_program.hpp"
 
 namespace meov::core {
 
