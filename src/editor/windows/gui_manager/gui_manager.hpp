@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/windows/base/base_window.hpp"
-
 #include <unordered_map>
 #include <memory>
+
+#include "editor/windows/base/base_window.hpp"
 
 namespace meov::Window {
 

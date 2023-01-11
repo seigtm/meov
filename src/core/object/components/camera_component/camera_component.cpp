@@ -35,7 +35,7 @@ void CameraComponent::Draw(Graphics &) {}
 void CameraComponent::Update(double delta) {
     if(!Valid())
         return;
-    auto holder{ mHolder.lock() };
+    auto holder{ GetHolder().lock() };
     auto graphics{ mWeakGraphics.lock() };
     if(graphics == nullptr)
         return;
@@ -65,7 +65,7 @@ void CameraComponent::Serialize() {
     ImGui::Indent();
     if(!valid) {
         ImGui::PopStyleColor();
-        auto holder{ mHolder.lock() };
+        auto holder{ GetHolder().lock() };
         if(holder == nullptr) {
             ImGui::Unindent();
             return;
@@ -100,7 +100,7 @@ void CameraComponent::Serialize() {
 }
 
 bool CameraComponent::Valid() const {
-    auto holder{ mHolder.lock() };
+    auto holder{ GetHolder().lock() };
     return !mWeakGraphics.expired() && holder && holder->GetComponent<TransformComponent>();
 }
 

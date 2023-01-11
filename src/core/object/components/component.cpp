@@ -2,8 +2,7 @@
 
 namespace meov::core::components {
 
-Component::Component(std::string &&name)
-    : mixin::Named{ std::move(name) } {}
+Component::Component(std::string &&name) noexcept : mixin::Named{ std::move(name) } {}
 
 void Component::PreDraw(Graphics &) {}
 void Component::Draw(Graphics &) {}
@@ -16,6 +15,10 @@ void Component::Serialize() {}
 
 void Component::SetHolder(std::weak_ptr<Holder> &&holder) {
     mHolder = std::move(holder);
+}
+
+std::weak_ptr<Holder> Component::GetHolder() const {
+    return mHolder;
 }
 
 }  // namespace meov::core::components

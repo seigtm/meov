@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/windows/base/base_window.hpp"
+#include "editor/windows/base/base_window.hpp"
 
 namespace meov::core {
 class Scene;

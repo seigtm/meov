@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/windows/base/base_window.hpp"
-#include "core/event_manager/event_manager.hpp"
+#include <core/event_manager/event_manager.hpp>
+#include "editor/windows/base/base_window.hpp"
 
 namespace meov::core {
 class FrameBuffer;
@@ -11,8 +11,8 @@ class FrameBuffer;
 namespace meov::Window {
 
 class Scene final
-    : public Base,
-      public core::managers::MouseManager::Listener {
+    : public Base
+    , public core::managers::MouseManager::Listener {
     using button = core::managers::MouseManager::Button;
 
 public:

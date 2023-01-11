@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 
 include(cmake/tools.cmake)
 project(meov
-    VERSION 0.2.7
+    VERSION 0.2.8
     LANGUAGES CXX
 )
 include(cmake/options.cmake)

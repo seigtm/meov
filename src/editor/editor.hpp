@@ -7,6 +7,9 @@ class Core;
 class Graphics;
 } // namespace meov::core
 
+namespace meov::Window {
+class Manager;
+} // namespace meov::Window
 
 namespace meov::editor {
 
@@ -18,6 +21,13 @@ public:
 
 private:
 	std::unique_ptr<core::Core> mCore;
+    std::shared_ptr<Window::Manager> mWindowManager;
+
+	void startFrame();
+	void renderFrame();
+	void serialize();
+
+	void update(const double delta);
 };
 
 template<class CoreType>

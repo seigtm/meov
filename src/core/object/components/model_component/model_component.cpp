@@ -20,7 +20,7 @@ ModelComponent::ModelComponent(const std::shared_ptr<core::Model> &model)
 void ModelComponent::Draw(Graphics &g) {
     if(!Valid())
         return;
-    auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+    auto transform{ GetHolder().lock()->GetComponent<TransformComponent>() };
     if(transform) transform->PushTransform(g);
     mModel->Draw(g);
     if(transform) transform->PopTransform(g);
@@ -64,7 +64,7 @@ bool ModelComponent::Reset(const std::shared_ptr<core::Model> &model) {
 }
 
 bool ModelComponent::Valid() const {
-    return !mHolder.expired() && mModel;
+    return !GetHolder().expired() && mModel;
 }
 
 void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
@@ -76,7 +76,7 @@ void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
     if(!ImGui::TreeNode(name.c_str()))
         return;
 
-    static const std::array types{
+    static constexpr std::array types{
         Texture::Type::Diffuse,
         Texture::Type::Specular,
         Texture::Type::Height,

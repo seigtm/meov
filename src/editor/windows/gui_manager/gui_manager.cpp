@@ -1,9 +1,5 @@
-#include "core/windows/gui_manager/gui_manager.hpp"
-
-#include "core/windows/log/log_window.hpp"
-#include "core/windows/properties/properties_window.hpp"
-#include "core/windows/scene/scene_tree.hpp"
-#include "core/windows/scene/scene_window.hpp"
+#include "editor/windows/windows.hpp"
+#include <app_info/app_info.hpp>
 
 namespace meov::Window {
 
@@ -19,7 +15,9 @@ Manager::Manager()
 {}
 
 void Manager::Draw() {
-	ImGui::ShowDemoWindow();
+	if constexpr (meov::AppInfo::IsDebugMode()) {
+		ImGui::ShowDemoWindow();
+	}
 	for (auto &&[name, window] : mWindows) {
 		window->Draw();
 	}

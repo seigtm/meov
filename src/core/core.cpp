@@ -1,5 +1,6 @@
 #include <common>
 #include <app_info/app_info.hpp>
+#include <utils/time/time_utils.hpp>
 
 #include "core/core.hpp"
 
@@ -24,28 +25,27 @@
 #include "core/initializer/initializer_factory.hpp"
 #include "core/initializer/initializer.hpp"
 
-#include "core/windows/gui_manager/gui_manager.hpp"
-#include "core/windows/scene/scene_tree.hpp"
-#include "core/windows/scene/scene_window.hpp"
-#include "core/windows/log/log_window.hpp"
-#include "core/windows/properties/properties_window.hpp"
-
 namespace meov::core {
 
-Core::ExecutionResult Core::Run() {
-    initialize();
+void Core::Initialize() {
+    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+    MakeTestScene(mScene, mGraphics);
+    mRunning = true;
 
     const ImVec4 clearColor{ 0.45f, 0.55f, 0.60f, 1.00f };                 // Clear color (background default color).
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);  // Set it up here.
+}
 
-    mRunning = true;
+Core::ExecutionResult Core::Run() {
+    Initialize();
+
+    utils::time::Clock mClock{};
     while(mRunning) {
         mClock.Update();
 
         StartFrame();
         Update(mClock.Delta());
-        Draw(*mGraphics);
-        Serialize();
+        Draw();
         RenderFrame();
 
         HandleEvents();
@@ -54,52 +54,40 @@ Core::ExecutionResult Core::Run() {
     return Core::SUCCESS;
 }
 
-void Core::initialize() {
-    mWindowManager = std::make_shared<Window::Manager>();
-    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+SDL_Window *Core::GetWindow() {
+    return mWindow;
+}
 
-    MakeTestScene(mScene, mGraphics);
+bool Core::IsRunning() const {
+    return mRunning;
+}
 
-    if (auto sceneView{ mWindowManager->getAs<Window::Scene>("scene") }; sceneView)
-        sceneView->Select(mFrameBuffer);
-    if (auto sceneTreeView{ mWindowManager->getAs<Window::SceneTree>("scene_tree") }; sceneTreeView)
-        sceneTreeView->Select(mScene);
-
-    if (auto logView{ mWindowManager->getAs<Window::Log>("log") }; logView)
-        utils::LogUtils::Instance()->GetLogStorage()->Subscribe(logView);
-
+std::shared_ptr<Scene> Core::GetScene() const {
+    return mScene;
+}
+std::shared_ptr<Graphics> Core::GetGraphics() const {
+    return mGraphics;
+}
+std::shared_ptr<FrameBuffer> Core::GetFrameBuffer() const {
+    return mFrameBuffer;
 }
 
 void Core::StartFrame() {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(mWindow);
-    ImGui::NewFrame();
-    ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void Core::RenderFrame() {
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(mWindow);
 }
 
 void Core::Update(double delta) {
     mScene->Update(delta);
-    if (auto propertiesView{ mWindowManager->getAs<Window::Properties>("properties") }; propertiesView)
-        propertiesView->Select(mScene->GetSelectedObjects());
 }
 
-void Core::Draw(Graphics& g) {
+void Core::Draw() {
     mFrameBuffer->Bind();
-    mScene->Draw(g);
+    mScene->Draw(*mGraphics);
     mFrameBuffer->UnBind();
 }
-
-void Core::Serialize() {
-    mWindowManager->Draw();
-}
-
 
 void Core::HandleEvents() {
     static auto handleKeyDownEvent{ [this](SDL_Event &event){
@@ -135,7 +123,6 @@ void Core::HandleEvents() {
         }
     }
 }
-
 
 void Core::OnFail(const std::string_view&) {
     exit(-1);

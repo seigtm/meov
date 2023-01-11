@@ -5,15 +5,10 @@
 #include <memory>
 
 #include "core/initializer/initializer_listener.hpp"
-#include <utils/time/time_utils.hpp>
 
 namespace meov::utils {
 class Initializer;
 } // namespace meov::utils
-
-namespace meov::Window {
-class Manager;
-} // namespace meov::Window
 
 namespace meov::core {
 
@@ -26,6 +21,8 @@ class Core final : public utils::InitializerListener {
 public:
     Core();
 
+    void Initialize();
+
     enum ExecutionResult{
         SUCCESS,
         FAIL = -1
@@ -33,16 +30,26 @@ public:
 
     ExecutionResult Run();
 
+    [[nodiscard]] SDL_Window *GetWindow();
+    [[nodiscard]] bool IsRunning() const;
+    [[nodiscard]] std::shared_ptr<Scene> GetScene() const;
+    [[nodiscard]] std::shared_ptr<Graphics> GetGraphics() const;
+    [[nodiscard]] std::shared_ptr<FrameBuffer> GetFrameBuffer() const;
+
+    void StartFrame();
+    void RenderFrame();
+    void Update(double delta);
+    void Draw();
+    void HandleEvents();
+
 private:
     SDL_Window *mWindow{ nullptr };
     SDL_GLContext mWinContext{ nullptr };
 
     bool mRunning{ false };
-    utils::time::Clock mClock;
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<Graphics> mGraphics;
     std::shared_ptr<FrameBuffer> mFrameBuffer;
-    std::shared_ptr<Window::Manager> mWindowManager;
     glm::mat4 mProjection{ 1 };
 
     std::vector<std::shared_ptr<utils::Initializer>> mInitTasks;
@@ -51,15 +58,6 @@ private:
     glm::vec2 lastMouseCoords{};
     glm::vec2 sceneSize{};
     glm::vec2 scenePos{};
-
-    void initialize();
-
-    void StartFrame();
-    void RenderFrame();
-    void Update(double delta);
-    void Draw(Graphics &g);
-    void Serialize();
-    void HandleEvents();
 
     // utils::InitializerListener
     void OnFail(const std::string_view &taskName) override;

@@ -38,7 +38,7 @@ void LightingComponent::Serialize() {
 
     if(!valid) {
         ImGui::PopStyleColor();
-        auto holder{ mHolder.lock() };
+        auto holder{ GetHolder().lock() };
         if(holder == nullptr) {
             ImGui::Text("Error! Holder not found!");
             return;
@@ -77,7 +77,7 @@ void LightingComponent::SetupDefaults(const std::string &name, shaders::Program 
 }
 
 bool LightingComponent::HasTransformComponent() const {
-    if(auto holder{ mHolder.lock() }; holder)
+    if(auto holder{ GetHolder().lock() }; holder)
         return holder->GetComponent<TransformComponent>() != nullptr;
     return false;
 }
@@ -163,7 +163,7 @@ void PointLightingComponent::PreDraw(Graphics &g) {
     program.Use();
     SetupDefaults(mTextureName, program);
     if(mEnabled) {
-        auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+        auto transform{ GetHolder().lock()->GetComponent<TransformComponent>() };
         const glm::vec3 position{ transform ? transform->GetPosition() : glm::vec3{} };
         program.Get(mTextureName + ".position")->Set(position);
         program.Get(mTextureName + ".constant")->Set(mConstant);
@@ -213,7 +213,7 @@ void SpotLightingComponent::PreDraw(Graphics &g) {
     program.Use();
     SetupDefaults("spotLight", program);
     if(mEnabled) {
-        auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+        auto transform{ GetHolder().lock()->GetComponent<TransformComponent>() };
         const glm::vec3 position{ transform ? transform->GetPosition() : glm::vec3{} };
         program.Get("spotLight.position")->Set(position);
         program.Get("spotLight.direction")->Set(mDirection);

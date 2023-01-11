@@ -40,7 +40,7 @@ void SkyboxComponent::Update(double) {
     if(!mDirtyFlag) {
         return;
     }
-    if(auto holder{ mHolder.lock() }; holder) {
+    if(auto holder{ GetHolder().lock() }; holder) {
         if(auto modelComponent{ holder->GetComponent<components::ModelComponent>() };
            modelComponent && modelComponent->Valid()) {
             modelComponent->Reset(RESOURCES->LoadModel(mPath));
@@ -69,7 +69,7 @@ void SkyboxComponent::Serialize() {
 }
 
 bool SkyboxComponent::Valid() const {
-    auto holder{ mHolder.lock() };
+    auto holder{ GetHolder().lock() };
     return {
         mSkyboxTexture &&
         mSkyboxTexture->Valid() &&
@@ -80,7 +80,7 @@ bool SkyboxComponent::Valid() const {
 }
 
 void SkyboxComponent::OnInvalidSerialize() {
-    auto holder{ mHolder.lock() };
+    auto holder{ GetHolder().lock() };
     if(!holder) {
         ImGui::TextColored({ 0.6f, 0.1f, 0.3f, 1.0f }, "I have no holder!!!!!!!!!");
         return;

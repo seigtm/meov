@@ -1,9 +1,9 @@
 #include <common>
 
-#include "core/windows/properties/properties_window.hpp"
+#include "editor/windows/properties/properties_window.hpp"
 
-#include "core/object/object.hpp"
-#include "core/object/components/component.hpp"
+#include <core/object/object.hpp>
+#include <core/object/components/component.hpp>
 
 namespace meov::Window {
 
@@ -32,13 +32,13 @@ void Properties::DrawImpl() {
                 ImGui::Separator();
             });
 
-            if (ImGui::BeginCombo("Components", "transform")) {
-                ImGui::EndCombo();
-            }
-            if (ImGui::Button("Add component")) {
-                // core::components::Factory::Build(obj, "component");
-            }
-            ImGui::Unindent();
+            // if (ImGui::BeginCombo("Components", "transform")) {
+            //     ImGui::EndCombo();
+            // }
+            // if (ImGui::Button("Add component")) {
+            //     // core::components::Factory::Build(obj, "component");
+            // }
+            // ImGui::Unindent();
             ImGui::PopID();
             ImGui::Spacing();
         }

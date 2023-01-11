@@ -1,12 +1,11 @@
 #include <common>
-#include "scene_window.hpp"
+#include "editor/windows/scene/scene_window.hpp"
 
-#include "core/framebuffer/frame_buffer.hpp"
+#include <core/framebuffer/frame_buffer.hpp>
 
 namespace meov::Window {
 
-Scene::Scene()
-    : Base{ "Scene" } {
+Scene::Scene() : Base{ "Scene" } {
     core::managers::MouseManager::AddListener(this);
 }
 

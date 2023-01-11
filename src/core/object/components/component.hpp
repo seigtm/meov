@@ -17,7 +17,7 @@ class Component : public mixin::Named {
 public:
     using Shared = std::shared_ptr<Component>;
 
-    explicit Component(std::string &&name);
+    explicit Component(std::string &&name) noexcept;
     virtual ~Component() = default;
 
     virtual void PreDraw(Graphics &);
@@ -29,8 +29,9 @@ public:
     virtual void Serialize();  // for ImGui
 
     void SetHolder(std::weak_ptr<Holder> &&holder);
+    [[nodiscard]] std::weak_ptr<Holder> GetHolder() const;
 
-protected:
+private:
     std::weak_ptr<Holder> mHolder;
 };
 

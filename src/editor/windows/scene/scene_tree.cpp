@@ -1,11 +1,12 @@
 #include <common>
 
-#include "core/resources/manager/resource_manager.hpp"
-#include "core/texture/texture.hpp"
+#include <editor/windows/scene/scene_tree.hpp>
 
-#include "scene_tree.hpp"
-#include "core/object/object.hpp"
-#include "core/scene/scene.hpp"
+#include <core/resources/manager/resource_manager.hpp>
+#include <core/texture/texture.hpp>
+
+#include <core/object/object.hpp>
+#include <core/scene/scene.hpp>
 
 namespace meov::Window {
 

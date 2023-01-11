@@ -20,7 +20,7 @@ void MoveComponent::Update(double delta) {
     if(!Valid())
         return;
 
-    auto transform{ mHolder.lock()->GetComponent<TransformComponent>() };
+    auto transform{ GetHolder().lock()->GetComponent<TransformComponent>() };
     mVelocity = GetDirection(*transform) * mSpeed * static_cast<float>(delta);
     transform->Move(mVelocity);
 }
@@ -36,7 +36,7 @@ void MoveComponent::Serialize() {
 
     if(!valid) {
         ImGui::PopStyleColor();
-        auto holder{ mHolder.lock() };
+        auto holder{ GetHolder().lock() };
         if(holder == nullptr) {
             ImGui::Unindent();
             return;
@@ -56,7 +56,7 @@ void MoveComponent::Serialize() {
 }
 
 bool MoveComponent::Valid() const {
-    if(auto holder{ mHolder.lock() }; holder)
+    if(auto holder{ GetHolder().lock() }; holder)
         return holder->GetComponent<TransformComponent>() != nullptr;
     return false;
 }

@@ -3,7 +3,8 @@
 #include <common>
 #include <utils/utils.hpp>
 #include <utils/log_utils.hpp>
-#include "core/windows/base/base_window.hpp"
+
+#include "editor/windows/base/base_window.hpp"
 
 namespace meov::Window {
 
