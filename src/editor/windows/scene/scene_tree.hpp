@@ -1,11 +1,14 @@
 #pragma once
 
+#include <utils/types.hpp>
 #include "editor/windows/base/base_window.hpp"
 
 namespace meov::core {
 class Scene;
 class Object;
+namespace resources {
 class Texture;
+}  // namespace resources
 }  // namespace meov::core
 
 namespace meov::Window {
@@ -15,11 +18,11 @@ public:
     explicit SceneTree() noexcept;
     ~SceneTree() override = default;
 
-    void Select(std::weak_ptr<core::Scene> &&scene);
+    void Select(wptr<core::Scene> &&scene);
 
 private:
-    std::weak_ptr<core::Scene> mWrappedScene;
-    const std::unordered_map<std::string, std::shared_ptr<core::Texture>> mIcons;
+    wptr<core::Scene> mWrappedScene;
+    const umap<std::string, sptr<core::resources::Texture>> mIcons;
 
     void DrawImpl() override;
 

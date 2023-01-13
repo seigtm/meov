@@ -3,7 +3,7 @@
 #include "core/mesh/mesh.hpp"
 #include "core/mesh/vertex.hpp"
 #include "core/shaders/shader/shader.hpp"
-#include "core/texture/texture.hpp"
+#include "core/resources/texture/texture.hpp"
 #include "core/graphics/graphics.hpp"
 
 namespace meov::core {

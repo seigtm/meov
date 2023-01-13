@@ -3,7 +3,7 @@
 #include <editor/windows/scene/scene_tree.hpp>
 
 #include <core/resources/manager/resource_manager.hpp>
-#include <core/texture/texture.hpp>
+#include <core/resources/texture/texture.hpp>
 
 #include <core/object/object.hpp>
 #include <core/scene/scene.hpp>
@@ -45,11 +45,11 @@ void SceneTree::DrawImpl() {
     Draw(scene->GetObjects());
 }
 
-void SceneTree::Draw(const std::vector<std::shared_ptr<core::Object>> &objects) {
+void SceneTree::Draw(const std::vector<sptr<core::Object>> &objects) {
     if (objects.empty())
         return;
 
-    auto drawLine = [&] (std::shared_ptr<core::Object> object, const std::string &name) {
+    auto drawLine = [&] (sptr<core::Object> object, const std::string &name) {
         ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow };
         bool selected{ object->IsSelected() };
         if (ImGui::Checkbox(("##" + name).c_str(), &selected))
@@ -79,7 +79,7 @@ void SceneTree::Draw(const std::vector<std::shared_ptr<core::Object>> &objects) 
 }
 
 bool SceneTree::ImageButton(const std::string &icon, const ImColor &clr) const {
-    const float size{ ImGui::GetTextLineHeightWithSpacing() };
+    const f32 size{ ImGui::GetTextLineHeightWithSpacing() };
     const ImVec2 buttonSize{ size, size };
     const ImVec2 uv0{};
     const ImVec2 uv1{ 1, 1 };

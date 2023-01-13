@@ -2,19 +2,16 @@
 
 #include <common>
 
-#include <vector>
-
 #include "core/graphics/graphics.hpp"
 #include "core/object/components/holder.hpp"
 #include "core/mesh/mesh.hpp"
 #include "core/graphics/graphics.hpp"
 #include "core/resources/manager/resource_manager.hpp"
+#include "core/resources/texture/texture.hpp"
 #include "core/mesh/vertex.hpp"
 
 #include "core/object/components/model_component/model_component.hpp"
 #include "core/object/components/shader_component/shader_component.hpp"
-
-const glm::u8vec4 whiteColor{ 1.0f, 1.0f, 1.0f, 1.0f };
 
 namespace meov::core::components {
 
@@ -36,7 +33,7 @@ void SkyboxComponent::PostDraw(Graphics &g) {
     glDepthFunc(GL_LESS);
 }
 
-void SkyboxComponent::Update(double) {
+void SkyboxComponent::Update([[maybe_unused]] const f64 delta) {
     if(!mDirtyFlag) {
         return;
     }
@@ -110,7 +107,7 @@ void SkyboxComponent::OnInvalidSerialize() {
 void SkyboxComponent::OnValidSerialize() {
     ImGui::Text("Current texture: %s", mPath.string().c_str());
     const bool isValid{ mSkyboxTexture && mSkyboxTexture->Valid() };
-    ImGui::Text("Texture status: %s", isValid ? "valid" : "invalid");
+    ImGui::Text("Texture status: %s", (isValid ? "valid" : "invalid"));
 
     if(ImGui::Button("Reload mesh?")) {
         mDirtyFlag = true;

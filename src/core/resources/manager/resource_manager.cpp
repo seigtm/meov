@@ -3,7 +3,7 @@
 #include "core/resources/manager/resource_manager.hpp"
 
 #include "core/resources/loader/impl/assimp_loader.hpp"
-#include "core/texture/texture.hpp"
+#include "core/resources/texture/texture.hpp"
 #include "core/mesh/mesh.hpp"
 
 namespace meov::core::resources {

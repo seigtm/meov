@@ -6,7 +6,7 @@
 
 // MEOV.
 #include "core/mesh/mesh.hpp"
-#include "core/texture/texture.hpp"
+#include "core/resources/texture/texture.hpp"
 #include "core/graphics/graphics.hpp"
 #include "core/resources/manager/resource.hpp"
 

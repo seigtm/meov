@@ -1,42 +1,41 @@
 #pragma once
 
-#include <cstdint>
-#include <memory>
+#include <utils/types.hpp>
 
 namespace meov::core {
 
 class FrameBuffer final {
 public:
-    static constexpr int32_t DefaultWidth{ 1280 };
-    static constexpr int32_t DefaultHeight{ 760 };
+    static constexpr i32 DefaultWidth{ 1280 };
+    static constexpr i32 DefaultHeight{ 760 };
 
     class Impl {
     public:
-        Impl(int32_t width, int32_t height);
+        Impl(i32 width, i32 height);
         virtual ~Impl() = default;
         virtual void Bind(){};
         virtual void UnBind(){};
-        virtual uint32_t GetFrameTexture() const = 0;
+        virtual u32 GetFrameTexture() const = 0;
 
-        int32_t Width() const;
-        int32_t Height() const;
+        i32 Width() const;
+        i32 Height() const;
 
     protected:
-        int32_t mWidth{ -1 };
-        int32_t mHeight{ -1 };
+        i32 mWidth{ -1 };
+        i32 mHeight{ -1 };
     };
 
-    FrameBuffer(int32_t width = DefaultWidth, int32_t height = DefaultHeight);
+    FrameBuffer(i32 width = DefaultWidth, i32 height = DefaultHeight);
 
     void Bind();
     void UnBind();
-    uint32_t GetFrameTexture() const;
+    u32 GetFrameTexture() const;
 
-    int32_t Width() const;
-    int32_t Height() const;
+    i32 Width() const;
+    i32 Height() const;
 
-protected:
-    std::shared_ptr<Impl> mImpl;
+private:
+    sptr<Impl> mImpl;
 };
 
 };  // namespace meov::core

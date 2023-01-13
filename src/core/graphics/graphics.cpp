@@ -63,7 +63,7 @@ shaders::Program Graphics::CurrentProgram() const {
     return shaders::Program{ "INVALID" };
 }
 
-void Graphics::DrawDot(const glm::vec3 &position, const float radius) {
+void Graphics::DrawDot(const glm::vec3 &position, const f32 radius) {
     if(mImpl) mImpl->DrawDot(position, radius);
 }
 void Graphics::DrawLine(std::initializer_list<glm::vec3> &&vertices) {
@@ -75,7 +75,7 @@ void Graphics::DrawTriangle(const std::array<glm::vec3, 3> &positions) {
 void Graphics::DrawRectangle(const std::array<glm::vec3, 4> &positions) {
     if(mImpl) mImpl->DrawRectangle(positions);
 }
-void Graphics::DrawRectangle(const glm::vec3 &position, const float width, const float height) {
+void Graphics::DrawRectangle(const glm::vec3 &position, const f32 width, const f32 height) {
     if(!mImpl) return;
 
     mImpl->DrawRectangle({
@@ -85,10 +85,10 @@ void Graphics::DrawRectangle(const glm::vec3 &position, const float width, const
         { position.x, position.y + height, position.z }           //
     });
 }
-void Graphics::DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) {
+void Graphics::DrawTexture(const std::array<glm::vec3, 4> &positions, const sptr<resources::Texture> &tex) {
     if(mImpl) mImpl->DrawTexture(positions, tex);
 }
-void Graphics::DrawTexture(const std::shared_ptr<Texture> &tex, const glm::vec3 position, const float width, const float height) {
+void Graphics::DrawTexture(const sptr<resources::Texture> &tex, const glm::vec3 position, const f32 width, const f32 height) {
     if(!mImpl) return;
 
     mImpl->DrawTexture(

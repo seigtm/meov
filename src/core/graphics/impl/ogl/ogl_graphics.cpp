@@ -3,7 +3,7 @@
 #include "core/model/model.hpp"
 #include "core/mesh/mesh.hpp"
 #include "core/mesh/vertex.hpp"
-#include "core/texture/texture.hpp"
+#include "core/resources/texture/texture.hpp"
 #include "core/graphics/impl/ogl/ogl_graphics.hpp"
 
 namespace meov::core::gl {
@@ -63,12 +63,12 @@ void OGLGraphicsImpl::DrawRectangle(const std::array<glm::vec3, 4> &positions) {
     DrawMesh(mesh);
 }
 
-void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) {
+void OGLGraphicsImpl::DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<resources::Texture> &tex) {
     if(mProgramQueue.empty()) return;
 
     const auto &clr{ CurrentColor() };
     Material mat;
-    mat[Texture::Type::Diffuse] = tex;
+    mat[resources::Texture::Type::Diffuse] = tex;
     const Mesh mesh{
         { Vertex{ positions[0], clr, glm::vec2{ 0.0f, 1.0f } },
           Vertex{ positions[1], clr, glm::vec2{ 1.0f, 1.0f } },
@@ -109,11 +109,11 @@ void OGLGraphicsImpl::DrawModel(const Model &model) {
 }
 
 void OGLGraphicsImpl::DrawMeshRaw(const Mesh &mesh, shaders::Program &program) {
-    const std::array<Texture::Type, 4> types{
-        Texture::Type::Diffuse,
-        Texture::Type::Specular,
-        Texture::Type::Normal,
-        Texture::Type::Height,
+    const std::array<resources::Texture::Type, 4> types{
+        resources::Texture::Type::Diffuse,
+        resources::Texture::Type::Specular,
+        resources::Texture::Type::Normal,
+        resources::Texture::Type::Height,
     };
 
     const auto &material{ mesh.Material() };

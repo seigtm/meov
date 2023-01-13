@@ -16,12 +16,12 @@ MoveComponent::MoveComponent()
 void MoveComponent::Draw(Graphics &g) {
 }
 
-void MoveComponent::Update(double delta) {
+void MoveComponent::Update(const f64 delta) {
     if(!Valid())
         return;
 
     auto transform{ GetHolder().lock()->GetComponent<TransformComponent>() };
-    mVelocity = GetDirection(*transform) * mSpeed * static_cast<float>(delta);
+    mVelocity = GetDirection(*transform) * mSpeed * static_cast<f32>(delta);
     transform->Move(mVelocity);
 }
 

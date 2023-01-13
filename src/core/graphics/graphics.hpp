@@ -1,15 +1,17 @@
 #pragma once
 
-#include <memory>
 #include <deque>
 #include <initializer_list>
+#include <utils/types.hpp>
 
 #include <common>
 #include "core/shaders/shaders_program/shaders_program.hpp"
 
 namespace meov::core {
 
+namespace resources {
 class Texture;
+} // namespace resources
 class Mesh;
 class Model;
 
@@ -41,14 +43,14 @@ public:
         virtual void PopProgram();
         virtual shaders::Program CurrentProgram() const;
 
-        virtual void DrawDot(const glm::vec3 &position, const float radius = 1) = 0;
+        virtual void DrawDot(const glm::vec3 &position, const f32 radius = 1) = 0;
         virtual void DrawLine(std::initializer_list<glm::vec3> &&vertices) = 0;
 
         virtual void DrawTriangle(const std::array<glm::vec3, 3> &positions) = 0;
 
         virtual void DrawRectangle(const std::array<glm::vec3, 4> &positions) = 0;
 
-        virtual void DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex) = 0;
+        virtual void DrawTexture(const std::array<glm::vec3, 4> &positions, const sptr<resources::Texture> &tex) = 0;
 
         virtual void DrawMesh(const Mesh &mesh) = 0;
         virtual void DrawModel(const Model &model) = 0;
@@ -83,22 +85,22 @@ public:
     void PopProgram();
     shaders::Program CurrentProgram() const;
 
-    void DrawDot(const glm::vec3 &position, const float radius = 1);
+    void DrawDot(const glm::vec3 &position, const f32 radius = 1);
     void DrawLine(std::initializer_list<glm::vec3> &&vertices);
 
     void DrawTriangle(const std::array<glm::vec3, 3> &positions);
 
     void DrawRectangle(const std::array<glm::vec3, 4> &positions);
-    void DrawRectangle(const glm::vec3 &position, const float width, const float height);
+    void DrawRectangle(const glm::vec3 &position, const f32 width, const f32 height);
 
-    void DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<Texture> &tex);
-    void DrawTexture(const std::shared_ptr<Texture> &tex, const glm::vec3 position, const float width, const float height);
+    void DrawTexture(const std::array<glm::vec3, 4> &positions, const std::shared_ptr<resources::Texture> &tex);
+    void DrawTexture(const std::shared_ptr<resources::Texture> &tex, const glm::vec3 position, const f32 width, const f32 height);
 
     void DrawMesh(const Mesh &mesh);
     void DrawModel(const Model &model);
 
 private:
-    std::shared_ptr<Impl> mImpl;
+    sptr<Impl> mImpl;
 };
 
 }  // namespace meov::core

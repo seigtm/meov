@@ -3,7 +3,8 @@
 
 namespace meov::core::mixin {
 
-Named::Named(std::string &&name) noexcept : mName{ std::move(name) } {}
+Named::Named(std::string &&name) noexcept
+    : mName{ !name.empty() ? std::move(name) : std::string{ DefaultName } } {}
 
 const std::string &Named::Name() const {
     return mName;

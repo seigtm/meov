@@ -28,7 +28,7 @@
 namespace meov::core {
 
 void Core::Initialize() {
-    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/lighting/PhongBased"));
+    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/default"));
     MakeTestScene(mScene, mGraphics);
     mRunning = true;
 
@@ -79,7 +79,7 @@ void Core::RenderFrame() {
     SDL_GL_SwapWindow(mWindow);
 }
 
-void Core::Update(double delta) {
+void Core::Update(const f64 delta) {
     mScene->Update(delta);
 }
 
@@ -135,32 +135,35 @@ void Core::MakeTestScene(std::shared_ptr<Scene> scene, std::shared_ptr<Graphics>
     camera->AddComponent<components::CameraComponent>(graphics);
 
     // Default model displayed when the application runs.
-    auto objects{ scene->AddObject("Objects") };
-    auto object{ scene->AddObject("Test object", objects) };
-    object->AddComponent<components::TransformComponent>();
-    object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
+    if (auto environment{ scene->AddObject("environment") }; environment != nullptr) {
+        environment->AddComponent<components::ShaderComponent>("shaders/lighting/PhongBased");
+        auto objects{ scene->AddObject("Objects", environment) };
+        auto object{ scene->AddObject("Test object", objects) };
+        object->AddComponent<components::TransformComponent>();
+        object->AddComponent<components::ModelComponent>("models/barrel/wine_barrel_01_4k.gltf");
 
-    auto lights{ scene->AddObject("Lights") };
+        auto lights{ scene->AddObject("Lights", environment) };
 
-    auto dirLight{ scene->AddObject("Directional light", lights) };
-    dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
-    dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
+        auto dirLight{ scene->AddObject("Directional light", lights) };
+        dirLight->AddComponent<components::TransformComponent>()->Move({ 10, 10, 10 });
+        dirLight->AddComponent<components::DirectionalLightingComponent>(glm::vec3{ -1.f, -1.f, -1.f });
 
-    auto pointLight{ scene->AddObject("Point light", lights) };
-    if (auto transform{ pointLight->AddComponent<components::TransformComponent>() }; transform) {
-        transform->Move({ 1, 1, 1 });
-        transform->Scale({ .5f, .5f, .5f });
+        auto pointLight{ scene->AddObject("Point light", lights) };
+        if (auto transform{ pointLight->AddComponent<components::TransformComponent>() }; transform) {
+            transform->Move({ 1, 1, 1 });
+            transform->Scale({ .5f, .5f, .5f });
+        }
+        pointLight->AddComponent<components::PointLightingComponent>();
+        pointLight->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
+
+        auto spotLight{ scene->AddObject("Spot light", lights) };
+        if (auto transform{ spotLight->AddComponent<components::TransformComponent>() }; transform) {
+            transform->Move({ -1, 1, 1 });
+            transform->Scale({ .5f, .5f, .5f });
+        }
+        spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ 1.f, -1.f, -1.f });
+        spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
     }
-    pointLight->AddComponent<components::PointLightingComponent>();
-    pointLight->AddComponent<components::ModelComponent>("models/blub/blub.fbx");
-
-    auto spotLight{ scene->AddObject("Spot light", lights) };
-    if (auto transform{ spotLight->AddComponent<components::TransformComponent>() }; transform) {
-        transform->Move({ -1, 1, 1 });
-        transform->Scale({ .5f, .5f, .5f });
-    }
-    spotLight->AddComponent<components::SpotLightingComponent>(glm::vec3{ 1.f, -1.f, -1.f });
-    spotLight->AddComponent<components::ModelComponent>("models/blub/blub.obj");
 
     auto skybox{ scene->AddObject("Skybox") };
     skybox->AddComponent<components::TransformComponent>();

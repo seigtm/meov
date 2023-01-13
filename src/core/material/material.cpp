@@ -4,20 +4,19 @@ namespace meov::core {
 
 Material::Material()
     : mTextures{
-        { Texture::Type::Diffuse, nullptr },
-        { Texture::Type::Specular, nullptr },
-        { Texture::Type::Height, nullptr },
-        { Texture::Type::Normal, nullptr },
-        { Texture::Type::Ambient, nullptr },
-        { Texture::Type::Cubemap, nullptr },
-        { Texture::Type::Invalid, nullptr },
+        { resources::Texture::Type::Diffuse, nullptr },
+        { resources::Texture::Type::Specular, nullptr },
+        { resources::Texture::Type::Height, nullptr },
+        { resources::Texture::Type::Normal, nullptr },
+        { resources::Texture::Type::Ambient, nullptr },
+        { resources::Texture::Type::Cubemap, nullptr },
+        { resources::Texture::Type::Invalid, nullptr },
     } {}
 
-std::shared_ptr<Texture>&
-Material::operator[](Texture::Type type) {
+sptr<resources::Texture> &Material::operator[](resources::Texture::Type type) {
     return mTextures[type];
 }
-const std::shared_ptr<Texture> Material::operator[](Texture::Type type) const {
+const sptr<resources::Texture> Material::operator[](resources::Texture::Type type) const {
     return mTextures.at(type);
 }
 

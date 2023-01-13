@@ -4,7 +4,7 @@
 
 namespace meov::core::gl {
 
-OGLFrameBufferImpl::OGLFrameBufferImpl(int32_t width, int32_t height)
+OGLFrameBufferImpl::OGLFrameBufferImpl(i32 width, i32 height)
     : FrameBuffer::Impl{
         width >= 0 ? width : FrameBuffer::DefaultWidth,
         height >= 0 ? height : FrameBuffer::DefaultHeight
@@ -61,11 +61,11 @@ void OGLFrameBufferImpl::UnBind() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-uint32_t OGLFrameBufferImpl::GetFrameTexture() const {
+u32 OGLFrameBufferImpl::GetFrameTexture() const {
     return mTexId;
 }
 
-uint32_t OGLFrameBufferImpl::GetFrameDepthBuffer() const {
+u32 OGLFrameBufferImpl::GetFrameDepthBuffer() const {
     return mRBO;
 }
 

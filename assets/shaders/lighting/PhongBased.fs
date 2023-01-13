@@ -86,9 +86,9 @@ void main() {
     vec3 result = CalculateDirectionalLight(dirLight, normal, viewDirection);
     // if(activePoints > 0) {
     // if(activePoints <= MAX_POINT_LIGHTS)
-    // activePoints = MAX_POINT_LIGHTS - 1;
-    for(int i = 0; i < MAX_POINT_LIGHTS; ++i)
-        result += CalculatePointLight(pointLights[i], normal, VSOut.FragmentPosition, viewDirection);
+    //     activePoints = MAX_POINT_LIGHTS - 1;
+    //     for(int i = 0; i < MAX_POINT_LIGHTS; ++i)
+    //         result += CalculatePointLight(pointLights[i], normal, VSOut.FragmentPosition, viewDirection);
     // }
     result += CalculateSpotLight(spotLight, normal, VSOut.FragmentPosition, viewDirection);
     FragmentColor = vec4(result, VSOut.Alpha);

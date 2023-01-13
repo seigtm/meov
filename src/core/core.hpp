@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include <memory>
+#include <utils/types.hpp>
 
 #include "core/initializer/initializer_listener.hpp"
 
@@ -23,22 +23,22 @@ public:
 
     void Initialize();
 
-    enum ExecutionResult{
+    enum ExecutionResult : i8 {
+        FAIL = -1,
         SUCCESS,
-        FAIL = -1
     };
 
     ExecutionResult Run();
 
     [[nodiscard]] SDL_Window *GetWindow();
     [[nodiscard]] bool IsRunning() const;
-    [[nodiscard]] std::shared_ptr<Scene> GetScene() const;
-    [[nodiscard]] std::shared_ptr<Graphics> GetGraphics() const;
-    [[nodiscard]] std::shared_ptr<FrameBuffer> GetFrameBuffer() const;
+    [[nodiscard]] sptr<Scene> GetScene() const;
+    [[nodiscard]] sptr<Graphics> GetGraphics() const;
+    [[nodiscard]] sptr<FrameBuffer> GetFrameBuffer() const;
 
     void StartFrame();
     void RenderFrame();
-    void Update(double delta);
+    void Update(const f64 delta);
     void Draw();
     void HandleEvents();
 
@@ -47,12 +47,12 @@ private:
     SDL_GLContext mWinContext{ nullptr };
 
     bool mRunning{ false };
-    std::shared_ptr<Scene> mScene;
-    std::shared_ptr<Graphics> mGraphics;
-    std::shared_ptr<FrameBuffer> mFrameBuffer;
+    sptr<Scene> mScene;
+    sptr<Graphics> mGraphics;
+    sptr<FrameBuffer> mFrameBuffer;
     glm::mat4 mProjection{ 1 };
 
-    std::vector<std::shared_ptr<utils::Initializer>> mInitTasks;
+    std::vector<sptr<utils::Initializer>> mInitTasks;
 
     bool isMousePressed{ false };
     glm::vec2 lastMouseCoords{};
@@ -62,7 +62,7 @@ private:
     // utils::InitializerListener
     void OnFail(const std::string_view &taskName) override;
 
-    static void MakeTestScene(std::shared_ptr<Scene> scene, std::shared_ptr<Graphics> graphics);
+    static void MakeTestScene(sptr<Scene> scene, sptr<Graphics> graphics);
 };
 
 }  // namespace meov::core

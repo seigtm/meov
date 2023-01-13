@@ -22,6 +22,7 @@ target_link_libraries(meov_utilities PUBLIC
     plog::plog
     deps::imgui
     deps::imgui_filedialog
+    deps::stb_image
 )
 
 unset(local_root)

@@ -2,8 +2,9 @@
 
 namespace {
 
-meov::core::Texture::Type assimpTextureTypeToMEOV(aiTextureType type) {
-    using Type = meov::core::Texture::Type;
+[[nodiscard]] constexpr meov::core::resources::Texture::Type assimpTextureTypeToMEOV(
+    const aiTextureType type) noexcept {
+    using Type = meov::core::resources::Texture::Type;
     switch(type) {
         case aiTextureType_DIFFUSE: return Type::Diffuse;
         case aiTextureType_SPECULAR: return Type::Specular;
@@ -21,7 +22,7 @@ meov::core::Texture::Type assimpTextureTypeToMEOV(aiTextureType type) {
 
 namespace meov::core::resources {
 
-std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
+sptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
     Assimp::Importer importer;
     const aiScene *scene{ importer.ReadFile(path.string(), aiProcess_Triangulate) };
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -37,7 +38,7 @@ std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path)
         PreLoadMaterials(scene->mMaterials, scene->mNumMaterials);
     }
 
-    std::vector<std::shared_ptr<Mesh>> meshes;
+    std::vector<sptr<Mesh>> meshes;
     for(size_t i{}; i < scene->mNumMeshes; ++i) {
         auto *asmesh{ scene->mMeshes[i] };
         if(auto mesh{ ProcessMesh(asmesh, scene) }; mesh) {
@@ -48,12 +49,12 @@ std::shared_ptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path)
     return std::make_shared<Model>(std::move(meshes));
 }
 
-std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) const {
+sptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) const {
     std::vector<meov::core::Vertex> vertices;
     vertices.reserve(mesh->mNumVertices);
-    std::vector<unsigned> indices;
+    std::vector<u32> indices;
 
-    for(unsigned i{}; i < mesh->mNumVertices; ++i) {
+    for(u32 i{}; i < mesh->mNumVertices; ++i) {
         // Get coordinates (aPos).
         glm::vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         // Get color (aColor).
@@ -74,9 +75,9 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
         vertices.emplace_back(std::move(position), std::move(color), std::move(texturePosition));
     }
     // Get indices from faces.
-    for(unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+    for(u32 i = 0; i < mesh->mNumFaces; ++i) {
         aiFace face = mesh->mFaces[i];
-        for(unsigned j{}; j < face.mNumIndices; j++)
+        for(u32 j{}; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
 
@@ -86,7 +87,7 @@ std::shared_ptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const 
 }
 
 void AssimpLoader::PreLoadMaterials(aiMaterial **materials, size_t count) {
-    static const std::array textureTypes{
+    static constexpr std::array textureTypes{
         aiTextureType_DIFFUSE,
         aiTextureType_SPECULAR,
         aiTextureType_AMBIENT,

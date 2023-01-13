@@ -12,8 +12,7 @@
 namespace meov::core::components {
 
 LightingComponent::LightingComponent(std::string &&name)
-    : Component{ name.empty() ? "Lighting component" : std::move(name) }
-    , mEnabled{ true } {
+    : Component{ name.empty() ? "Lighting component" : std::move(name) } {
 }
 
 void LightingComponent::Serialize() {

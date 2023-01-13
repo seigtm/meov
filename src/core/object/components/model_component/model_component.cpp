@@ -1,11 +1,13 @@
 #include <common>
+#include <utils/scope_wrapper/scope_wrapper.hpp>
+
+#include "ImGuiFileDialog.h"
+
+#include "core/object/components/model_component/model_component.hpp"
 #include "core/object/components/holder.hpp"
 #include "core/object/components/transform_component/transform_component.hpp"
-#include "core/object/components/model_component/model_component.hpp"
-#include "ImGuiFileDialog.h"
 #include "core/resources/manager/resource_manager.hpp"
-
-#include "utils/scope_wrapper/scope_wrapper.hpp"
+#include "core/model/model.hpp"
 
 namespace meov::core::components {
 
@@ -26,8 +28,7 @@ void ModelComponent::Draw(Graphics &g) {
     if(transform) transform->PopTransform(g);
 }
 
-void ModelComponent::Update(double) {
-}
+void ModelComponent::Update(const f64 delta) { }
 
 void ModelComponent::Serialize() {
     const auto valid{ Valid() };
@@ -77,21 +78,21 @@ void ModelComponent::Serialize(const std::shared_ptr<Mesh> &mesh) {
         return;
 
     static constexpr std::array types{
-        Texture::Type::Diffuse,
-        Texture::Type::Specular,
-        Texture::Type::Height,
-        Texture::Type::Normal,
-        Texture::Type::Ambient,
-        Texture::Type::Cubemap,
+        resources::Texture::Type::Diffuse,
+        resources::Texture::Type::Specular,
+        resources::Texture::Type::Height,
+        resources::Texture::Type::Normal,
+        resources::Texture::Type::Ambient,
+        resources::Texture::Type::Cubemap,
     };
 
     const auto &material{ mesh->Material() };
     for(const auto &type : types) {
         const auto texture{ material[type] };
         if(texture == nullptr) continue;
-        if(ImGui::TreeNode(Texture::Type2String(type).c_str())) {
+        if(ImGui::TreeNode(resources::Texture::Type2String(type).data())) {
             if(texture->Valid()) {
-                constexpr float size{ 256.f };
+                constexpr f32 size{ 256.f };
                 const auto id{ texture->GetID() };
                 ImGui::Image(reinterpret_cast<void *>(id), ImVec2{ size, size });
             }

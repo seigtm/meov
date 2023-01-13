@@ -7,7 +7,7 @@
 
 // MEOV.
 #include "core/shaders/shader/shader.hpp"
-#include "core/texture/texture.hpp"
+#include "core/resources/texture/texture.hpp"
 
 namespace fs = std::filesystem;
 
@@ -30,12 +30,13 @@ class Loader {
 public:
     virtual ~Loader() = default;
 
-    virtual std::shared_ptr<Texture> LoadTexture(const fs::path& path, const Texture::Type type = Texture::Type::Invalid);
-    virtual std::shared_ptr<Texture> LoadSkybox(const fs::path& path);
-    virtual std::shared_ptr<shaders::Shader> LoadShader(const fs::path& path,
-                                                        const shaders::ShaderType type);
-    virtual std::shared_ptr<shaders::Program> LoadProgram(const fs::path& path);
-    virtual std::shared_ptr<Model> LoadModel(const fs::path& path) = 0;
+    virtual [[nodiscard]] sptr<Texture> LoadTexture(const fs::path& path,
+        const Texture::Type type = Texture::Type::Invalid);
+    virtual [[nodiscard]] sptr<Texture> LoadSkybox(const fs::path& path);
+    virtual [[nodiscard]] sptr<shaders::Shader> LoadShader(const fs::path& path,
+        const shaders::ShaderType type);
+    virtual [[nodiscard]] sptr<shaders::Program> LoadProgram(const fs::path& path);
+    virtual [[nodiscard]] sptr<Model> LoadModel(const fs::path& path) = 0;
 };
 
 }  // namespace meov::core::resources

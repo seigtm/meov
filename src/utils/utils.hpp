@@ -6,8 +6,7 @@ namespace meov::utils {
 
 /** @warning Use this class only for final classes! */
 template<class Base>
-class AsReference {
-public:
+struct AsReference {
     using Ref = std::shared_ptr<Base>;
     using WeakRef = std::weak_ptr<Base>;
     using Ptr = std::unique_ptr<Base>;

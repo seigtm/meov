@@ -14,6 +14,8 @@
 #include "core/mesh/vertex.hpp"
 #include "core/material/material.hpp"
 
+#include <utils/types.hpp>
+
 // Logger.
 #include <plog/Log.h>
 
@@ -30,25 +32,25 @@
 namespace meov::core::resources {
 
 class AssimpLoader final : public Loader {
-    using TexturePtr = std::shared_ptr<meov::core::Texture>;
-    using ModelPtr = std::shared_ptr<meov::core::Model>;
+    using TexturePtr = sptr<meov::core::resources::Texture>;
+    using ModelPtr = sptr<meov::core::Model>;
 
 public:
     AssimpLoader() = default;
     ~AssimpLoader() override = default;
 
-    std::shared_ptr<meov::core::Model> LoadModel(const fs::path &path) override;
+    [[nodiscard]] sptr<meov::core::Model> LoadModel(const fs::path &path) override;
 
 private:
     fs::path mLastLoadingDirectory;
-    std::unordered_map<unsigned, Material> mCachedMaterials;
+    umap<u32, Material> mCachedMaterials;
 
     /*! \brief Mesh processing.
         \param[in] mesh Mesh to process.
         \param[in] scene aiScene object.
         \return Shared pointer to the processed mesh.
     */
-    std::shared_ptr<meov::core::Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene) const;
+    sptr<meov::core::Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene) const;
 
     void PreLoadMaterials(aiMaterial **materials, size_t count);
 };

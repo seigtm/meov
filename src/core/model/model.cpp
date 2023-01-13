@@ -3,7 +3,7 @@
 namespace meov::core {
 
 Model::Model(std::vector<std::shared_ptr<core::Mesh>>&& meshes)
-    : resources::Resource{ "UNNAMED" }, mMeshes{ std::move(meshes) } {}
+    : resources::Resource{ std::string{ "model" } }, mMeshes{ std::move(meshes) } {}
 
 void Model::Draw(core::Graphics& g) const {
     g.DrawModel(*this);

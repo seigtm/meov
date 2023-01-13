@@ -1,88 +1,30 @@
 #include <common>
 
+#include <utils/scope_wrapper/scope_wrapper.hpp>
+#include <utils/stb/image.hpp>
+
+#include "core/resources/image/image.hpp"
 #include "core/resources/loader/loader.hpp"
 #include "core/shaders/shaders_program/shaders_program.hpp"
-#include <utils/scope_wrapper/scope_wrapper.hpp>
 
 namespace meov::core::resources {
 
-struct STBImage{
-    int width{};
-    int height{};
-    int channels{};
-    unsigned char *bytes{ nullptr };
-    bool wasLoaded{ false };
-
-    explicit STBImage(const std::string_view filename)
-        : bytes{ stbi_load(filename.data(), &width, &height, &channels, 0) }
-        , wasLoaded{ bytes != nullptr } { }
-    ~STBImage() {
-        if (wasLoaded) {
-            stbi_image_free(bytes);
-        }
-    }
-    bool operator==(const STBImage &other) const {
-        return width == other.width && height == other.height && channels == other.channels;
-    }
-
-    STBImage(const STBImage &other) = delete;
-    STBImage& operator=(const STBImage &other) = delete;
-
-    STBImage(STBImage &&other) noexcept
-        : width{ other.width }, height{ other.height }, channels{ other.channels }
-        , bytes{ other.bytes }, wasLoaded{ other.wasLoaded } {
-        other.width = 0;
-        other.height = 0;
-        other.channels = 0;
-        other.bytes = nullptr;
-        other.wasLoaded = false;
-    }
-    STBImage& operator=(STBImage &&other) noexcept {
-        if (this == &other) return *this;
-
-        if (wasLoaded) stbi_image_free(bytes);
-
-        width = other.width;
-        height = other.height;
-        channels = other.channels;
-        bytes = other.bytes;
-        wasLoaded = other.wasLoaded;
-
-        other.width = 0;
-        other.height = 0;
-        other.channels = 0;
-        other.bytes = nullptr;
-        other.wasLoaded = false;
-
-        return *this;
-    }
-};
-
-std::shared_ptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture::Type type) {
+sptr<Texture> Loader::LoadTexture(const fs::path& path, const Texture::Type type) {
     if(path.empty()) {
         LOGW << "Creating texture with empty path parameter!";
         return nullptr;
     }
 
-    int width{};
-    int height{};
-    int channels{};
-    auto bytes{ stbi_load(path.string().c_str(), &width, &height, &channels, 0) };
-    if(nullptr == bytes) {
-        LOGE << "Error while loading texture from '" << path.string() << "'";
-        LOGE << "    " << stbi_failure_reason();
-        return nullptr;
+    if(utils::stb::image image{ path.string() }; image.wasLoaded) {
+        return std::make_shared<Texture>(image, type);
     }
 
-    auto texture{ std::make_shared<meov::core::Texture>(bytes, width, height, channels, type) };
-    texture->SetPath(path);
-
-    stbi_image_free(bytes);
-
-    return texture;
+    LOGE << "Error while loading texture from '" << path.string() << "'";
+    LOGE << "    " << stbi_failure_reason();
+    return nullptr;
 }
 
-std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
+sptr<Texture> Loader::LoadSkybox(const fs::path& path) {
     if(path.empty()) {
         LOGW << "Creating skybox texture with empty path parameter!";
         return nullptr;
@@ -107,13 +49,13 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
 
     // Array of bytes.
     constexpr size_t ImagesCount{ 6 };
-    std::vector<STBImage> images;
-    images.reserve(ImagesCount);
+    using STBImageArray = std::array<utils::stb::image, ImagesCount>;
+    STBImageArray images;
     // Load every face.
     const std::string pathForLog{ path.string() };
+    STBImageArray::size_type counter{};
     for(const auto &face : faces) {
-        const auto filename{ path / face };
-        const auto &image{ images.emplace_back<const std::string_view>(filename.string()) };
+        utils::stb::image image{ (path / face).string() };
         if(!image.wasLoaded) {
             LOGE << "Error while loading texture "
                  << "'" << face << "'"
@@ -121,7 +63,7 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
             LOGE << "    " << stbi_failure_reason();
             return nullptr;
         }
-        if(images.size() > 1 && images.front() != image) {
+        if(counter > 0 && images.front() != image) {
             constexpr std::string_view errmsg{
                 "Can't load skybox because its images don't have"
                 " the same size and number of channels."
@@ -129,28 +71,15 @@ std::shared_ptr<Texture> Loader::LoadSkybox(const fs::path& path) {
             LOGE << errmsg.data() << " Path: " << pathForLog.c_str();
             throw std::invalid_argument{ std::string{ errmsg } };
         }
+        images.at(counter) = std::move(image);
+        ++counter;
     }
-    // Create texture with array<bytes> c-tor.
-    std::array<unsigned char *, ImagesCount> bytes{};
-    size_t id{};
-    for (auto &image : images) {
-        bytes.at(id++) = image.bytes;
-    }
-    auto &image{ images.front() };
-
-    auto texture{
-        std::make_shared<meov::core::Texture>(std::move(bytes),
-            image.width, image.height, image.channels)
-    };  ///< FIXME: We hope that every cubemap image has the same width, height and channels.
-
-    texture->SetPath(path);
 
     LOGD << "Skybox texture '" << pathForLog.c_str() << "' was loaded!";
-    return texture;
+    return std::make_shared<Texture>(images);
 }
 
-std::shared_ptr<shaders::Shader> Loader::LoadShader(const fs::path& path,
-                                                    const shaders::ShaderType type) {
+sptr<shaders::Shader> Loader::LoadShader(const fs::path& path, const shaders::ShaderType type) {
     if(type == shaders::ShaderType::Invalid || path.empty()) {
         return nullptr;
     }
@@ -163,7 +92,7 @@ std::shared_ptr<shaders::Shader> Loader::LoadShader(const fs::path& path,
     return shader;
 }
 
-std::shared_ptr<shaders::Program> Loader::LoadProgram(const fs::path& path) {
+sptr<shaders::Program> Loader::LoadProgram(const fs::path& path) {
     if(path.empty()) return nullptr;
 
     const auto name{ path.filename() };
