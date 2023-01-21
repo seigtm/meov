@@ -3,15 +3,19 @@
 namespace meov::core {
 
 struct Vertex {
+    using position_type = glm::vec3;
+    using color_type = glm::vec4;
+    using tex_coords_type = glm::vec2;
+
     Vertex() = default;
-    constexpr Vertex(glm::vec3 &&pos, glm::u8vec4 &&clr, glm::vec2 &&texCoords) noexcept
+    constexpr Vertex(position_type &&pos, color_type &&clr, tex_coords_type &&texCoords) noexcept
         : mPos{ std::move(pos) }, mClr{ std::move(clr) }, mTexCoords{ std::move(texCoords) } {}
-    constexpr Vertex(const glm::vec3 &pos, const glm::u8vec4 &clr, const glm::vec2 &texCoords) noexcept
+    constexpr Vertex(const position_type &pos, const color_type &clr, const tex_coords_type &texCoords) noexcept
         : mPos{ pos }, mClr{ clr }, mTexCoords{ texCoords } {}
 
-    glm::vec3 mPos{};
-    glm::u8vec4 mClr{};
-    glm::vec2 mTexCoords{};
+    position_type mPos{};
+    color_type mClr{};
+    tex_coords_type mTexCoords{};
     // glm::vec3 mTangent;
     // glm::vec3 mBitAgent;
 
@@ -20,17 +24,17 @@ struct Vertex {
 
     /// @brief Count of floats (Stride)
     [[nodiscard]] static constexpr GLsizei Count() noexcept {
-        return glm::vec3::length() + glm::u8vec4::length() + glm::vec2::length();
+        return position_type::length() + color_type::length() + tex_coords_type::length();
     };
 
     [[nodiscard]] static constexpr GLint PositionCount() noexcept {
-        return glm::vec3::length();
+        return position_type::length();
     };
     [[nodiscard]] static constexpr GLint ColorCount() noexcept {
-        return glm::u8vec4::length();
+        return color_type::length();
     };
     [[nodiscard]] static constexpr GLint TexturePositionCount() noexcept {
-        return glm::vec2::length();
+        return tex_coords_type::length();
     };
     // [[nodiscard]] static constexpr GLint TangentCount() noexcept {
     //     return glm::vec3::length();

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <string>
 
+#include <utils/types.hpp>
 #include "core/mixins/named.hpp"
 
 namespace meov::core {
@@ -15,7 +15,7 @@ class Holder;
 
 class Component : public mixin::Named {
 public:
-    using Shared = std::shared_ptr<Component>;
+    using Shared = sptr<Component>;
 
     explicit Component(std::string &&name) noexcept;
     virtual ~Component() = default;
@@ -23,16 +23,16 @@ public:
     virtual void PreDraw(Graphics &);
     virtual void Draw(Graphics &);
     virtual void PostDraw(Graphics &);
-    virtual void PreUpdate(double);
-    virtual void Update(double);
-    virtual void PostUpdate(double);
+    virtual void PreUpdate(f64);
+    virtual void Update(f64);
+    virtual void PostUpdate(f64);
     virtual void Serialize();  // for ImGui
 
-    void SetHolder(std::weak_ptr<Holder> &&holder);
-    [[nodiscard]] std::weak_ptr<Holder> GetHolder() const;
+    void SetHolder(wptr<Holder> &&holder);
+    [[nodiscard]] wptr<Holder> GetHolder() const;
 
 private:
-    std::weak_ptr<Holder> mHolder;
+    wptr<Holder> mHolder;
 };
 
 }  // namespace components

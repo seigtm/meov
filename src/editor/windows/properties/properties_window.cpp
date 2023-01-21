@@ -1,6 +1,7 @@
 #include <common>
 
 #include "editor/windows/properties/properties_window.hpp"
+#include "editor/serializer/serializer.hpp"
 
 #include <core/object/object.hpp>
 #include <core/object/components/component.hpp>
@@ -38,7 +39,7 @@ void Properties::DrawImpl() {
             // if (ImGui::Button("Add component")) {
             //     // core::components::Factory::Build(obj, "component");
             // }
-            // ImGui::Unindent();
+            ImGui::Unindent();
             ImGui::PopID();
             ImGui::Spacing();
         }

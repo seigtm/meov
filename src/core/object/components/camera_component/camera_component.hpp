@@ -68,7 +68,7 @@ private:
     void OnMousePressed(managers::MouseManager::Button button, const glm::vec2 &position) override;
     void OnMouseReleased(managers::MouseManager::Button button, const glm::vec2 &position) override;
     void OnMouseMove(const glm::vec2 &position) override;
-    void OnMouseScroll(const glm::vec2 &direction) override;
+    // void OnMouseScroll(const glm::vec2 &direction) override;
 };
 
 }  // namespace meov::core::components

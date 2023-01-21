@@ -10,6 +10,7 @@ set(editor_directory ${sources_directory}/editor)
 set(core_directory   ${sources_directory}/core)
 set(utilities_directory ${sources_directory}/utils)
 set(dependencies_directory ${root}/dependencies)
+set(modules_directory ${sources_directory}/modules)
 
 set(precompiled ${sources_directory}/precompiled.hpp)
 set(include_directories ${sources_directory})

@@ -18,7 +18,7 @@ class Model;
 class Graphics final {
 public:
     class Impl {
-        static constexpr glm::u8vec4 DefaultColor{ 0xFF, 0xFF, 0xFF, 0xFF };
+        static constexpr glm::vec4 DefaultColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         static constexpr glm::mat4 DefaultTransform{ 1 };
 
     public:
@@ -30,9 +30,9 @@ public:
         virtual const glm::mat4 &GetViewMatrix() const;
         virtual const glm::mat4 &GetProjection() const;
 
-        virtual void PushColor(const glm::u8vec4 &color);
+        virtual void PushColor(const glm::vec4 &color);
         virtual void PopColor();
-        virtual glm::u8vec4 CurrentColor() const;
+        virtual glm::vec4 CurrentColor() const;
 
         virtual void PushTransform(const glm::mat4 &transform);
         virtual void PopTransform();
@@ -56,7 +56,7 @@ public:
         virtual void DrawModel(const Model &model) = 0;
 
     protected:
-        std::deque<glm::u8vec4> mColorQueue;
+        std::deque<glm::vec4> mColorQueue;
         std::deque<glm::mat4> mTransformQueue;
         std::deque<shaders::Program> mProgramQueue;
         glm::mat4 mView{ 1.f };
@@ -72,9 +72,9 @@ public:
     const glm::mat4 &GetViewMatrix() const;
     const glm::mat4 &GetProjection() const;
 
-    void PushColor(const glm::u8vec4 &color);
+    void PushColor(const glm::vec4 &color);
     void PopColor();
-    glm::u8vec4 CurrentColor() const;
+    glm::vec4 CurrentColor() const;
 
     void PushTransform(const glm::mat4 &transform);
     void PopTransform();

@@ -12,6 +12,7 @@ add_precompiled_target(precompiled)
 
 # === Dependencies ===#
 add_subdirectory(${dependencies_directory})
+add_module(${modules_directory} meov::modules)
 add_module(${utilities_directory} meov::utilities)
 add_module(${core_directory} meov::core)
 

@@ -1,4 +1,5 @@
 #include "core/resources/loader/impl/assimp_loader.hpp"
+#include <benchmark/benchmark.hpp>
 
 namespace {
 
@@ -15,6 +16,41 @@ namespace {
             break;
     };
     return Type::Invalid;
+}
+
+[[nodiscard]] meov::core::Vertex::color_type extractColor(const aiMesh *mesh,
+    const meov::u32 index) noexcept {
+    assert(mesh != nullptr);
+    using namespace meov::core;
+    if(const auto *mesh_color{ mesh->mColors[0] }; mesh_color != nullptr) {
+        return Vertex::color_type{
+            mesh_color->r,
+            mesh_color->g,
+            mesh_color->b,
+            mesh_color->a
+        };
+    } else if (const auto *mesh_normals{ mesh->mNormals }; mesh_normals != nullptr) {
+        return Vertex::color_type{
+            mesh_normals[index].x,
+            mesh_normals[index].y,
+            mesh_normals[index].z,
+            1.0f
+        };
+    }
+    return Vertex::color_type{ 1.0f, 1.0f, 1.0f, 1.0f };
+}
+
+[[nodiscard]] meov::core::Vertex::tex_coords_type extractTexCoordinates(const aiMesh *mesh,
+    const meov::u32 index) noexcept {
+    assert(mesh != nullptr);
+    using namespace meov::core;
+    if(const auto *mesh_texture_coords{ mesh->mTextureCoords[0] }; mesh_texture_coords != nullptr) {
+        return Vertex::tex_coords_type{
+            mesh_texture_coords[index].x,
+            mesh_texture_coords[index].y
+        };
+    }
+    return Vertex::tex_coords_type{ 0.0f, 0.0f };
 }
 
 }  // anonymous namespace
@@ -39,10 +75,11 @@ sptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
     }
 
     std::vector<sptr<Mesh>> meshes;
+    meshes.reserve(scene->mNumMeshes);
     for(size_t i{}; i < scene->mNumMeshes; ++i) {
-        auto *asmesh{ scene->mMeshes[i] };
-        if(auto mesh{ ProcessMesh(asmesh, scene) }; mesh) {
-            mesh->Rename(std::string{ asmesh->mName.C_Str() });
+        auto as_mesh{ scene->mMeshes[i] };
+        if(auto mesh{ ProcessMesh(as_mesh, scene) }; mesh) {
+            mesh->Rename(std::string{ as_mesh->mName.C_Str() });
             meshes.emplace_back(std::move(mesh));
         }
     }
@@ -52,33 +89,28 @@ sptr<meov::core::Model> AssimpLoader::LoadModel(const fs::path &path) {
 sptr<meov::core::Mesh> AssimpLoader::ProcessMesh(aiMesh *mesh, const aiScene *scene) const {
     std::vector<meov::core::Vertex> vertices;
     vertices.reserve(mesh->mNumVertices);
-    std::vector<u32> indices;
 
+    // Get vertices.
+    #pragma omp parallel for
     for(u32 i{}; i < mesh->mNumVertices; ++i) {
-        // Get coordinates (aPos).
-        glm::vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
-        // Get color (aColor).
-        glm::u8vec4 color{ 0xff, 0xff, 0xff, 0xff };
-        if(mesh->mColors[0] != nullptr) {
-            color = { mesh->mColors[0]->r * 255,
-                      mesh->mColors[0]->g * 255,
-                      mesh->mColors[0]->b * 255,
-                      mesh->mColors[0]->a * 255 };
-        }
-        // Get texture coordinates (aTexPos).
-        glm::vec2 texturePosition{ 0, 0 };
-        // If mesh has texture coords.
-        if(mesh->HasTextureCoords(0)) {
-            texturePosition.x = mesh->mTextureCoords[0][i].x;
-            texturePosition.y = mesh->mTextureCoords[0][i].y;
-        }
-        vertices.emplace_back(std::move(position), std::move(color), std::move(texturePosition));
+        const auto &vertex{ mesh->mVertices[i] };
+        vertices.emplace_back(
+            Vertex::position_type{ vertex.x, vertex.y, vertex.z },
+            extractColor(mesh, i),
+            extractTexCoordinates(mesh, i)
+        );
     }
+
     // Get indices from faces.
+    const auto size{
+        std::accumulate(mesh->mFaces, mesh->mFaces + mesh->mNumFaces, 0,
+            [](u32 i, aiFace &face) { return i + face.mNumIndices; })
+    };
+    std::vector<u32> indices;
+    indices.reserve(size);
     for(u32 i = 0; i < mesh->mNumFaces; ++i) {
         aiFace face = mesh->mFaces[i];
-        for(u32 j{}; j < face.mNumIndices; j++)
-            indices.push_back(face.mIndices[j]);
+        indices.insert(std::end(indices), face.mIndices, face.mIndices + face.mNumIndices);
     }
 
     // Process materials.
@@ -95,9 +127,13 @@ void AssimpLoader::PreLoadMaterials(aiMaterial **materials, size_t count) {
         aiTextureType_NORMALS
     };
 
+    #pragma omp parallel
     for(size_t i{}; i < count; ++i) {
         const aiMaterial *material{ materials[i] };
         Material cache;
+        if (f32 shininess{ cache.GetShininess() }; material->Get(AI_MATKEY_SHININESS, shininess) == aiReturn_SUCCESS) {
+            cache.SetShininess(shininess);
+        }
         for(const auto &type : textureTypes) {
             const auto textures{ material->GetTextureCount(type) };
             for(size_t index{}; index < textures; ++index) {

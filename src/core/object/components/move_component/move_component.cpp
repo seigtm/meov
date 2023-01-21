@@ -11,6 +11,11 @@ namespace meov::core::components {
 
 MoveComponent::MoveComponent()
     : Component{ "Move component" } {
+    managers::MouseManager::AddListener(this);
+}
+
+MoveComponent::~MoveComponent() {
+    managers::MouseManager::RemoveListener(this);
 }
 
 void MoveComponent::Draw(Graphics &g) {
@@ -94,6 +99,10 @@ glm::vec3 MoveComponent::GetDirection(TransformComponent &transform) const {
         direction += -forward;
     }
     return direction;
+}
+
+void MoveComponent::OnMouseScroll(const glm::vec2 &direction) {
+    mSpeed = std::clamp(mSpeed + (direction.y + direction.x), MinSpeed, MaxSpeed);
 }
 
 }  // namespace meov::core::components

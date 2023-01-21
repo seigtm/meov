@@ -72,7 +72,7 @@ void Mesh::Load() {
     };
 
     InitializeAttribute(Vertex::PositionCount(), Vertex::PositionOffset());
-    InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset(), GL_UNSIGNED_BYTE, GL_TRUE);
+    InitializeAttribute(Vertex::ColorCount(), Vertex::ColorOffset()); //, GL_UNSIGNED_BYTE, GL_TRUE);
     InitializeAttribute(Vertex::TexturePositionCount(), Vertex::TexturePositionOffset());
     // InitializeAttribute(Vertex::TangentCount(), Vertex::TangentOffset());
     // InitializeAttribute(Vertex::BitAgentCount(), Vertex::BitAgentOffset());

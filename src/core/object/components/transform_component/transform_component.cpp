@@ -23,18 +23,19 @@ void TransformComponent::PostDraw(Graphics &g) {
 }
 
 void TransformComponent::Serialize() {
+    static constexpr f32 drag_speed{ 0.1f };
     if(!ImGui::CollapsingHeader(Name().c_str())) return;
 
     ImGui::Indent();
     auto &trans{ GetTransform() };
     glm::vec4 position{ trans[3] };
     ImGui::Text("\t\tX\t\t|\t\tY\t\t|\t\tZ");
-    if(ImGui::DragFloat3("Position", glm::value_ptr(position))) {
+    if(ImGui::DragFloat3("Position", glm::value_ptr(position), drag_speed)) {
         trans[3] = std::move(position);
     }
 
     glm::vec3 scale{ trans[0][0], trans[1][1], trans[2][2] };
-    if(ImGui::DragFloat3("Scale", glm::value_ptr(scale))) {
+    if(ImGui::DragFloat3("Scale", glm::value_ptr(scale), drag_speed)) {
         trans[0][0] = scale[0];
         trans[1][1] = scale[1];
         trans[2][2] = scale[2];

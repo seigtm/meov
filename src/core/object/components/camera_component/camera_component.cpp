@@ -165,11 +165,11 @@ void CameraComponent::OnMouseMove(const glm::vec2 &position) {
     }
 }
 
-void CameraComponent::OnMouseScroll(const glm::vec2 &direction) {
-    constexpr float MinZoom{ 0.0f };
-    constexpr float MaxZoom{ 45.0f };
-    mZoom = RoundByRange(mZoom - direction.y, MinZoom, MaxZoom);
-}
+// void CameraComponent::OnMouseScroll(const glm::vec2 &direction) {
+//     constexpr float MinZoom{ 0.0f };
+//     constexpr float MaxZoom{ 45.0f };
+//     mZoom = RoundByRange(mZoom - direction.y, MinZoom, MaxZoom);
+// }
 
 
 }  // namespace meov::core::components

@@ -30,13 +30,13 @@ const glm::mat4 &Graphics::GetProjection() const {
 }
 
 
-void Graphics::PushColor(const glm::u8vec4 &color) {
+void Graphics::PushColor(const glm::vec4 &color) {
     if(mImpl) mImpl->PushColor(color);
 }
 void Graphics::PopColor() {
     if(mImpl) mImpl->PopColor();
 }
-glm::u8vec4 Graphics::CurrentColor() const {
+glm::vec4 Graphics::CurrentColor() const {
     if(mImpl) return mImpl->CurrentColor();
     return {};
 }
@@ -128,13 +128,13 @@ const glm::mat4 &Graphics::Impl::GetProjection() const {
 }
 
 
-void Graphics::Impl::PushColor(const glm::u8vec4 &color) {
+void Graphics::Impl::PushColor(const glm::vec4 &color) {
     mColorQueue.push_back(color);
 }
 void Graphics::Impl::PopColor() {
     if(mColorQueue.size() != 1) mColorQueue.pop_back();
 }
-glm::u8vec4 Graphics::Impl::CurrentColor() const {
+glm::vec4 Graphics::Impl::CurrentColor() const {
     if(mColorQueue.empty())
         return {};
     return mColorQueue.back();

@@ -7,17 +7,17 @@ Component::Component(std::string &&name) noexcept : mixin::Named{ std::move(name
 void Component::PreDraw(Graphics &) {}
 void Component::Draw(Graphics &) {}
 void Component::PostDraw(Graphics &) {}
-void Component::PreUpdate(double) {}
-void Component::Update(double) {}
-void Component::PostUpdate(double) {}
+void Component::PreUpdate(f64) {}
+void Component::Update(f64) {}
+void Component::PostUpdate(f64) {}
 
 void Component::Serialize() {}
 
-void Component::SetHolder(std::weak_ptr<Holder> &&holder) {
+void Component::SetHolder(wptr<Holder> &&holder) {
     mHolder = std::move(holder);
 }
 
-std::weak_ptr<Holder> Component::GetHolder() const {
+wptr<Holder> Component::GetHolder() const {
     return mHolder;
 }
 

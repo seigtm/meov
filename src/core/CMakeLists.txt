@@ -18,7 +18,7 @@ target_compile_definitions(meov_core PUBLIC
     $<$<CONFIG:Debug>:_DEBUG>
 )
 target_link_libraries(meov_core PUBLIC
-    meov::utilities
+    ${modules}
     ${OPENGL_opengl_LIBRARY}
 
     # Don't really need to include this dep, 'cause we get it from Dear ImGui.
