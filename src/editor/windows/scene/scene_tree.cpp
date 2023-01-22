@@ -49,43 +49,89 @@ void SceneTree::Draw(const std::vector<sptr<core::Object>> &objects) {
     if (objects.empty())
         return;
 
-    auto drawLine = [&] (sptr<core::Object> object, const std::string &name) {
-        ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow };
-        bool selected{ object->IsSelected() };
-        if (ImGui::Checkbox(("##" + name).c_str(), &selected))
-            object->SetSelect(selected);
-        if (selected)
-            flags |= ImGuiTreeNodeFlags_Selected;
-        if (object->childrenCount() == 0)
-            flags |= ImGuiTreeNodeFlags_Leaf;
-        ImGui::SameLine();
-        const bool toggled{ ImGui::TreeNodeEx(name.c_str(), flags) };
-        ImGui::SameLine();
-        if (const bool enabled{ object->Enabled() }; ImageButton(enabled ? "visible" : "invisible")) {
-            if (enabled)
-                object->Disable();
-            else
-                object->Enable();
-        }
-        return toggled;
-    };
-
     for (auto &&object : objects) {
-        if (drawLine(object, object->Name())) {
+        if (DrawTreeNode(object)) {
             Draw(object->children());
             ImGui::TreePop();
         }
     }
 }
 
+bool SceneTree::DrawTreeNode(const std::shared_ptr<core::Object> &object) {
+    constexpr ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_None
+        | ImGuiTreeNodeFlags_OpenOnArrow
+        | ImGuiTreeNodeFlags_DefaultOpen
+        | ImGuiTreeNodeFlags_FramePadding
+        | ImGuiTreeNodeFlags_SpanAvailWidth
+        | ImGuiTreeNodeFlags_AllowItemOverlap
+    };
+    constexpr std::string_view PayloadType{ "Object" };
+    const auto &name{ object->Name() };
+    const bool selected{ object->IsSelected() };
+
+    const bool toggled{ ImGui::TreeNodeEx(name.c_str(),
+        flags | (object->empty() ? ImGuiTreeNodeFlags_Leaf     : ImGuiTreeNodeFlags_None)
+              | (selected        ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None)
+    ) };
+    bool node_clicked{ false };
+    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+        node_clicked = true;
+
+    // Drag & drop behavior
+    if (ImGui::BeginDragDropSource()) {
+        ImGui::SetDragDropPayload(PayloadType.data(), &object, sizeof(object));
+        ImGui::Text(name.c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget()) {
+        if (const auto payload{ ImGui::AcceptDragDropPayload(PayloadType.data()) }; payload != nullptr) {
+            const auto *dragObjectPtr{ static_cast<const std::shared_ptr<core::Object> *>(payload->Data) };
+            if (dragObjectPtr == nullptr) {
+                LOGE << "Payload data is nullptr";
+                ImGui::EndDragDropTarget();
+                return toggled;
+            }
+            auto dragObject{ *dragObjectPtr };
+
+            if (dragObject != object) {
+                if (auto parent{ dragObject->parent() }; parent)
+                    parent->removeChild(dragObject);
+                object->addChild(std::move(dragObject));
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
+    // Selectable behavior
+    // ImGui::SameLine();
+    if (const auto id{ "##" + name }; node_clicked)
+        object->SetSelect(!selected);
+
+    ImGui::SameLine();
+
+    if (const bool enabled{ object->Enabled() }; ImageButton(enabled ? "visible" : "invisible")) {
+        if (enabled)
+            object->Disable();
+        else
+            object->Enable();
+    }
+
+    return toggled;
+}
+
 bool SceneTree::ImageButton(const std::string &icon, const ImColor &clr) const {
-    const f32 size{ ImGui::GetTextLineHeightWithSpacing() };
-    const ImVec2 buttonSize{ size, size };
-    const ImVec2 uv0{};
-    const ImVec2 uv1{ 1, 1 };
+    const f32 size{ ImGui::GetFrameHeight() };
 
     return ImGui::ImageButton(
-        reinterpret_cast<ImTextureID>(mIcons.at(icon)->GetID()), buttonSize, uv0, uv1, 0, {}, clr);
+        reinterpret_cast<ImTextureID>(mIcons.at(icon)->GetID()),
+        ImVec2{ size, size },
+        ImVec2{ 0.f, 0.f }, // uv0
+        ImVec2{ 1.f, 1.f }, // uv1
+        0, // frame padding
+        clr, // bg
+        clr // tint color
+    );
 }
 
 }  // namespace meov::Window

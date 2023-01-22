@@ -33,6 +33,7 @@ public:
     bool WannaDead() const;
 
     void setParent(Object *parent);
+    Object *parent() const;
 
     std::shared_ptr<Object> addChild(std::shared_ptr<Object> &&child);
     void removeChild(const std::shared_ptr<Object> &child);
@@ -40,6 +41,7 @@ public:
 
     std::vector<std::shared_ptr<Object>> children() const;
     size_t childrenCount() const;
+    bool empty() const;
 
     std::shared_ptr<Object> find(const std::string &name, bool recursive = false) const;
 

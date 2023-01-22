@@ -27,6 +27,7 @@ private:
     void DrawImpl() override;
 
     void Draw(const std::vector<std::shared_ptr<core::Object>> &objects);
+    bool DrawTreeNode(const std::shared_ptr<core::Object> &object);
     bool ImageButton(const std::string &icon, const ImColor &clr = IM_COL32_WHITE) const;
 };
 

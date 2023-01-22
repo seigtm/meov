@@ -76,6 +76,10 @@ void Object::setParent(Object *parent) {
     mParent = parent;
 }
 
+Object *Object::parent() const {
+    return mParent;
+}
+
 std::shared_ptr<Object> Object::addChild(std::shared_ptr<Object> &&child) {
     if (child == nullptr)
         return nullptr;
@@ -115,6 +119,10 @@ std::vector<std::shared_ptr<Object>> Object::children() const {
 
 size_t Object::childrenCount() const {
     return mChildren.size();
+}
+
+bool Object::empty() const {
+    return mChildren.empty();
 }
 
 std::shared_ptr<Object> Object::find(const std::string &name, bool recursive) const {
