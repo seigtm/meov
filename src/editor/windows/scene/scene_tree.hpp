@@ -15,6 +15,8 @@ namespace meov::Window {
 
 class SceneTree final : public Base {
 public:
+    static constexpr ImVec2 MinSize{ 400.f, 0.f };
+
     explicit SceneTree() noexcept;
     ~SceneTree() override = default;
 

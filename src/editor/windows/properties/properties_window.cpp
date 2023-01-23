@@ -8,8 +8,8 @@
 
 namespace meov::Window {
 
-Properties::Properties(ImVec2 const &size, bool isClosable)
-    : Base{ "Properties", size, isClosable } {}
+Properties::Properties(ImVec2 const &min_size, ImVec2 const &size, bool isClosable)
+    : Base{ "Properties", min_size, size, isClosable } {}
 
 void Properties::Select(std::vector<std::weak_ptr<core::Object>> &&object) {
     mObjects = std::move(object);

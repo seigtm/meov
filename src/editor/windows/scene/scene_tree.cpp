@@ -11,7 +11,7 @@
 namespace meov::Window {
 
 SceneTree::SceneTree() noexcept
-    : Base{ "Scene tree" }
+    : Base{ "Scene tree", MinSize }
     , mIcons{
         { "add", RESOURCES->LoadTexture("icons/plus_icon.png") },
         { "remove", RESOURCES->LoadTexture("icons/minus_icon.png") },
@@ -69,6 +69,8 @@ bool SceneTree::DrawTreeNode(const std::shared_ptr<core::Object> &object) {
     const auto &name{ object->Name() };
     const bool selected{ object->IsSelected() };
 
+    ImGui::PushID(name.c_str());
+
     const bool toggled{ ImGui::TreeNodeEx(name.c_str(),
         flags | (object->empty() ? ImGuiTreeNodeFlags_Leaf     : ImGuiTreeNodeFlags_None)
               | (selected        ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None)
@@ -76,6 +78,8 @@ bool SceneTree::DrawTreeNode(const std::shared_ptr<core::Object> &object) {
     bool node_clicked{ false };
     if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
         node_clicked = true;
+
+    ImGui::PopID();
 
     // Drag & drop behavior
     if (ImGui::BeginDragDropSource()) {
@@ -110,6 +114,8 @@ bool SceneTree::DrawTreeNode(const std::shared_ptr<core::Object> &object) {
 
     ImGui::SameLine();
 
+    const auto xPosition{ ImGui::CalcItemWidth() - ImGui::GetFrameHeight() };
+    ImGui::SetCursorPosX(xPosition);
     if (const bool enabled{ object->Enabled() }; ImageButton(enabled ? "visible" : "invisible")) {
         if (enabled)
             object->Disable();

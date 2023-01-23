@@ -2,9 +2,10 @@
 
 namespace meov::Window {
 
-Base::Base(std::string_view const title, ImVec2 const& size, bool isClosable, ImGuiWindowFlags flags)
+Base::Base(std::string_view const title, ImVec2 const& min_size, ImVec2 const& size, bool isClosable, ImGuiWindowFlags flags)
     : mTitle{ title }
     , mSize{ size }
+    , mMinSize{ min_size }
     , mIsClosable{ isClosable }
     , mFlags{ flags } {}
 
@@ -13,6 +14,7 @@ void Base::Draw(bool visible) {
         return;
 
     ImGui::SetNextWindowSize(mSize, ImGuiCond_Once);  // Resize will be called once per session.
+    ImGui::SetNextWindowSizeConstraints(mMinSize, ImVec2{ FLT_MAX, FLT_MAX });
     ImGui::Begin(mTitle.c_str(), &mIsClosable, mFlags);
     mSize = ImGui::GetWindowSize();
     mPos = ImGui::GetWindowPos();

@@ -15,7 +15,7 @@ public:
      * \param isClosable should the window be closable, false by default.
      * \param flags Dear ImGui window flags, no flags by default (== 0).
      */
-    Base(std::string_view const title, ImVec2 const& size = {}, bool isClosable = false, ImGuiWindowFlags flags = {});
+    Base(std::string_view const title, ImVec2 const& min_size = {}, ImVec2 const& size = {}, bool isClosable = false, ImGuiWindowFlags flags = {});
     virtual ~Base() = default;
 
     //! \brief Draw method. Call it inside your draw loop.
@@ -38,6 +38,7 @@ public:
 protected:
     ImVec2 mSize{};
     ImVec2 mPos{};
+    ImVec2 mMinSize{};
 
     //! \brief Implementation of draw call inside Dear ImGui's Begin()/End().
     //! Override this with your interface widgets' calls.

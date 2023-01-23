@@ -11,7 +11,7 @@ namespace meov::Window {
 
 class Properties final : public Base {
 public:
-    Properties(ImVec2 const &size = {}, bool isClosable = false);
+    Properties(ImVec2 const& min_size = {}, ImVec2 const &size = {}, bool isClosable = false);
 
     void Select(std::vector<std::weak_ptr<core::Object>> &&objects);
     void Reset();
