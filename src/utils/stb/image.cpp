@@ -16,7 +16,7 @@ image::~image() {
 }
 
 std::span<const byte> image::raw() const {
-	return std::span<const byte>{ bytes, length() };
+	return std::span<const byte>{ bytes, static_cast<size_t>(length()) };
 }
 
 u64 image::length() const {
