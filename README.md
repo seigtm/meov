@@ -19,6 +19,21 @@ There was no testing on `Linux`, but it is a goal for the foreseeable future.
 
 The application will require the latest version of the `Microsoft Visual C++ Redistributable` to be installed on the computer.
 
+## Clone && Build process
+
+```bash
+# 1. Clone the repository with it's submodules:
+git clone --recurse-submodules -j8 'https://github.com/seigtm/meov.git'
+
+# 2. Configure and build with CMake:
+cd meov
+mkdir build
+cmake -S . -B build
+cmake --build build
+
+# 3. Enjoy :)
+```
+
 ## Usage
 
 To change the direction of view you need to `hold the computer mouse wheel`.
