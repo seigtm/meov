@@ -6,11 +6,29 @@
 #include "core/resources/texture/texture.hpp"
 #include "core/mesh/mesh.hpp"
 
+namespace {
+
+fs::path resourcesRoot() {
+    char *basePath{ SDL_GetBasePath() };
+    if(basePath == nullptr) {
+        LOGW << "Cannot determine the executable directory: " << SDL_GetError();
+        return fs::current_path();
+    }
+
+    fs::path root{ basePath };
+    SDL_free(basePath);
+    return root;
+}
+
+}  // namespace
+
 namespace meov::core::resources {
 
 Manager::Manager()
-    : mResourcesRoot{ fs::current_path() }
-    , mLoader(std::make_shared<AssimpLoader>()) {}
+    : mResourcesRoot{ resourcesRoot() }
+    , mLoader(std::make_shared<AssimpLoader>()) {
+    LOGI << "Resources directory: " << mResourcesRoot.string();
+}
 
 Manager::~Manager() {
     for(auto &&program : mPrograms) {

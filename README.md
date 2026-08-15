@@ -17,7 +17,7 @@ The main goal of this project is to design, create and release a universal appli
 At this stage of development, the software product has been tested on the operating systems of the `Microsoft Windows` family and functions correctly.
 There was no testing on `Linux`, but it is a goal for the foreseeable future.
 
-The application will require the latest version of the `Microsoft Visual C++ Redistributable` to be installed on the computer.
+The application will require the latest version of the `Microsoft Visual C++ Redistributable` to be installed on the computer (not on Linux systems).
 
 ## Clone && Build process
 

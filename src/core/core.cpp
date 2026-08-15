@@ -28,7 +28,6 @@
 namespace meov::core {
 
 void Core::Initialize() {
-    mGraphics->PushProgram(*RESOURCES->LoadProgram("shaders/default"));
     MakeTestScene(mScene, mGraphics);
     mRunning = true;
 
@@ -98,7 +97,9 @@ void Core::HandleEvents() {
                 mGraphics->PopProgram();
             }
             for(auto&& path : textures) {
-                mGraphics->PushProgram(*RESOURCES->LoadProgram(std::move(path), true));
+                if(auto program{ RESOURCES->LoadProgram(std::move(path), true) }; program) {
+                    mGraphics->PushProgram(*program);
+                }
             }
             LOGI << "Textures were reloaded";
         }

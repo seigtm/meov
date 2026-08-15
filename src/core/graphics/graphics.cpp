@@ -10,7 +10,9 @@ namespace meov::core {
 
 Graphics::Graphics()
     : mImpl{ factories::ImplFactory::Instance()->MakeGraphicsImpl() } {
-    PushProgram(*RESOURCES->LoadProgram("shaders/default"));
+    if(auto program{ RESOURCES->LoadProgram("shaders/default") }; program) {
+        PushProgram(*program);
+    }
 }
 
 void Graphics::SetViewMatrix(const glm::mat4 &view) {
@@ -22,11 +24,13 @@ void Graphics::SetProjection(const glm::mat4 &projection) {
 
 const glm::mat4 &Graphics::GetViewMatrix() const {
     if(mImpl) return mImpl->GetViewMatrix();
-    return {};
+    static const glm::mat4 empty{};
+    return empty;
 }
 const glm::mat4 &Graphics::GetProjection() const {
     if(mImpl) return mImpl->GetProjection();
-    return {};
+    static const glm::mat4 empty{};
+    return empty;
 }
 
 

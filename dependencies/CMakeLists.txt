@@ -7,6 +7,8 @@ function(add_dependency module_name)
     if (EXISTS ${current_dir}/${module_name}/CMakeLists.txt)
         message(VERBOSE "Add subdir of ${module_name}")
         set(OPTION_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
+        set(OPTION_BUILD_TOOLS OFF CACHE BOOL "Build tools." FORCE)
+        set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Build Assimp tests." FORCE)
         set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static libraries." FORCE)
 
         add_subdirectory(${current_dir}/${module_name})

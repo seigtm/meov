@@ -20,7 +20,11 @@ void Log::DrawImpl() {
         clipper.Begin(storage->size(), ImGui::GetTextLineHeight());
         while(clipper.Step()) {
             for(int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+#ifdef _WIN32
                 const auto &line{ plog::util::toNarrow(storage->at(i), plog::codePage::kActive) };
+#else
+                const auto &line{ storage->at(i) };
+#endif
                 ImGui::TextColored(GetColorFor(line), line.c_str());
             }
         }

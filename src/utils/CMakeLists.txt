@@ -18,6 +18,7 @@ target_compile_definitions(meov_utilities PUBLIC
     $<$<CONFIG:Debug>:_DEBUG>
 )
 target_link_libraries(meov_utilities PUBLIC
+    glbinding::glbinding
     glm::glm
     plog::plog
     deps::imgui

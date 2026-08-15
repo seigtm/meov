@@ -41,7 +41,7 @@ size_t Mesh::VerticesCount() const {
     return mVertices.size();
 }
 
-const Material &Mesh::Material() const {
+const meov::core::Material &Mesh::Material() const {
     return mMaterial;
 }
 

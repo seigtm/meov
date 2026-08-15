@@ -1,12 +1,19 @@
 # === Common ===#
 cmake_minimum_required(VERSION 3.20)
 
+# Some vendored dependencies still declare compatibility with CMake 3.0.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.0)
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
+
 include(cmake/tools.cmake)
 project(meov
-    VERSION 0.2.8
+    VERSION 0.3.0
     LANGUAGES CXX
 )
 include(cmake/options.cmake)
+
+find_package(OpenGL REQUIRED)
 
 add_precompiled_target(precompiled)
 

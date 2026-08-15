@@ -15,7 +15,12 @@ namespace {
 
 template<class T, std::enable_if_t<std::is_same_v<typename T::value_type, char>, bool> = false>
 static constexpr putil::nstring str2nstr(T str) {
-    return std::wstring_convert<std::codecvt_utf8<putil::nchar>>().from_bytes(str.data());
+    if constexpr (std::is_same_v<putil::nchar, char>) {
+        return { str.data(), str.size() };
+    } else {
+        return std::wstring_convert<std::codecvt_utf8<putil::nchar>>().from_bytes(
+            str.data(), str.data() + str.size());
+    }
 }
 
 }  // namespace
