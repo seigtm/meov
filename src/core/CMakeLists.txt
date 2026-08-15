@@ -19,14 +19,17 @@ target_compile_definitions(meov_core PUBLIC
 )
 target_link_libraries(meov_core PUBLIC
     ${modules}
-    ${OPENGL_opengl_LIBRARY}
+    OpenGL::GL
 
     # Don't really need to include this dep, 'cause we get it from Dear ImGui.
     # SDL2::SDL2-static
     glbinding::glbinding
     assimp::assimp
     deps::stb_image
-    -static
 )
+
+if(MINGW)
+    target_link_options(meov_core PUBLIC -static)
+endif()
 
 unset(local_root)

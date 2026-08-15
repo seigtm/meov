@@ -5,7 +5,7 @@ macro(add_precompiled_target name)
 		CXX_STANDARD ${MEOV_CXX_STANDARD}
 	)
 	target_link_libraries(${name} PUBLIC
-		${OPENGL_opengl_LIBRARY}
+		OpenGL::GL
 		glbinding::glbinding
 		glm::glm
 		plog::plog

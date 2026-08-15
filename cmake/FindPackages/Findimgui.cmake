@@ -27,7 +27,7 @@ target_include_directories(deps_imgui
 
 target_link_libraries(deps_imgui
     PUBLIC
-        ${OPENGL_opengl_LIBRARY}
+        OpenGL::GL
         SDL2::SDL2-static
 )
 

@@ -25,7 +25,7 @@ public:
     size_t IndicesCount() const;
     size_t VerticesCount() const;
 
-    const Material &Material() const;
+    const meov::core::Material &Material() const;
 
 private:
     GLuint VAO{}, VBO{}, EBO{};

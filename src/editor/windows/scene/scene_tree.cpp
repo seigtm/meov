@@ -128,9 +128,13 @@ bool SceneTree::DrawTreeNode(const std::shared_ptr<core::Object> &object) {
 
 bool SceneTree::ImageButton(const std::string &icon, const ImColor &clr) const {
     const f32 size{ ImGui::GetFrameHeight() };
+    const auto found{ mIcons.find(icon) };
+    if(found == mIcons.end() || found->second == nullptr) {
+        return ImGui::Button(icon.c_str(), ImVec2{ size, size });
+    }
 
     return ImGui::ImageButton(
-        reinterpret_cast<ImTextureID>(mIcons.at(icon)->GetID()),
+        reinterpret_cast<ImTextureID>(found->second->GetID()),
         ImVec2{ size, size },
         ImVec2{ 0.f, 0.f }, // uv0
         ImVec2{ 1.f, 1.f }, // uv1
